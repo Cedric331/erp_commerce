@@ -10,24 +10,33 @@ class Stock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_produit',
+        'commercant_id',
+        'produit_id',
+        'stock_status_id',
         'quantity',
         'status',
+        'type',
         'note',
-        'date_add',
+        'scheduled_date',
     ];
 
-    // arrivage, vente, perte, retour client, retour fournisseur, sortie
-    const STATUS_ARRIVAL = 'arrival';
-    const STATUS_SALE = 'sale';
-    const STATUS_LOSS = 'loss';
-    const STATUS_BACK_CUSTOMER = 'back_customer';
-    const STATUS_BACK_BRAND = 'back_brand';
-    const STATUS_OUTPUT = 'output';
+    protected static ?string $tenantRelationshipName = 'produit';
 
+    const TYPE_ENTRY = 'entry';
+    const TYPE_EXIT = 'exit';
 
     public function produit()
     {
-        return $this->belongsTo(Produit::class, 'id_produit');
+        return $this->belongsTo(Produit::class, 'produit_id');
+    }
+
+    public function stockStatus()
+    {
+        return $this->belongsTo(StockStatus::class, 'stock_status_id');
+    }
+
+    public function commercant()
+    {
+        return $this->belongsTo(Commercant::class, 'commercant_id');
     }
 }

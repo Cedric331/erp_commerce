@@ -4,12 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProduitResource\Pages;
 use App\Models\Produit;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\BaseFilter;
@@ -23,16 +25,13 @@ class ProduitResource extends Resource
     protected static ?string $model = Produit::class;
 
     protected static bool $isScopedToTenant = true;
-
-
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $label = 'Produit';
     protected static ?string $pluralModelLabel = 'Produits';
     protected static ?string $slug = 'products';
     protected static ?string $navigationGroup = 'Gestion des produits';
-    protected static ?int $navigationSort = 0;
-
+    protected static ?int $navigationSort = 3;
     protected static ?string $recordTitleAttribute = 'nom';
 
     public static function form(Form $form): Form
@@ -56,10 +55,68 @@ class ProduitResource extends Resource
                             ->label('Code EAN')
                             ->maxLength(255),
 
+                        Forms\Components\Select::make('categorie_id')
+                            ->relationship(name: 'categorie', titleAttribute: 'name')
+                            ->label('Catégorie')
+                            ->searchable()
+                            ->optionsLimit(10)
+                            ->searchDebounce(200)
+                            ->loadingMessage('Recherche des catégories...')
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Nom de la catégorie')
+                                    ->maxLength(255)
+                                    ->required(),
+
+                            ])
+                            ->createOptionAction(function (Action $action) {
+                                $action->mutateFormDataUsing(function (array $data) {
+                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    return $data;
+                                });
+                            }),
+
+                        Forms\Components\Select::make('fournisseur_id')
+                            ->relationship(name: 'fournisseur', titleAttribute: 'name')
+                            ->label('Fournisseur')
+                            ->searchable()
+                            ->optionsLimit(10)
+                            ->searchDebounce(200)
+                            ->loadingMessage('Recherche des fournisseurs...')
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Nom du fournisseur')
+                                    ->maxLength(255)
+                                    ->required(),
+                            ])
+                            ->createOptionAction(function (Action $action) {
+                                $action->mutateFormDataUsing(function (array $data) {
+                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    return $data;
+                                });
+                            }),
+
+                        Forms\Components\TextInput::make('stock')
+                            ->hint('Stock actuel du produit (Le stock est mis à jour automatiquement suivant les mouvements de stock)')
+                            ->label('Stock du produit')
+                            ->required()
+                            ->numeric('integer')
+                            ->default(0)
+                            ->columnSpanFull(),
+
+                        Forms\Components\TextInput::make('stock_alert')
+                            ->hint('Alerte de stock (Si le stock est inférieur à cette valeur, une alerte sera envoyée)')
+                            ->label('Alerte de stock')
+                            ->required()
+                            ->numeric('integer')
+                            ->default(0)
+                            ->columnSpanFull(),
+
                         Forms\Components\Textarea::make('description')
                             ->maxLength(65535)
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->columns(3),
 
                 // Section: Détails financiers
                 Forms\Components\Section::make('Détails financiers')
@@ -178,6 +235,18 @@ class ProduitResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                SelectFilter::make('categorie')
+                    ->label('Catégorie')
+                    ->relationship('categorie', 'name')
+                    ->options(
+                        fn (Builder $query) => $query->pluck('name', 'id')->all()
+                    ),
+                SelectFilter::make('fournisseur')
+                    ->label('Fournisseur')
+                    ->relationship('fournisseur', 'name')
+                    ->options(
+                        fn (Builder $query) => $query->pluck('name', 'id')->all()
+                    ),
                 SelectFilter::make('tva')
                     ->label('TVA')
                     ->options([
@@ -185,7 +254,14 @@ class ProduitResource extends Resource
                         '10' => '10',
                         '20' => '20',
                     ]),
-            ])
+            ], layout: FiltersLayout::Modal)
+            ->persistFiltersInSession()
+            ->filtersFormColumns(3)
+            ->filtersTriggerAction(
+                fn (\Filament\Tables\Actions\Action $action) => $action
+                    ->button()
+                    ->label('Filter les produits'),
+            )
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

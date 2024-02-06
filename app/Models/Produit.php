@@ -15,12 +15,16 @@ class Produit extends Model implements HasMedia
         'nom',
         'description',
         'reference',
+        'stock',
+        'stock_alert',
         'ean',
         'prix_ht',
         'prix_ttc',
         'tva',
         'stock',
-        'id_commercant',
+        'commercant_id',
+        'fournisseur_id',
+        'categorie_id',
         'created_by',
         'updated_by',
     ];
@@ -28,5 +32,15 @@ class Produit extends Model implements HasMedia
     public function commercant()
     {
         return $this->belongsTo(Commercant::class);
+    }
+
+    public function fournisseur()
+    {
+        return $this->belongsTo(Fournisseur::class);
+    }
+
+    public function categorie()
+    {
+        return $this->belongsTo(CategorieProduit::class, 'categorie_id', 'id');
     }
 }

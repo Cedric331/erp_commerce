@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\ProduitResource\Pages\Tenancy\CommercantEdit;
 use App\Filament\Resources\ProduitResource\Pages\Tenancy\CommercantRegister;
+use App\Http\Middleware\ApplyTenantScopes;
 use App\Models\Commercant;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -62,9 +63,13 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->databaseNotifications()
             ->tenant(Commercant::class, 'slug')
             ->tenantRegistration(CommercantRegister::class)
             ->tenantProfile(CommercantEdit::class)
-            ->tenantRoutePrefix('commerce');
+            ->tenantRoutePrefix('commerce')
+            ->tenantMiddleware([
+                ApplyTenantScopes::class,
+            ], isPersistent: true);
     }
 }
