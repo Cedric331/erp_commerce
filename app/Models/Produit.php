@@ -17,7 +17,6 @@ class Produit extends Model implements HasMedia
         'reference',
         'stock',
         'stock_alert',
-        'ean',
         'prix_ht',
         'prix_ttc',
         'tva',

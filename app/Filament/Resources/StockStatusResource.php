@@ -29,6 +29,13 @@ class StockStatusResource extends Resource
                     ->label('Nom du statut')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('type')
+                    ->required()
+                    ->options([
+                        'entrée' => 'Entrée',
+                        'sortie' => 'Sortie',
+                    ])
+                    ->label('Type de mouvement'),
                 Forms\Components\ColorPicker::make('color')
                     ->required()
                     ->hint('Format hexadécimal')
@@ -42,6 +49,9 @@ class StockStatusResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nom du statut')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Type de mouvement')
                     ->searchable(),
                 Tables\Columns\ColorColumn::make('color')
                     ->label('Couleur')

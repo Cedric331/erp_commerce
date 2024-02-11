@@ -11,16 +11,10 @@ class StockStatus extends Model
 
     protected $fillable = [
         'name',
+        'type',
         'color',
         'commercant_id',
     ];
-
-    // Status
-    const STATUS_PROGRESS = 'En cours';
-    const STATUS_COMPLETED = 'Traité';
-    const STATUS_ERROR = 'Erreur';
-    const STATUS_CANCELLED = 'Annulé';
-
 
     public function commercant()
     {

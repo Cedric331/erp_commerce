@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('categorie_produits', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index();
+            $table->integer('alert_stock')->default(0);
             $table->foreignId('commercant_id')->constrained()->onDelete('cascade');
             $table->unique(['name', 'commercant_id']);
             $table->timestamps();

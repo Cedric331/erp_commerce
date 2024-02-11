@@ -11,6 +11,11 @@ class CreateFournisseur extends CreateRecord
 {
     protected static string $resource = FournisseurResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $tenant = Filament::getTenant();

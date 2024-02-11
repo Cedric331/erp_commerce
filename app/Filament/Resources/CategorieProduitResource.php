@@ -6,9 +6,11 @@ use App\Filament\Resources\CategorieProduitResource\Pages;
 use App\Filament\Resources\CategorieProduitResource\RelationManagers;
 use App\Models\CategorieProduit;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -36,7 +38,12 @@ class CategorieProduitResource extends Resource
                     ->label('Nom de la catégorie')
                     ->required()
                     ->maxLength(255),
-            ]);
+                Forms\Components\TextInput::make('alert_stock')
+                    ->label('Alerte de stock')
+                    ->hint('Le stock à partir duquel une alerte sera envoyée pour les produits de cette catégorie. Si valeur à 0, il ne sera pas pris en compte.')
+                    ->required()
+                    ->integer(),
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -45,6 +52,9 @@ class CategorieProduitResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nom de la catégorie')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('alert_stock')
+                    ->label('Alerte de stock')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('produits_count')
                     ->label('Nombre de produits dans cette catégorie')
@@ -71,6 +81,7 @@ class CategorieProduitResource extends Resource
             //
         ];
     }
+
 
     public static function getPages(): array
     {

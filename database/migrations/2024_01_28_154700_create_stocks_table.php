@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('produit_id')->constrained()->onDelete('cascade');
             $table->foreignId('stock_status_id')->constrained()->onDelete(null);
             $table->integer('quantity')->default(0);
-            $table->enum('type', ['entry', 'exit'])->default('entry');
             $table->longText('note')->nullable();
             $table->date('scheduled_date')->nullable();
             $table->timestamps();

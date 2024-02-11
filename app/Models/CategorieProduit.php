@@ -11,6 +11,7 @@ class CategorieProduit extends Model
 
     protected $fillable = [
         'name',
+        'alert_stock',
         'commercant_id',
     ];
 

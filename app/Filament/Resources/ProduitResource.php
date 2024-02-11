@@ -14,8 +14,6 @@ use Filament\Tables;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\BaseFilter;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,10 +49,6 @@ class ProduitResource extends Resource
                             ->required()
                             ->maxLength(255),
 
-                        Forms\Components\TextInput::make('ean')
-                            ->label('Code EAN')
-                            ->maxLength(255),
-
                         Forms\Components\Select::make('categorie_id')
                             ->relationship(name: 'categorie', titleAttribute: 'name')
                             ->label('Catégorie')
@@ -67,6 +61,11 @@ class ProduitResource extends Resource
                                     ->label('Nom de la catégorie')
                                     ->maxLength(255)
                                     ->required(),
+                                Forms\Components\TextInput::make('alert_stock')
+                                    ->label('Alerte de stock')
+                                    ->hint('Le stock à partir duquel une alerte sera envoyée pour les produits de cette catégorie. Si valeur à 0, il ne sera pas pris en compte.')
+                                    ->required()
+                                    ->integer(),
 
                             ])
                             ->createOptionAction(function (Action $action) {
@@ -100,12 +99,13 @@ class ProduitResource extends Resource
                             ->hint('Stock actuel du produit (Le stock est mis à jour automatiquement suivant les mouvements de stock)')
                             ->label('Stock du produit')
                             ->required()
+                            ->disabledOn('edit')
                             ->numeric('integer')
                             ->default(0)
                             ->columnSpanFull(),
 
                         Forms\Components\TextInput::make('stock_alert')
-                            ->hint('Alerte de stock (Si le stock est inférieur à cette valeur, une alerte sera envoyée)')
+                            ->hint('Alerte de stock (Si le stock est inférieur à cette valeur, une alerte sera envoyée). Mettre à 0 pour désactiver.')
                             ->label('Alerte de stock')
                             ->required()
                             ->numeric('integer')
@@ -116,7 +116,7 @@ class ProduitResource extends Resource
                             ->maxLength(65535)
                             ->columnSpanFull(),
                     ])
-                    ->columns(3),
+                    ->columns(2),
 
                 // Section: Détails financiers
                 Forms\Components\Section::make('Détails financiers')
@@ -164,16 +164,16 @@ class ProduitResource extends Resource
                     ]),
 
                 // Section: Médias
-                Forms\Components\Section::make('Médias')
-                    ->schema([
-                        SpatieMediaLibraryFileUpload::make('attachments')
-                            ->label('Images du produit')
-                            ->collection('media-product')
-                            ->conversion('thumb')
-                            ->responsiveImages()
-                            ->multiple()
-                            ->reorderable(),
-                    ]),
+//                Forms\Components\Section::make('Médias')
+//                    ->schema([
+//                        SpatieMediaLibraryFileUpload::make('attachments')
+//                            ->label('Images du produit')
+//                            ->collection('media-product')
+//                            ->conversion('thumb')
+//                            ->responsiveImages()
+//                            ->multiple()
+//                            ->reorderable(),
+//                    ]),
             ]);
     }
 
@@ -183,16 +183,16 @@ class ProduitResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('attachments')
-                    ->collection('media-product')
-                    ->circular()
-                    ->stacked()
-                    ->limit(3)
-                    ->limitedRemainingText(function ($state) {
-                        return count($state) > 3;
-                    })
-                    ->conversion('thumb')
-                    ->label('Images'),
+//                SpatieMediaLibraryImageColumn::make('attachments')
+//                    ->collection('media-product')
+//                    ->circular()
+//                    ->stacked()
+//                    ->limit(3)
+//                    ->limitedRemainingText(function ($state) {
+//                        return count($state) > 3;
+//                    })
+//                    ->conversion('thumb')
+//                    ->label('Images'),
                 Tables\Columns\TextColumn::make('nom')
                     ->label('Nom du produit')
                     ->sortable()
@@ -201,9 +201,9 @@ class ProduitResource extends Resource
                     ->label('Référence')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('ean')
-                    ->label('Code EAN')
-                    ->searchable()
+                Tables\Columns\TextColumn::make('stock')
+                    ->label('Stock')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('prix_ht')
                     ->label('Prix HT')
@@ -223,6 +223,14 @@ class ProduitResource extends Resource
                     ->label('TVA (%)')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('categorie.name')
+                    ->label('Catégorie')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('fournisseur.name')
+                    ->label('Fournisseur')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Créé le')
                     ->dateTime()

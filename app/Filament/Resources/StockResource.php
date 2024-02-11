@@ -18,9 +18,9 @@ class StockResource extends Resource
     protected static bool $isScopedToTenant = true;
     protected static ?string $navigationIcon = 'heroicon-o-archive-box-arrow-down';
 
-    protected static ?string $label = 'Stock';
-    protected static ?string $pluralModelLabel = 'Stock';
-    protected static ?string $slug = 'stock';
+    protected static ?string $label = 'Historique du stock';
+    protected static ?string $pluralModelLabel = 'Historique des stocks';
+    protected static ?string $slug = 'historique-stocks';
     protected static ?string $navigationGroup = 'Gestion des stocks';
     protected static ?int $navigationSort = 1;
 

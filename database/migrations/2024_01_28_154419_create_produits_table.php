@@ -16,9 +16,8 @@ return new class extends Migration
             $table->string('nom')->index();
             $table->longText('description')->nullable();
             $table->string('reference')->unique()->index();
-            $table->integer('stock')->default(0);
+            $table->decimal('stock', 5, 2)->nullable();
             $table->integer('stock_alert')->default(0);
-            $table->string('ean')->nullable();
             $table->decimal('prix_ht', 10, 2)->nullable();
             $table->decimal('prix_ttc', 10, 2);
             $table->decimal('tva', 5, 2);
