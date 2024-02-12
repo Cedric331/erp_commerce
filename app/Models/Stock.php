@@ -15,15 +15,11 @@ class Stock extends Model
         'stock_status_id',
         'quantity',
         'status',
-        'type',
         'note',
         'scheduled_date',
     ];
 
     protected static ?string $tenantRelationshipName = 'produit';
-
-    const TYPE_ENTRY = 'entry';
-    const TYPE_EXIT = 'exit';
 
     public function produit()
     {

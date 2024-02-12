@@ -44,6 +44,10 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::TOPBAR_START,
                 fn (): string => Blade::render('@livewire(\'create-product\')')
             )
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_START,
+                fn (): string => Blade::render('@livewire(\'create-stock\')')
+            )
             ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => '#137863',

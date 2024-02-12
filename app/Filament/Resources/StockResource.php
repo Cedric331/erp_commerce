@@ -28,7 +28,7 @@ class StockResource extends Resource
     {
         return $form
             ->schema([
-                //
+
             ]);
     }
 
