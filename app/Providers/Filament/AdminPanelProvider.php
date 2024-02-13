@@ -38,6 +38,7 @@ class AdminPanelProvider extends PanelProvider
             ->font('Poppins')
             ->profile()
             ->login()
+            ->loginRouteSlug('connexion')
             ->passwordReset()
             ->globalSearch()
             ->renderHook(
