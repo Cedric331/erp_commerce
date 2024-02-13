@@ -25,13 +25,19 @@ class CreateStock extends Component implements HasForms
 {
     use InteractsWithForms;
 
-    public $openModal = false;
     protected static ?string $model = Stock::class;
+
     public ?array $data = [];
+
+    public bool $showForm = false;
 
     public function mount(): void
     {
-        $this->form->fill();
+        if (StockStatus::where('commercant_id', Filament::getTenant()->id)->count() > 0) {
+            $this->form->fill();
+        } else {
+            $this->showForm = false;
+        }
     }
 
     public function create(): void
@@ -121,6 +127,15 @@ class CreateStock extends Component implements HasForms
             ])
             ->columns(2)
             ->statePath('data');
+    }
+
+    public function showFormNotShown()
+    {
+        Notification::make()
+            ->title('Aucun statut de stock n\'est configuré')
+            ->body('Veuillez configurer au moins un statut de stock pour pouvoir créer une ligne de stock.')
+            ->warning()
+            ->send();
     }
 
     public function render()
