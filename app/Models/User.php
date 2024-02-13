@@ -53,7 +53,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     public function canAccessPanel(Panel $panel): bool
     {
        // check panel id
-            return $this->email === 'limacedric@hotmail.fr';
+            return true;
     }
 
     public function getTenants(Panel $panel): Collection
