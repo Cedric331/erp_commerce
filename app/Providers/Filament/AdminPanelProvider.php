@@ -83,7 +83,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->databaseNotifications()
             ->tenant(Commercant::class, 'slug')
-            ->tenantRegistration(CommercantRegister::class)
+//            ->tenantRegistration(CommercantRegister::class)
             ->tenantProfile(CommercantEdit::class)
             ->tenantRoutePrefix('commerce')
             ->tenantMiddleware([
