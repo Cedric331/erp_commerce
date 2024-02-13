@@ -21,6 +21,7 @@ class Stock extends Model
 
     protected static ?string $tenantRelationshipName = 'produit';
 
+
     public function produit()
     {
         return $this->belongsTo(Produit::class, 'produit_id');
@@ -34,5 +35,10 @@ class Stock extends Model
     public function commercant()
     {
         return $this->belongsTo(Commercant::class, 'commercant_id');
+    }
+
+    public function getScheduledDateAttribute($value)
+    {
+        return $value ? $this->asDateTime($value)->format('d/m/Y') : null;
     }
 }

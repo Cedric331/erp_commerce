@@ -36,13 +36,22 @@ class StockResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('produit.nom')->label('Produit'),
+                Tables\Columns\TextColumn::make('quantity')->label('Quantité'),
+                Tables\Columns\TextColumn::make('stockStatus.name')->label('Statut'),
+                Tables\Columns\TextColumn::make('scheduled_date')->label('Date prévue'),
+                Tables\Columns\TextColumn::make('note')->label('Note'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->before(
+                        fn ($record) => date('Y-m-d') > $record->scheduled_date
+                            ? Tables\Actions\EditAction::make()
+                            : null
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

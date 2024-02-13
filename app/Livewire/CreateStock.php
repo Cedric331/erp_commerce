@@ -48,6 +48,19 @@ class CreateStock extends Component implements HasForms
 
         Stock::create($this->data);
 
+        if (!$this->data['scheduled_date']) {
+            $type = StockStatus::find($this->data['stock_status_id'])->type;
+            if ($type === StockStatus::TYPE_ENTREE) {
+                Produit::find($this->data['produit_id'])->update([
+                    'stock' => Produit::find($this->data['produit_id'])->stock + $this->data['quantity'],
+                ]);
+            } else {
+                Produit::find($this->data['produit_id'])->update([
+                    'stock' => Produit::find($this->data['produit_id'])->stock - $this->data['quantity'],
+                ]);
+            }
+        }
+
         Notification::make()
             ->title('Ligne de stock créé avec succès')
             ->success()
@@ -75,10 +88,14 @@ class CreateStock extends Component implements HasForms
                 Select::make('stock_status_id')
                     ->label('Sélectionner un statut')
                     ->options(StockStatus::where('commercant_id', Filament::getTenant()->id)->pluck('name', 'id'))
-                    ->default(StockStatus::where([
-                        ['commercant_id', Filament::getTenant()->id],
-                        ['name', 'Vente'],
-                    ])->first()->id)
+                    ->default(
+                        StockStatus::where([
+                            ['commercant_id', Filament::getTenant()->id],
+                            ['name', 'Vente'],
+                        ])->firstOr(function () {
+                            return null;
+                        })->id
+                    )
                     ->searchable()
                     ->required()
                     ->columnSpanFull()

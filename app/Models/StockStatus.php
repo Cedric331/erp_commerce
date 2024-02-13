@@ -16,6 +16,9 @@ class StockStatus extends Model
         'commercant_id',
     ];
 
+    const TYPE_ENTREE = 'entrée';
+    const TYPE_SORTIE = 'sortie';
+
     public function commercant()
     {
         return $this->belongsTo(Commercant::class);
