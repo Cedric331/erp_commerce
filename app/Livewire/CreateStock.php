@@ -110,6 +110,9 @@ class CreateStock extends Component implements HasForms
                     ->live(true)
                     ->hint(function (Get $get) {
                       $status = StockStatus::find($get('stock_status_id'));
+                      if (!$status) {
+                          return 'Sélectionnez un statut pour obtenir des informations.';
+                      }
                       if ($status->type === 'entrée') {
                             return 'Le stock sera augmenté de la quantité indiquée.';
                       } else {
