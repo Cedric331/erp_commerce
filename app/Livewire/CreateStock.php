@@ -75,6 +75,9 @@ class CreateStock extends Component implements HasForms
 
     public function form(Form $form): Form
     {
+        if (!$this->showForm) {
+            $this->showFormNotShown();
+        }
         return $form
             ->schema([
                 Select::make('produit_id')
