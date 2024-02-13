@@ -92,9 +92,7 @@ class CreateStock extends Component implements HasForms
                         StockStatus::where([
                             ['commercant_id', Filament::getTenant()->id],
                             ['name', 'Vente'],
-                        ])->firstOr(function () {
-                            return null;
-                        })->id
+                        ])->first()?->id
                     )
                     ->searchable()
                     ->required()
