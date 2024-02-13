@@ -3,7 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StockResource\Pages;
+use App\Models\Produit;
 use App\Models\Stock;
+use App\Models\StockStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -24,11 +26,42 @@ class StockResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des stocks';
     protected static ?int $navigationSort = 1;
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-
+                Forms\Components\Select::make('produit_id')
+                    ->label('Produit')
+                    ->options(
+                        Produit::where('commercant_id', Filament::getTenant()->id)
+                            ->get()
+                            ->mapWithKeys(fn ($produit) => [$produit->id => $produit->nom])
+                            ->toArray()
+                    )
+                    ->required(),
+                Forms\Components\TextInput::make('quantity')
+                    ->label('Quantité')
+                    ->required()
+                    ->integer(),
+                Forms\Components\Select::make('stock_status_id')
+                    ->label('Statut')
+                    ->options(
+                       StockStatus::where('commercant_id', Filament::getTenant()->id)
+                            ->get()
+                            ->mapWithKeys(fn ($stockStatus) => [$stockStatus->id => $stockStatus->name])
+                            ->toArray()
+                    )
+                    ->required(),
+                Forms\Components\DatePicker::make('scheduled_date')
+                    ->label('Date prévue')
+                    ->required(),
+                Forms\Components\Textarea::make('note')
+                    ->label('Note'),
             ]);
     }
 
@@ -38,20 +71,21 @@ class StockResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('produit.nom')->label('Produit'),
                 Tables\Columns\TextColumn::make('quantity')->label('Quantité'),
-                Tables\Columns\TextColumn::make('stockStatus.name')->label('Statut'),
-                Tables\Columns\TextColumn::make('scheduled_date')->label('Date prévue'),
                 Tables\Columns\TextColumn::make('note')->label('Note'),
+                Tables\Columns\TextColumn::make('stockStatus.name')->label('Statut'),
+                Tables\Columns\TextColumn::make('formatted_scheduled_date')->label('Date prévue'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->before(
-                        fn ($record) => date('Y-m-d') > $record->scheduled_date
-                            ? Tables\Actions\EditAction::make()
-                            : null
-                    ),
+                    ->visible(function ($record) {
+                        if ($record->scheduled_date === null)
+                            return false;
+                        else
+                        return $record->scheduled_date->isFuture();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +22,10 @@ class Stock extends Model
 
     protected static ?string $tenantRelationshipName = 'produit';
 
+    protected $casts = [
+        'scheduled_date' => 'datetime',
+    ];
+
 
     public function produit()
     {
@@ -37,8 +42,8 @@ class Stock extends Model
         return $this->belongsTo(Commercant::class, 'commercant_id');
     }
 
-    public function getScheduledDateAttribute($value)
+    public function getFormattedScheduledDateAttribute()
     {
-        return $value ? $this->asDateTime($value)->format('d/m/Y') : null;
+        return $this->scheduled_date ? $this->scheduled_date->format('d/m/Y') : null;
     }
 }
