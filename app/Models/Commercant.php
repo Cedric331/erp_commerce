@@ -58,4 +58,9 @@ class Commercant extends Model
     {
         return $this->hasMany(Fournisseur::class);
     }
+
+    public function stockStatuses()
+    {
+        return $this->hasMany(StockStatus::class);
+    }
 }
