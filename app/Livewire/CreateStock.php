@@ -29,7 +29,7 @@ class CreateStock extends Component implements HasForms
 
     public ?array $data = [];
 
-    public bool $showForm = false;
+    public bool $showForm = true;
 
     public function mount(): void
     {
