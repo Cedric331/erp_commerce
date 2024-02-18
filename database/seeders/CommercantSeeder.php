@@ -20,7 +20,6 @@ class CommercantSeeder extends Seeder
             'slug' => 'web-discovery',
             'siret' => '123456789',
             'pays' => 'France',
-            'user_id' => User::first()->id,
         ]);
     }
 }

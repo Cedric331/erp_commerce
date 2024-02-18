@@ -2,22 +2,26 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\ProduitExporter;
 use App\Filament\Resources\ProduitResource\Pages;
 use App\Models\Produit;
+use Filament\Actions\Exports\Enums\ExportFormat;
+use Filament\Actions\Exports\Models\Export;
 use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ProduitResource extends Resource
 {
@@ -37,7 +41,6 @@ class ProduitResource extends Resource
     {
         return $form
             ->schema([
-                // Section: Informations de base
                 Forms\Components\Section::make('Informations de base')
                     ->schema([
                         Forms\Components\TextInput::make('nom')
@@ -224,6 +227,16 @@ class ProduitResource extends Resource
                     ->label('TVA (%)')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('total_stock_ht')
+                    ->label('Valeur Stock HT')
+                    ->icon('heroicon-o-currency-euro')
+                    ->iconPosition(IconPosition::After)
+                    ->iconColor('primary')
+                    ->default(function ($record) {
+                        return number_format($record->stock * $record->prix_ht, 2, '.', '');
+                    })
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('categorie.name')
                     ->label('Catégorie')
                     ->sortable()
@@ -281,6 +294,18 @@ class ProduitResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                    ->label('Exporter les produits')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('primary')
+                    ->formats([
+                        ExportFormat::Xlsx,
+                        ExportFormat::Csv,
+                    ])
+                    ->hidden(!Gate::allows('create', Export::class))
+                    ->exporter(ProduitExporter::class)
             ]);
     }
 

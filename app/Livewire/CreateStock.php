@@ -33,7 +33,7 @@ class CreateStock extends Component implements HasForms
 
     public function mount(): void
     {
-        if (StockStatus::where('commercant_id', Filament::getTenant()->id)->count() > 0) {
+        if (StockStatus::where('commercant_id', Filament::getTenant()->id)->count() > 0 && Produit::where('commercant_id', Filament::getTenant()->id)->count() > 0) {
             $this->form->fill();
         } else {
             $this->showForm = false;

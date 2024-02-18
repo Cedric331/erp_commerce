@@ -16,15 +16,13 @@ return new class extends Migration
             $table->string('enseigne')->index();
             $table->string('email')->unique();
             $table->string('slug')->unique()->index();
-            $table->string('siret')->index();
+            $table->string('siret')->nullable();
             $table->string('telephone')->nullable();
             $table->text('adresse')->nullable();
             $table->text('adresse_2')->nullable();
             $table->string('ville')->nullable();
             $table->string('code_postal')->nullable();
             $table->string('pays')->nullable();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->unique(['enseigne', 'user_id']);
             $table->timestamps();
         });
     }

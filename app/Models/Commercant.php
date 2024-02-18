@@ -5,6 +5,9 @@ namespace App\Models;
 use Filament\Actions\Concerns\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class Commercant extends Model
 {
@@ -34,9 +37,9 @@ class Commercant extends Model
         return strtolower($this->enseigne);
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'commercant_users', 'commercant_id', 'user_id');
     }
 
     public function produits()
@@ -63,4 +66,20 @@ class Commercant extends Model
     {
         return $this->hasMany(StockStatus::class);
     }
+
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'model');
+    }
+
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
+    }
+
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
+    }
+
 }

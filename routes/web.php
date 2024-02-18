@@ -20,7 +20,7 @@ Route::get('/', function () {
     return redirect('/app');
 });
 
-//Route::get('login', function () {
-//    return redirect('/app');
-//})->name('login')->middleware('guest');
+Route::get('login', function () {
+    return redirect('/app');
+})->name('login')->middleware('guest');
 

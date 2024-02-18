@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\ProduitResource\Pages;
 
 use App\Filament\Resources\ProduitResource;
-use Filament\Actions;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;

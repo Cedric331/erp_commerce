@@ -2,9 +2,11 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\ProduitResource\Pages\Tenancy\CommercantEdit;
-use App\Filament\Resources\ProduitResource\Pages\Tenancy\CommercantRegister;
+use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use App\Filament\Resources\Tenancy\CommercantEdit;
+use App\Filament\Resources\Tenancy\CommercantRegister;
 use App\Http\Middleware\ApplyTenantScopes;
+use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
 use App\Models\Commercant;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -12,7 +14,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -38,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->font('Poppins')
             ->profile()
             ->login()
-            ->loginRouteSlug('connexion')
+            ->loginRouteSlug('login')
             ->passwordReset()
             ->globalSearch()
             ->renderHook(
@@ -83,12 +84,15 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->databaseNotifications()
+            ->databaseNotificationsPolling('300s')
             ->tenant(Commercant::class, 'slug')
-//            ->tenantRegistration(CommercantRegister::class)
+            ->tenantRegistration(CommercantRegister::class)
             ->tenantProfile(CommercantEdit::class)
-            ->tenantRoutePrefix('commerce')
+            ->tenantRoutePrefix('shop')
             ->tenantMiddleware([
+                SyncSpatiePermissionsWithFilamentTenants::class,
                 ApplyTenantScopes::class,
-            ], isPersistent: true);
+            ], isPersistent: true)
+            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
     }
 }
