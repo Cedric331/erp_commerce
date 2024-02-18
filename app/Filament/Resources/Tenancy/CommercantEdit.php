@@ -23,7 +23,7 @@ class CommercantEdit extends EditTenantProfile
 
     public static function canView(\Illuminate\Database\Eloquent\Model $tenant): bool
     {
-       return Auth::user()->hasPermissionTo('Gestion commerce') || Auth::user()->isAdministrateurOrGérant();
+       return Auth::user()->hasPermissionTo('Gestion commerce') || Auth::user()->isAdministrateurOrGerant();
     }
 
     public function form(Form $form): Form

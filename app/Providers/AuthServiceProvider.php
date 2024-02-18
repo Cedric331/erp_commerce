@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\Stock;
 use App\Models\StockStatus;
 use App\Models\User;
+use App\Policies\CategorieProduitPolicy;
 use App\Policies\CommercantPolicy;
 use App\Policies\ExportPolicy;
 use App\Policies\FournisseurPolicy;
@@ -31,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Produit::class => ProduitPolicy::class,
-        CategorieProduit::class => CategorieProduit::class,
+        CategorieProduit::class => CategorieProduitPolicy::class,
         Fournisseur::class => FournisseurPolicy::class,
         Stock::class => StockPolicy::class,
         StockStatus::class => StockStatusPolicy::class,

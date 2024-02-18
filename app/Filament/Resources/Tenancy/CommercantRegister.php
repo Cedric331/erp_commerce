@@ -22,7 +22,7 @@ class CommercantRegister extends RegisterTenant
 
     public static function canView(): bool
     {
-        return Auth::user()->isAdministrateurOrGérant();
+        return Auth::user()->isAdministrateurOrGerant();
     }
 
     public function form(Form $form): Form

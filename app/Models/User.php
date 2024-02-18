@@ -17,12 +17,11 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Collection;
 use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasTenants
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -77,7 +76,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
             return false;
         }    }
 
-    public function isAdministrateurOrGérant()
+    public function isAdministrateurOrGerant()
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
 
@@ -112,7 +111,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function canAccessTenant(Model $tenant): bool
     {
-        // Assurez-vous que $tenant->id correspond à l'ID du commerçant. Ajustez si nécessaire.
         return $this->commercant->contains('id', $tenant->id);
     }
 
