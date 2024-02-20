@@ -7,6 +7,18 @@ use App\Models\User;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
+use Filament\Facades\Filament;
+
+function getValeurStock(): float
+{
+    $produits = Produit::where('commercant_id', Filament::getTenant()->id)->get();
+    $value = 0;
+    foreach ($produits as $produit) {
+        $value += $produit->stock * $produit->prix_ht;
+    }
+
+    return $value;
+}
 
 class ProduitExporter extends Exporter
 {
@@ -22,11 +34,13 @@ class ProduitExporter extends Exporter
         return 'Produits';
     }
 
+
+
     public static function getColumns(): array
     {
+        $value = getValeurStock();
         return [
-            ExportColumn::make('id')
-                ->label('ID'),
+
             ExportColumn::make('nom')
                 ->label('Nom du produit'),
             ExportColumn::make('reference')
@@ -38,7 +52,7 @@ class ProduitExporter extends Exporter
             ExportColumn::make('stock_alert')
                 ->label('Stock Alerte'),
             ExportColumn::make('stock_total_ht')
-                ->label('Stock Total HT')
+                ->label('Valeur Stock HT Produit')
                 ->state(function (Produit $record): float {
                     return $record->stock * $record->prix_ht;
                 }),
@@ -60,12 +74,16 @@ class ProduitExporter extends Exporter
             ExportColumn::make('updated_at')
                 ->enabledByDefault(false)
                 ->label('Date de modification'),
+            ExportColumn::make('produit_total_ht')
+                ->label('Valeur Total HT')
+                ->state($value),
+
         ];
     }
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Les produits sont exporter ' . number_format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exporté.';
+        $body = 'Les produits sont exporter ' . number_format($export->successful_rows) . ' ' . str('ligne')->plural($export->successful_rows) . ' exporté.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
             $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' échec de l\'import.';

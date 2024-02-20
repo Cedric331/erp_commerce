@@ -14,8 +14,10 @@
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
+        @filamentStyles
     </head>
     <body class="font-sans antialiased">
         @inertia
+        @filamentScripts
     </body>
 </html>

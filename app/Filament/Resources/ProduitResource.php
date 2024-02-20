@@ -45,11 +45,13 @@ class ProduitResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('nom')
                             ->label('Nom du produit')
+                            ->unique(ignoreRecord: true)
                             ->required()
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('reference')
                             ->label('Référence')
+                            ->unique(ignoreRecord: true)
                             ->required()
                             ->maxLength(255),
 
@@ -60,6 +62,7 @@ class ProduitResource extends Resource
                             ->optionsLimit(10)
                             ->searchDebounce(200)
                             ->loadingMessage('Recherche des catégories...')
+                            ->preload()
                             ->createOptionForm([
                                 Forms\Components\TextInput::make('name')
                                     ->label('Nom de la catégorie')
@@ -85,6 +88,7 @@ class ProduitResource extends Resource
                             ->searchable()
                             ->optionsLimit(10)
                             ->searchDebounce(200)
+                            ->preload()
                             ->loadingMessage('Recherche des fournisseurs...')
                             ->createOptionForm([
                                 Forms\Components\TextInput::make('name')
@@ -304,7 +308,7 @@ class ProduitResource extends Resource
                         ExportFormat::Xlsx,
                         ExportFormat::Csv,
                     ])
-                    ->hidden(!Gate::allows('create', Export::class))
+                    ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant() && !Auth::user()->isManager())
                     ->exporter(ProduitExporter::class)
             ]);
     }

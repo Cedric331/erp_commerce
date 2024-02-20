@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\InvitationUser;
 use Filament\Actions;
+use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -18,6 +19,10 @@ class CreateUser extends CreateRecord
     public function mutateFormDataBeforeCreate(array $data): array
     {
         $data['password'] = Hash::make(Str::random(10));
+
+        if ($data['commercant_id'] === null) {
+            $data['commercant_id'] = Filament::getTenant()->id;
+        }
 
         return $data;
     }

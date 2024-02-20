@@ -37,6 +37,7 @@ class CategorieProduitResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Nom de la catégorie')
                     ->required()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('alert_stock')
                     ->label('Alerte de stock')

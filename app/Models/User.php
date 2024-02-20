@@ -63,7 +63,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function getTenants(Panel $panel): Collection
     {
-        return $this->commercant;
+        return $this->getAccessibleCommercants();
     }
 
     public function isAdministrateur()
@@ -74,13 +74,30 @@ class User extends Authenticatable implements FilamentUser, HasTenants
             return true;
         } else {
             return false;
-        }    }
+        }
+    }
 
     public function isAdministrateurOrGerant()
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
 
         if ($userRoles->contains('Administrateur') || $userRoles->contains('Gérant')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isManager(): bool
+    {
+        return $this->hasRole('Manager');
+    }
+
+    public function isGerant(): bool
+    {
+        $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
+
+        if ($userRoles->contains('Gérant')) {
             return true;
         } else {
             return false;
@@ -109,8 +126,21 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $this->belongsToMany(Commercant::class, 'commercant_users', 'user_id', 'commercant_id');
     }
 
+    public function getAccessibleCommercants()
+    {
+        if ($this->isAdministrateurOrGerant()) {
+            return Commercant::all();
+        } else {
+            return $this->commercant;
+        }
+    }
+
+
     public function canAccessTenant(Model $tenant): bool
     {
+        if ($this->isAdministrateurOrGerant()) {
+            return true;
+        }
         return $this->commercant->contains('id', $tenant->id);
     }
 

@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use App\Filament\Resources\Tenancy\CommercantEdit;
-use App\Filament\Resources\Tenancy\CommercantRegister;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
 use App\Models\Commercant;
@@ -24,6 +23,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -42,12 +42,13 @@ class AdminPanelProvider extends PanelProvider
             ->loginRouteSlug('login')
             ->passwordReset()
             ->globalSearch()
+            ->globalSearchDebounce(100)
             ->renderHook(
-                PanelsRenderHook::TOPBAR_START,
+                PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
                 fn (): string => Blade::render('@livewire(\'create-product\')')
             )
             ->renderHook(
-                PanelsRenderHook::TOPBAR_START,
+                PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
                 fn (): string => Blade::render('@livewire(\'create-stock\')')
             )
             ->sidebarCollapsibleOnDesktop()
@@ -65,7 +66,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
+//                Widgets\AccountWidget::class,
 //                Widgets\FilamentInfoWidget::class,
             ])
             ->spa()
@@ -83,16 +84,25 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->navigationGroups([
+                'Gestion des produits',
+                'Gestion des stocks',
+                'Gestion des utilisateurs',
+                'Rôles et Permissions'
+            ])
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
             ->tenant(Commercant::class, 'slug')
-            ->tenantRegistration(CommercantRegister::class)
+//            ->tenantRegistration(CommercantRegister::class)
             ->tenantProfile(CommercantEdit::class)
             ->tenantRoutePrefix('shop')
             ->tenantMiddleware([
                 SyncSpatiePermissionsWithFilamentTenants::class,
                 ApplyTenantScopes::class,
             ], isPersistent: true)
-            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
+            ->plugins([
+                FilamentSpatieRolesPermissionsPlugin::make(),
+                FilamentApexChartsPlugin::make()
+            ]);
     }
 }

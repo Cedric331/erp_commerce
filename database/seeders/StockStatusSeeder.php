@@ -9,10 +9,9 @@ use Illuminate\Database\Seeder;
 class StockStatusSeeder extends Seeder
 {
 
-    const STATUS_PROGRESS = 'En cours';
-    const STATUS_COMPLETED = 'Traité';
-    const STATUS_ERROR = 'Erreur';
-    const STATUS_CANCELLED = 'Annulé';
+    const STATUS_VENTE = 'Vente';
+    const STATUS_LIVRAISON = 'Livraison';
+    const STATUS_PERTE = 'Perte';
 
     /**
      * Run the database seeds.
@@ -20,26 +19,23 @@ class StockStatusSeeder extends Seeder
     public function run(): void
     {
         StockStatus::create([
-            'name' => self::STATUS_PROGRESS,
+            'name' => self::STATUS_VENTE,
+            'color' =>  '#008000',
+            'type' => StockStatus::TYPE_SORTIE,
+            'commercant_id' => 1,
+        ]);
+
+        StockStatus::create([
+            'name' => self::STATUS_LIVRAISON,
             'color' => '#FFA500',
+            'type' => StockStatus::TYPE_ENTREE,
             'commercant_id' => 1,
         ]);
 
         StockStatus::create([
-            'name' => self::STATUS_COMPLETED,
-            'color' => '#008000',
-            'commercant_id' => 1,
-        ]);
-
-        StockStatus::create([
-            'name' => self::STATUS_ERROR,
+            'name' => self::STATUS_PERTE,
             'color' => '#FF0000',
-            'commercant_id' => 1,
-        ]);
-
-        StockStatus::create([
-            'name' => self::STATUS_CANCELLED,
-            'color' => '#000000',
+            'type' => StockStatus::TYPE_SORTIE,
             'commercant_id' => 1,
         ]);
     }

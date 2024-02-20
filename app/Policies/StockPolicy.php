@@ -14,7 +14,7 @@ class StockPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Créer Stock') || $user->isAdministrateur();
+        return $user->isAdministrateurOrGerant() || $user->isManager() || $user->hasPermissionTo('Créer stock');
     }
 
     /**
@@ -22,7 +22,7 @@ class StockPolicy
      */
     public function update(User $user, Stock $stock): bool
     {
-        return $user->hasPermissionTo('Modifier Stock') || $user->isAdministrateur();
+        return $user->isAdministrateurOrGerant() || $user->isManager() || $user->hasPermissionTo('Modifier stock');
     }
 
     /**
@@ -30,6 +30,6 @@ class StockPolicy
      */
     public function delete(User $user, Stock $stock): bool
     {
-        return $user->hasPermissionTo('Supprimer Stock') || $user->isAdministrateur();
+        return false;
     }
 }

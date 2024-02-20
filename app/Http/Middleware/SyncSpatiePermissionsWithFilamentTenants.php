@@ -22,7 +22,9 @@ class SyncSpatiePermissionsWithFilamentTenants
 
         if ($filament && $filament->id !== $spatie) {
             setPermissionsTeamId($filament);
-            Auth::user()->unsetRelation('roles')->unsetRelation('permissions');
+            if (Auth::check()) {
+                Auth::user()->unsetRelation('roles')->unsetRelation('permissions');
+            }
         }
 
         return $next($request);

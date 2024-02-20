@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Commercant;
 use App\Models\Produit;
 use App\Models\User;
+use App\Notifications\AlerteStock;
 use Filament\Notifications\Notification;
 use Illuminate\Console\Command;
 
@@ -29,29 +31,42 @@ class CheckProductStock extends Command
      */
     public function handle()
     {
-        $products = Produit::with('categorie')->get();
+        $commercants = Commercant::whereHas('produits', function ($query) {
+            $query->where('stock', '>', 0)
+                    ->with('categorie');
+        })->get();
 
-        foreach ($products as $product) {
-            $threshold = $product->stock_alert && $product->stock_alert > 0 ? $product->stock_alert : $product->categorie->alert_stock;
+        foreach ($commercants as $commercant) {
+            $data = [];
+            $recipient = User::with('rolesAllTenant')->whereHas('commercant', function ($query) use ($commercant) {
+                $query->where('commercant_id', $commercant->id);
+            })->get();
+            $recipient = $recipient->filter(function ($user) {
+                return $user->rolesAllTenant()->whereIn('name', ['Gérant', 'Manager'])->exists();
+            });
 
-            if ($threshold > 0 && $product->stock <= $threshold) {
-                $recipient = User::with('rolesAllTenant')->whereHas('commercant', function ($query) use ($product) {
-                    $query->where('commercant_id', $product->commercant_id);
-                })->get();
-                // On garde que les users qui ont le rôle "Gérant" et 'Manager' dans la relation rolesAllTenant
-                $recipient = $recipient->filter(function ($user) {
-                    return $user->rolesAllTenant()->whereIn('name', ['Gérant', 'Manager'])->exists();
-                });
+            foreach ($commercant->produits as $product) {
+                $threshold = $product->stock_alert && $product->stock_alert > 0 ? $product->stock_alert : $product->categorie->alert_stock;
 
-                Notification::make()
-                    ->title('Alerte stock sur le produit ' . $product->nom . ' - ' . $product->commercant->enseigne)
-                    ->body('Le stock du produit ' . $product->nom . ' sur le commerce ' . $product->commercant->enseigne . ' est en dessous du seuil d\'alerte. Il reste ' . $product->stock . ' unités.')
-                    ->sendToDatabase($recipient);
-                dd('Notification envoyée pour le produit ' . $product->nom);
-//                \Notification::route('mail', 'email@example.com')
-//                ->notify(new StockAlertNotification($product));
+                if ($threshold > 0 && $product->stock <= $threshold) {
+                    Notification::make()
+                        ->title('Alerte stock sur le produit ' . $product->nom . ' - ' . $product->commercant->enseigne)
+                        ->body('Le stock du produit ' . $product->nom . ' sur le commerce ' . $product->commercant->enseigne . ' est en dessous du seuil d\'alerte. Il reste ' . $product->stock . ' unités.')
+                        ->sendToDatabase($recipient);
+                    $data[] = [
+                        'product' => $product->nom,
+                        'stock' => $product->stock,
+                        'seuil_alerte' => $threshold,
+                    ];
+                }
+            }
+            if (count($data) > 0) {
+                foreach ($recipient as $user) {
+                    $user->notify(new AlerteStock($data, $commercant));
+                }
             }
         }
+
 
         $this->info('Vérification du stock terminée.');
     }

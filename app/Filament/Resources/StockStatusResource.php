@@ -27,6 +27,7 @@ class StockStatusResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nom du statut')
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('type')
@@ -75,7 +76,13 @@ class StockStatusResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(function ($record) {
+                        if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE)
+                            return false;
+                        else
+                            return true;
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

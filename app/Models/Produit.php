@@ -42,4 +42,9 @@ class Produit extends Model implements HasMedia
     {
         return $this->belongsTo(CategorieProduit::class, 'categorie_id', 'id');
     }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
+    }
 }

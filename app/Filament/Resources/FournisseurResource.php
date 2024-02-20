@@ -33,6 +33,7 @@ class FournisseurResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nom du fournisseur')
+                    ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
 //                Forms\Components\TextInput::make('email')
