@@ -6,6 +6,7 @@ use App\Filament\Resources\StockResource\Pages;
 use App\Models\Produit;
 use App\Models\Stock;
 use App\Models\StockStatus;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -26,10 +27,6 @@ class StockResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des stocks';
     protected static ?int $navigationSort = 1;
 
-    public static function canCreate(): bool
-    {
-        return false;
-    }
 
     public static function form(Form $form): Form
     {
@@ -58,8 +55,7 @@ class StockResource extends Resource
                     )
                     ->required(),
                 Forms\Components\DatePicker::make('scheduled_date')
-                    ->label('Date prévue')
-                    ->required(),
+                    ->label('Date prévue'),
                 Forms\Components\Textarea::make('note')
                     ->label('Note'),
             ]);
@@ -86,11 +82,18 @@ class StockResource extends Resource
                         else
                         return $record->scheduled_date->isFuture();
                     }),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(function ($record) {
+                        if ($record->scheduled_date === null)
+                            return false;
+                        else
+                            return $record->scheduled_date->isFuture();
+                    }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+//                Tables\Actions\BulkActionGroup::make([
+//                    Tables\Actions\DeleteBulkAction::make(),
+//                ]),
             ]);
     }
 

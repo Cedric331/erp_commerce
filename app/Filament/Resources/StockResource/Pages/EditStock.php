@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\StockResource\Pages;
 
 use App\Filament\Resources\StockResource;
+use App\Models\Stock;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 
 class EditStock extends EditRecord
 {
@@ -13,7 +16,23 @@ class EditStock extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+//            Actions\DeleteAction::make(),
         ];
     }
+
+    public function beforeSave()
+    {
+        if (Auth::user()->can('update', $this->getRecord()) && $this->getRecord()->scheduled_date !== null) {
+            return true;
+        }
+        Notification::make()
+            ->title('Accès interdit')
+            ->body('Vous n\'avez pas l\'autorisation d\'effectuer cette modification.')
+            ->danger()
+            ->duration(10000)
+            ->send();
+
+        $this->halt();
+    }
+
 }

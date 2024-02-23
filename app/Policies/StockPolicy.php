@@ -30,6 +30,6 @@ class StockPolicy
      */
     public function delete(User $user, Stock $stock): bool
     {
-        return false;
+        return $user->isAdministrateurOrGerant() || $user->isManager() || $user->hasPermissionTo('Créer stock');
     }
 }

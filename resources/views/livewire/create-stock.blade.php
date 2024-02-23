@@ -15,6 +15,7 @@
                     <x-filament::button
                         color="primary"
                         size="sm"
+
                         icon="heroicon-o-clipboard-document-list"
                         iconSize="sm">
                         Gestion du stock
