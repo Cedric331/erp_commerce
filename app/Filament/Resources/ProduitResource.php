@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Exports\ProduitExporter;
 use App\Filament\Resources\ProduitResource\Pages;
+use App\Filament\Resources\ProduitResource\Widgets\ValeurStockProduct;
 use App\Models\Produit;
+use Filament\Actions\CreateAction;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Actions\Exports\Models\Export;
 use Filament\Facades\Filament;
@@ -36,6 +38,13 @@ class ProduitResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des produits';
     protected static ?int $navigationSort = 3;
     protected static ?string $recordTitleAttribute = 'nom';
+
+    public static function getWidgets(): array
+    {
+        return [
+            ValeurStockProduct::class
+        ];
+    }
 
     public static function form(Form $form): Form
     {
@@ -269,11 +278,13 @@ class ProduitResource extends Resource
                 SelectFilter::make('categorie')
                     ->label('Catégorie')
                     ->relationship('categorie', 'name')
+                    ->preload()
                     ->options(
                         fn (Builder $query) => $query->pluck('name', 'id')->all()
                     ),
                 SelectFilter::make('fournisseur')
                     ->label('Fournisseur')
+                    ->preload()
                     ->relationship('fournisseur', 'name')
                     ->options(
                         fn (Builder $query) => $query->pluck('name', 'id')->all()
@@ -281,6 +292,7 @@ class ProduitResource extends Resource
                 SelectFilter::make('tva')
                     ->label('TVA')
                     ->options([
+                        '2.1' => '2.1',
                         '5.5' => '5.5',
                         '10' => '10',
                         '20' => '20',
@@ -305,6 +317,8 @@ class ProduitResource extends Resource
                 ]),
             ])
             ->headerActions([
+                Tables\Actions\CreateAction::make()
+                    ->label('Créer un produit'),
                 ExportAction::make()
                     ->label('Exporter les produits')
                     ->icon('heroicon-o-arrow-down-tray')

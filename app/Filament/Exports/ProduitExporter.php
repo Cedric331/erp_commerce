@@ -44,7 +44,9 @@ class ProduitExporter extends Exporter
             ExportColumn::make('nom')
                 ->label('Nom du produit'),
             ExportColumn::make('reference')
-                ->label('Référence'),
+                ->label('Référence fournisseur'),
+            ExportColumn::make('type')
+                ->label('Type de produit'),
             ExportColumn::make('description')
                 ->label('Description'),
             ExportColumn::make('stock')
@@ -55,6 +57,11 @@ class ProduitExporter extends Exporter
                 ->label('Valeur Stock HT Produit')
                 ->state(function (Produit $record): float {
                     return $record->stock * $record->prix_ht;
+                }),
+            ExportColumn::make('stock_total_ttc')
+                ->label('Valeur Stock TTC Produit')
+                ->state(function (Produit $record): float {
+                    return $record->stock * $record->prix_ttc;
                 }),
             ExportColumn::make('prix_ht')
                 ->label('Prix HT'),
