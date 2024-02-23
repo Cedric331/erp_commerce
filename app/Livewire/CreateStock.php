@@ -2,11 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Filament\Resources\ProduitResource;
+use App\Filament\Resources\StockStatusResource;
 use App\Models\Produit;
 use App\Models\Stock;
 use App\Models\StockStatus;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use Filament\Notifications\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
@@ -19,6 +22,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class CreateStock extends Component implements HasForms
@@ -138,9 +142,29 @@ class CreateStock extends Component implements HasForms
     public function showFormNotShown()
     {
         Notification::make()
-            ->title('Aucun statut de stock n\'est configuré')
-            ->body('Veuillez configurer au moins un statut de stock pour pouvoir créer une ligne de stock.')
+            ->title('Aucun produit ou statut de stock n\'est configuré')
+            ->body('Veuillez créer un produit et configurer au moins un statut de stock.')
             ->warning()
+            ->color('warning')
+            ->duration(15000)
+            ->actions([
+                Action::make('create_product')
+                    ->button()
+                    ->label('Créer un produit')
+                    ->outlined()
+                    ->hidden(function () {
+                        return Produit::where('commercant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', Produit::class);
+                    })
+                    ->url(ProduitResource::getUrl('create')),
+                Action::make('create_statut')
+                    ->button()
+                    ->label('Créer un statut')
+                    ->outlined()
+                    ->hidden(function () {
+                        return StockStatus::where('commercant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', StockStatus::class);
+                    })
+                    ->url(StockStatusResource::getUrl('create')),
+            ])
             ->send();
     }
 

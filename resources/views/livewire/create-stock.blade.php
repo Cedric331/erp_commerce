@@ -4,11 +4,10 @@
             <x-filament::button
                 wire:click="showFormNotShown"
                 color="primary"
-                disabled
                 size="sm"
                 icon="heroicon-o-clipboard-document-list"
                 iconSize="sm">
-                Gestion du stock
+                Gestion du stocks
             </x-filament::button>
         @else
             <x-filament::modal icon="heroicon-o-clipboard-document-list" icon-color="primary" slide-over width="4xl">
