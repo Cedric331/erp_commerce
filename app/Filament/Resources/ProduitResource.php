@@ -47,10 +47,15 @@ class ProduitResource extends Resource
                             ->label('Nom du produit')
                             ->unique(ignoreRecord: true)
                             ->required()
+                            ->columnSpanFull()
+                            ->maxLength(255),
+
+                        Forms\Components\TextInput::make('type')
+                            ->label('Type de produit')
                             ->maxLength(255),
 
                         Forms\Components\TextInput::make('reference')
-                            ->label('Référence')
+                            ->label('Référence fournisseur')
                             ->unique(ignoreRecord: true)
                             ->required()
                             ->maxLength(255),
