@@ -48,7 +48,6 @@
     },
     "scripts": {
         "livewire-publish": [
-            "rm ./public/livewire",
             "ln -s ../vendor/livewire/livewire/dist ./public/livewire"
         ],
         "livewire-unpublish": [
