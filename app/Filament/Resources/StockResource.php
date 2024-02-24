@@ -6,11 +6,15 @@ use App\Filament\Resources\StockResource\Pages;
 use App\Models\Produit;
 use App\Models\Stock;
 use App\Models\StockStatus;
+use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -65,14 +69,34 @@ class StockResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('produit.nom')->label('Produit'),
-                Tables\Columns\TextColumn::make('quantity')->label('Quantité'),
-                Tables\Columns\TextColumn::make('note')->label('Note'),
-                Tables\Columns\TextColumn::make('stockStatus.name')->label('Statut'),
-                Tables\Columns\TextColumn::make('formatted_scheduled_date')->label('Date prévue'),
+                Tables\Columns\TextColumn::make('produit.nom')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Produit'),
+                Tables\Columns\TextColumn::make('quantity')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Quantité'),
+                Tables\Columns\TextColumn::make('note')
+                    ->searchable()
+                    ->label('Note'),
+                Tables\Columns\TextColumn::make('stockStatus.name')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Statut'),
+                Tables\Columns\TextColumn::make('formatted_scheduled_date')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Date prévue'),
             ])
             ->filters([
-                //
+                SelectFilter::make('quantity')
+                    ->label('Produit')
+                    ->relationship('produit', 'nom')
+                    ->preload()
+                    ->options(
+                        fn (Builder $query) => $query->pluck('nom', 'id')->all()
+                    ),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

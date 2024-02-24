@@ -35,6 +35,7 @@ class FournisseurResource extends Resource
                     ->label('Nom du fournisseur')
                     ->unique(ignoreRecord: true)
                     ->required()
+                    ->columnSpanFull()
                     ->maxLength(255),
 //                Forms\Components\TextInput::make('email')
 //                    ->email()
@@ -66,6 +67,7 @@ class FournisseurResource extends Resource
                 Tables\Columns\TextColumn::make('produits_count')
                     ->label('Nombre de produits chez ce fournisseur')
                     ->counts('produits')
+                    ->sortable()
                     ->searchable(),
 //                Tables\Columns\TextColumn::make('email')
 //                    ->searchable(),
@@ -107,7 +109,7 @@ class FournisseurResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ProduitsRelationManager::class,
         ];
     }
 

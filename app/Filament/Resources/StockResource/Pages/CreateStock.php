@@ -42,19 +42,4 @@ class CreateStock extends CreateRecord
             }
         }
     }
-
-    public function beforeCreate()
-    {
-        if (Auth::user()->can('create', $this->getRecord())) {
-            return true;
-        }
-        Notification::make()
-            ->title('Accès interdit')
-            ->body('Vous n\'avez pas l\'autorisation d\'effectuer cette action.')
-            ->danger()
-            ->duration(10000)
-            ->send();
-
-        $this->halt();
-    }
 }

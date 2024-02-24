@@ -1,53 +1,27 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\CategorieProduitResource\RelationManagers;
 
-use App\Filament\Exports\ProduitExporter;
-use App\Filament\Resources\ProduitResource\Pages;
-use App\Filament\Resources\ProduitResource\Widgets\ValeurStockProduct;
-use App\Models\Produit;
-use Filament\Actions\CreateAction;
-use Filament\Actions\Exports\Enums\ExportFormat;
-use Filament\Actions\Exports\Models\Export;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Validation\Rule;
 
-class ProduitResource extends Resource
+class ProduitsRelationManager extends RelationManager
 {
-    protected static ?string $model = Produit::class;
+    protected static string $relationship = 'produits';
 
-    protected static bool $isScopedToTenant = true;
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static ?string $title = 'Produit dans cette catégorie';
 
-    protected static ?string $label = 'Produit';
-    protected static ?string $pluralModelLabel = 'Produits';
-    protected static ?string $slug = 'products';
-    protected static ?string $navigationGroup = 'Gestion des produits';
-    protected static ?int $navigationSort = 3;
-    protected static ?string $recordTitleAttribute = 'nom';
 
-    public static function getWidgets(): array
-    {
-        return [
-            ValeurStockProduct::class
-        ];
-    }
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -190,37 +164,14 @@ class ProduitResource extends Resource
                             })
                             ->numeric('decimal', 2),
                     ]),
-
-                // Section: Médias
-//                Forms\Components\Section::make('Médias')
-//                    ->schema([
-//                        SpatieMediaLibraryFileUpload::make('attachments')
-//                            ->label('Images du produit')
-//                            ->collection('media-product')
-//                            ->conversion('thumb')
-//                            ->responsiveImages()
-//                            ->multiple()
-//                            ->reorderable(),
-//                    ]),
             ]);
     }
 
-
-
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('nom')
             ->columns([
-//                SpatieMediaLibraryImageColumn::make('attachments')
-//                    ->collection('media-product')
-//                    ->circular()
-//                    ->stacked()
-//                    ->limit(3)
-//                    ->limitedRemainingText(function ($state) {
-//                        return count($state) > 3;
-//                    })
-//                    ->conversion('thumb')
-//                    ->label('Images'),
                 Tables\Columns\TextColumn::make('nom')
                     ->label('Nom du produit')
                     ->sortable()
@@ -261,98 +212,21 @@ class ProduitResource extends Resource
                     })
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('categorie.name')
-                    ->label('Catégorie')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('fournisseur.name')
-                    ->label('Fournisseur')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Créé le')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Modifié le')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('categorie')
-                    ->label('Catégorie')
-                    ->relationship('categorie', 'name')
-                    ->preload()
-                    ->options(
-                        fn (Builder $query) => $query->pluck('name', 'id')->all()
-                    ),
-                SelectFilter::make('fournisseur')
-                    ->label('Fournisseur')
-                    ->preload()
-                    ->relationship('fournisseur', 'name')
-                    ->options(
-                        fn (Builder $query) => $query->pluck('name', 'id')->all()
-                    ),
-                SelectFilter::make('tva')
-                    ->label('TVA')
-                    ->options([
-                        '2.1' => '2.1',
-                        '5.5' => '5.5',
-                        '10' => '10',
-                        '20' => '20',
-                    ]),
-            ], layout: FiltersLayout::Modal)
-            ->persistFiltersInSession()
-            ->filtersFormColumns(3)
-            ->filtersTriggerAction(
-                fn (\Filament\Tables\Actions\Action $action) => $action
-                    ->button()
-                    ->label('Filter les produits'),
-            )
-            ->actions([
-                ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
-                ]),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->label('Créer un produit'),
-                ExportAction::make()
-                    ->label('Exporter les produits')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->color('primary')
-                    ->formats([
-                        ExportFormat::Xlsx,
-                        ExportFormat::Csv,
-                    ])
-                    ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant() && !Auth::user()->isManager())
-                    ->exporter(ProduitExporter::class)
+                //   Tables\Actions\CreateAction::make(),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+//                Tables\Actions\DeleteAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListProduits::route('/'),
-            'create' => Pages\CreateProduit::route('/create'),
-            'edit' => Pages\EditProduit::route('/{record}/edit'),
-        ];
+//            ->bulkActions([
+//                Tables\Actions\BulkActionGroup::make([
+//                    Tables\Actions\DeleteBulkAction::make(),
+//                ]),
+//            ]);
     }
 }

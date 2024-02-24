@@ -79,7 +79,7 @@ class CategorieProduitResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ProduitsRelationManager::class,
         ];
     }
 
