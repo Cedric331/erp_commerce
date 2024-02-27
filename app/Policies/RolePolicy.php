@@ -13,7 +13,7 @@ class RolePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant() || $user->isManager();
     }
 
     /**
@@ -21,7 +21,7 @@ class RolePolicy
      */
     public function view(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant() || $user->isManager();
     }
 
     /**
@@ -29,7 +29,7 @@ class RolePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant() || $user->isManager();
     }
 
     /**

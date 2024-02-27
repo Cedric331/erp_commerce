@@ -13,7 +13,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Créer Utilisateur') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Créer Utilisateur') || $user->isAdministrateurOrGerant() || $user->isManager();
     }
 
     /**
@@ -21,7 +21,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('Modifier Utilisateur') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Modifier Utilisateur') || $user->isAdministrateurOrGerant() || $user->isManager();
     }
 
     /**
@@ -29,6 +29,6 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('Supprimer Utilisateur') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Supprimer Utilisateur') || $user->isAdministrateurOrGerant() || $user->isManager();
     }
 }

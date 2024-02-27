@@ -35,6 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('/favicon.ico'))
             ->brandLogo(asset('images/logo.png'))
             ->darkModeBrandLogo(asset('images/logo-dark.png'))
+            ->viteTheme('resources/css/filament/app/theme.css')
             ->brandLogoHeight('3rem')
             ->font('Poppins')
             ->profile()

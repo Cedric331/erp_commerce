@@ -37,9 +37,11 @@ class ApplyTenantScopes
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
         );
 
-//        Role::addGlobalScope(
-//            fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
-//        );
+        Role::addGlobalScope(
+            fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant())
+                ->orWhere('name', '=', 'Administrateur')
+                ->orWhere('name', '=', 'Gérant')
+        );
 
         return $next($request);
     }

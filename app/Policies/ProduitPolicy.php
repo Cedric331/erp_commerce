@@ -15,7 +15,7 @@ class ProduitPolicy
      */
     public function create(User $user): bool
     {
-       return $user->hasPermissionTo('Créer produit') || $user->isAdministrateur();
+       return $user->hasPermissionTo('Créer produit') || $user->isAdministrateurOrGerant();
     }
 
     /**
@@ -23,7 +23,7 @@ class ProduitPolicy
      */
     public function update(User $user, Produit $produit): bool
     {
-        return $user->hasPermissionTo('Créer produit') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Créer produit') || $user->isAdministrateurOrGerant();
     }
 
     /**
@@ -31,6 +31,6 @@ class ProduitPolicy
      */
     public function delete(User $user, Produit $produit): bool
     {
-        return $user->hasPermissionTo('Supprimer produit') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Supprimer produit') || $user->isAdministrateurOrGerant();
     }
 }

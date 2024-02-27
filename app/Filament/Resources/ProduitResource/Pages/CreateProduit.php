@@ -6,6 +6,7 @@ use App\Filament\Resources\ProduitResource;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Auth;
 
 class CreateProduit extends CreateRecord
 {
@@ -31,5 +32,15 @@ class CreateProduit extends CreateRecord
         $data['commercant_id'] = $tenant->id;
 
         return $data;
+    }
+
+    public function afterCreate()
+    {
+        activity('Produit')
+            ->event('Création du produit')
+            ->causedBy(Auth::user())
+            ->performedOn($this->record)
+            ->log('Le produit a été créé avec succès.');
+
     }
 }

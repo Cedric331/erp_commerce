@@ -14,7 +14,7 @@ class FournisseurPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Créer Fournisseur') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Créer Fournisseur') || $user->isAdministrateurOrGerant();
     }
 
     /**
@@ -22,7 +22,7 @@ class FournisseurPolicy
      */
     public function update(User $user, Fournisseur $fournisseur): bool
     {
-        return $user->hasPermissionTo('Modifier Fournisseur') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Modifier Fournisseur') || $user->isAdministrateurOrGerant();
     }
 
     /**
@@ -30,6 +30,6 @@ class FournisseurPolicy
      */
     public function delete(User $user, Fournisseur $fournisseur): bool
     {
-        return $user->hasPermissionTo('Supprimer Fournisseur') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Supprimer Fournisseur') || $user->isAdministrateurOrGerant();
     }
 }

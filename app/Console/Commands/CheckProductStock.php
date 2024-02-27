@@ -46,7 +46,7 @@ class CheckProductStock extends Command
             });
 
             foreach ($commercant->produits as $product) {
-                $threshold = $product->stock_alert && $product->stock_alert > 0 ? $product->stock_alert : $product->categorie->alert_stock;
+                $threshold = $product->stock_alert && $product->stock_alert > 0 || !$product->categorie ? $product->stock_alert : $product->categorie->alert_stock;
 
                 if ($threshold > 0 && $product->stock <= $threshold) {
                     Notification::make()
@@ -58,6 +58,12 @@ class CheckProductStock extends Command
                         'stock' => $product->stock,
                         'seuil_alerte' => $threshold,
                     ];
+
+                    activity('Produit')
+                        ->event('Alerte stock')
+                        ->causedBy($commercant->user)
+                        ->performedOn($product)
+                        ->log('Le stock du produit ' . $product->nom . ' est en dessous du seuil d\'alerte. Il reste ' . $product->stock . ' unités.');
                 }
             }
             if (count($data) > 0) {

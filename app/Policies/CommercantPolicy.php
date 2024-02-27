@@ -12,13 +12,11 @@ class CommercantPolicy
 
     public function viewAny(User $user): bool
     {
-        dd($user->hasPermissionTo('Gestion commerce') || $user->isAdministrateur());
-        return $user->hasPermissionTo('Gestion commerce') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Gestion commerce') || $user->isAdministrateurOrGerant();
     }
 
     public function view(User $user, Commercant $commercant): bool
     {
-        $user->hasPermissionTo('Gestion commerce') || $user->isAdministrateur();
-        return $user->hasPermissionTo('Gestion commerce') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Gestion commerce') || $user->isAdministrateurOrGerant();
     }
 }

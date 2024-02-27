@@ -14,7 +14,7 @@ class CategorieProduitPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Créer catégorie') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Créer catégorie') || $user->isAdministrateurOrGerant();
     }
 
     /**
@@ -22,7 +22,7 @@ class CategorieProduitPolicy
      */
     public function update(User $user, CategorieProduit $categorie): bool
     {
-        return $user->hasPermissionTo('Modifier catégorie') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Modifier catégorie') || $user->isAdministrateurOrGerant();
     }
 
     /**
@@ -30,6 +30,6 @@ class CategorieProduitPolicy
      */
     public function delete(User $user, CategorieProduit $categorie): bool
     {
-        return $user->hasPermissionTo('Supprimer catégorie') || $user->isAdministrateur();
+        return $user->hasPermissionTo('Supprimer catégorie') || $user->isAdministrateurOrGerant();
     }
 }

@@ -43,6 +43,12 @@ class AddStock extends Command
                 $stock->produit->decrement('stock', $stock->quantity);
             }
 
+            activity('Produit')
+                ->event('Stock modifié')
+                ->causedBy($stock->user)
+                ->performedOn($stock)
+                ->log('Le stock a été modifié avec succès le '. date('d/m/Y', strtotime(now())) .'. Le stock du produit est maintenant de ' . $stock->produit->stock . '.');
+
             $stock->update([
                 'scheduled_date' => null,
             ]);

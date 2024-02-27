@@ -1,10 +1,18 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
+import preset from './vendor/filament/support/tailwind.config.preset'
 
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-    content: ["./resources/**/*.blade.php", "./vendor/filament/**/*.blade.php"],
+    presets: [preset],
+    content: [
+        "./resources/**/*.blade.php",
+        './vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
+        './app/Filament/**/*.php',
+        './resources/views/filament/**/*.blade.php',
+        './vendor/filament/**/*.blade.php',
+    ],
     darkMode: "class",
     theme: {
         extend: {
@@ -17,8 +25,7 @@ module.exports = {
         },
     },
     plugins: [
-        require("@tailwindcss/forms"),
-        require("@tailwindcss/typography"),
-        forms
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography'),
     ],
 };

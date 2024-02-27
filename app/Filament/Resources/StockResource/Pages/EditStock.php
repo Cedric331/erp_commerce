@@ -20,6 +20,15 @@ class EditStock extends EditRecord
         ];
     }
 
+    public function mutateFormDataBeforeSave(array $data): array
+    {
+        if ($this->data['scheduled_date'] === "") {
+            $this->data['scheduled_date'] = null;
+        }
+
+        return $data;
+    }
+
     public function beforeSave()
     {
         if (Auth::user()->can('update', $this->getRecord()) && $this->getRecord()->scheduled_date !== null) {

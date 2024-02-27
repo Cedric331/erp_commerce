@@ -56,19 +56,30 @@ class CreateStock extends Component implements HasForms
 
         $this->data['commercant_id'] = Filament::getTenant()->id;
 
+        if ($this->data['scheduled_date'] === "") {
+            $this->data['scheduled_date'] = null;
+        }
+
         Stock::create($this->data);
 
         if (!$this->data['scheduled_date']) {
             $type = StockStatus::find($this->data['stock_status_id'])->type;
+
+            $produit = Produit::find($this->data['produit_id']);
             if ($type === StockStatus::TYPE_ENTREE) {
-                Produit::find($this->data['produit_id'])->update([
-                    'stock' => Produit::find($this->data['produit_id'])->stock + $this->data['quantity'],
+                $produit->update([
+                    'stock' => $produit->stock + $this->data['quantity'],
                 ]);
             } else {
-                Produit::find($this->data['produit_id'])->update([
-                    'stock' => Produit::find($this->data['produit_id'])->stock - $this->data['quantity'],
+                $produit->update([
+                    'stock' => $produit->stock - $this->data['quantity'],
                 ]);
             }
+            activity('Produit')
+                ->event('Stock modifié - ' . StockStatus::find($this->data['stock_status_id'])->name)
+                ->causedBy(Auth::user())
+                ->performedOn($produit)
+                ->log('Le stock a été modifié avec succès. Le stock du produit est maintenant de ' . $produit->stock . '.');
         }
 
         Notification::make()

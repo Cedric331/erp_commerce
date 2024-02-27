@@ -9,7 +9,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Produit extends Model implements HasMedia
 {
-    use InteractsWithMedia, HasFactory;
+    use InteractsWithMedia, HasFactory
+;
 
     protected $fillable = [
         'nom',
@@ -18,6 +19,7 @@ class Produit extends Model implements HasMedia
         'reference',
         'stock',
         'stock_alert',
+        'prix_buy',
         'prix_ht',
         'prix_ttc',
         'tva',

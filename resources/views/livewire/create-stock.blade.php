@@ -23,6 +23,7 @@
                     </x-filament::button>
                 </x-slot>
 
+
                 <x-slot name="heading">
                     Création ligne de stock
                 </x-slot>

@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Unique;
 
 class ProduitResource extends Resource
 {
@@ -66,12 +67,12 @@ class ProduitResource extends Resource
 
                         Forms\Components\TextInput::make('reference')
                             ->label('Référence fournisseur')
-                            ->rules([
-                                Rule::unique('produits', 'reference')
-                                    ->where(function ($query) {
-                                        return $query->where('commercant_id', Filament::getTenant()->id);
-                                    }),
-                            ])
+                            ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
+                                return $rule->where('commercant_id', Filament::getTenant()->id);
+                            })
+                            ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
+                                return $rule->where('commercant_id', Filament::getTenant()->id);
+                            })
                             ->required()
                             ->maxLength(255),
 
@@ -149,8 +150,13 @@ class ProduitResource extends Resource
                 // Section: Détails financiers
                 Forms\Components\Section::make('Détails financiers')
                     ->schema([
+                        Forms\Components\TextInput::make('prix_buy')
+                            ->hint('Prix d\'achat du produit chez le fournisseur')
+                            ->label('Prix d\'achat')
+                            ->suffixIcon('heroicon-o-currency-euro')
+                            ->numeric('decimal', 2),
                         Forms\Components\TextInput::make('prix_ht')
-                            ->label('Prix HT')
+                            ->label('Prix Vente HT')
                             ->suffixIcon('heroicon-o-currency-euro')
                             ->required()
                             ->live('input', debounce: 200)
@@ -163,7 +169,7 @@ class ProduitResource extends Resource
                             ->numeric('decimal', 2),
 
                         Forms\Components\TextInput::make('prix_ttc')
-                            ->label('Prix TTC')
+                            ->label('Prix Vente TTC')
                             ->suffixIcon('heroicon-o-currency-euro')
                             ->required()
                             ->hint('Le prix TTC est calculé automatiquement en fonction du prix HT et de la TVA.')
@@ -176,19 +182,25 @@ class ProduitResource extends Resource
                             })
                             ->numeric('decimal', 2),
 
-                        Forms\Components\TextInput::make('tva')
+                        Forms\Components\Select::make('tva')
                             ->label('TVA (%)')
-                            ->default(20.00)
+                            ->options([
+                                '20' => '20',
+                                '10' => '10',
+                                '5.5' => '5.5',
+                                '2.1' => '2.1',
+                            ])
+                            ->default('20')
                             ->required()
                             ->hint('En modifiant la TVA, le prix TTC sera recalculé automatiquement.')
                             ->live('input', debounce: 200)
+                            ->selectablePlaceholder(false)
                             ->afterStateUpdated(function (callable $set, callable $get, $state) {
                                 $tva = (float) $state / 100;
                                 $prixHT = (float) $get('prix_ht');
                                 $prixTTC = $prixHT * (1 + $tva);
                                 $set('prix_ttc', number_format($prixTTC, 2, '.', ''));
-                            })
-                            ->numeric('decimal', 2),
+                            }),
                     ]),
 
                 // Section: Médias
@@ -234,14 +246,14 @@ class ProduitResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('prix_ht')
-                    ->label('Prix HT')
+                    ->label('Prix Vente HT')
                     ->icon('heroicon-o-currency-euro')
                     ->iconPosition(IconPosition::After)
                     ->iconColor('primary')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('prix_ttc')
-                    ->label('Prix TTC')
+                    ->label('Prix Vente TTC')
                     ->icon('heroicon-o-currency-euro')
                     ->iconPosition(IconPosition::After)
                     ->iconColor('primary')
@@ -309,12 +321,18 @@ class ProduitResource extends Resource
             ->filtersTriggerAction(
                 fn (\Filament\Tables\Actions\Action $action) => $action
                     ->button()
-                    ->label('Filter les produits'),
+                    ->label('Filtrer les produits'),
             )
             ->actions([
                 ActionGroup::make([
+                    Tables\Actions\Action::make('view_activities')
+                        ->label('Historique du produit')
+                        ->icon('heroicon-m-bolt')
+                        ->color('purple')
+                        ->url(fn ($record) => ProduitResource::getUrl('activities', ['record' => $record])),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
+
                 ]),
             ])
             ->bulkActions([
@@ -324,9 +342,10 @@ class ProduitResource extends Resource
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
+                    ->icon('heroicon-o-plus')
                     ->label('Créer un produit'),
                 ExportAction::make()
-                    ->label('Exporter les produits')
+                    ->label('Exporter')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('primary')
                     ->formats([
@@ -338,6 +357,7 @@ class ProduitResource extends Resource
             ]);
     }
 
+
     public static function getRelations(): array
     {
         return [
@@ -345,14 +365,13 @@ class ProduitResource extends Resource
         ];
     }
 
-
-
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListProduits::route('/'),
             'create' => Pages\CreateProduit::route('/create'),
             'edit' => Pages\EditProduit::route('/{record}/edit'),
+            'activities' => Pages\ViewProduitActivities::route('/produit/{record}/activities'),
         ];
     }
 }
