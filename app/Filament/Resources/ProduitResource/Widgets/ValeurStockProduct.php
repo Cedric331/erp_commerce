@@ -12,8 +12,11 @@ class ValeurStockProduct extends BaseWidget
     protected function getStats(): array
     {
         $products = Produit::where('commercant_id', Filament::getTenant()->id)->get();
-        $valeurStockHt = $this->getValueStock($products, 'ht');
-        $valeurStockTtc = $this->getValueStock($products, 'ttc');
+        $valeurStockHtBrut = $this->getValueStock($products, 'ht');
+        $valeurStockTtcBrut = $this->getValueStock($products, 'ttc');
+
+        $valeurStockHt = number_format($valeurStockHtBrut, 2, '.', '');
+        $valeurStockTtc = number_format($valeurStockTtcBrut, 2, '.', '');
         return [
             Stat::make('Nombre de produit', $products->count())
                 ->icon('heroicon-o-circle-stack'),

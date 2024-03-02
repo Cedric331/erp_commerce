@@ -128,7 +128,15 @@ class ProduitResource extends Resource
                             ->hint('Stock actuel du produit (Le stock est mis à jour automatiquement suivant les mouvements de stock)')
                             ->label('Stock du produit')
                             ->required()
-                            ->disabledOn('edit')
+                            ->disabled(function ($livewire) {
+                                if ($livewire->record) {
+                                    if (Auth::user()->isAdministrateurOrGerant()) {
+                                        return false;
+                                    }
+                                    return true;
+                                }
+                                return false;
+                            })
                             ->numeric('integer')
                             ->default(0)
                             ->columnSpanFull(),
@@ -321,7 +329,7 @@ class ProduitResource extends Resource
             ->filtersTriggerAction(
                 fn (\Filament\Tables\Actions\Action $action) => $action
                     ->button()
-                    ->label('Filtrer les produits'),
+                    ->label('Filtrer'),
             )
             ->actions([
                 ActionGroup::make([
