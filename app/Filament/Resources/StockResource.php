@@ -69,6 +69,21 @@ class StockResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('date_action')
+                    ->label('Traité le')
+                    ->sortable()
+                    ->searchable()
+                    ->getStateUsing(function ($record) {
+                        if (!empty($record->scheduled_date)) {
+                            if ($record->scheduled_date->isFuture()) {
+                                return 'En attente';
+                            } else {
+                                return $record->schedule_date->format('d/m/Y');
+                            }
+                        } else {
+                            return $record->created_at->format('d/m/Y');
+                        }
+                    }),
                 Tables\Columns\TextColumn::make('produit.nom')
                     ->searchable()
                     ->sortable()
@@ -78,6 +93,7 @@ class StockResource extends Resource
                     ->sortable()
                     ->label('Quantité'),
                 Tables\Columns\TextColumn::make('note')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable()
                     ->label('Note'),
                 Tables\Columns\TextColumn::make('stockStatus.name')
