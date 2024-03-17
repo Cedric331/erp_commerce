@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Commercant;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Cashier\Cashier;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+//        Cashier::keepPastDueSubscriptionsActive();
+//        Cashier::keepIncompleteSubscriptionsActive();
     }
 
     /**
@@ -19,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Cashier::useCustomerModel(Commercant::class);
+
     }
 }

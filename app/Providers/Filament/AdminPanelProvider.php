@@ -4,7 +4,9 @@ namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use App\Filament\Resources\Tenancy\CommercantEdit;
+use App\Filament\Resources\Tenancy\CommercantRegister;
 use App\Http\Middleware\ApplyTenantScopes;
+use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
 use App\Models\Commercant;
 use Filament\Http\Middleware\Authenticate;
@@ -16,13 +18,13 @@ use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use Maartenpaauw\Filament\Cashier\Stripe\BillingProvider;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 use Swis\Filament\Backgrounds\ImageProviders\MyImages;
 
@@ -39,6 +41,8 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/app/theme.css')
             ->brandLogoHeight('3rem')
             ->font('Poppins')
+            ->tenantBillingProvider(new BillingProvider())
+            ->requiresTenantSubscription()
             ->profile()
             ->login()
             ->loginRouteSlug('login')
@@ -95,7 +99,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
             ->tenant(Commercant::class, 'slug')
-//            ->tenantRegistration(CommercantRegister::class)
+            ->tenantRegistration(CommercantRegister::class)
             ->tenantProfile(CommercantEdit::class)
             ->tenantRoutePrefix('shop')
             ->tenantMiddleware([

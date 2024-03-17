@@ -10,6 +10,8 @@ use Closure;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use Laravel\Cashier\Billable;
+use Laravel\Cashier\Cashier;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Database\Eloquent\Builder;
 class ApplyTenantScopes
@@ -21,6 +23,7 @@ class ApplyTenantScopes
      */
     public function handle(Request $request, Closure $next): Response
     {
+
         Produit::addGlobalScope(
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
         );

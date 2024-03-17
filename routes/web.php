@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Cashier\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +25,8 @@ Route::get('/', function () {
 Route::get('login', function () {
     return redirect('/app');
 })->name('login')->middleware('guest');
+
+Route::post('stripe/stripe_webhooks', [StripeController::class, 'handleWebhook']);
+Route::get('/complete-payment/{paymentIntent}', [StripeController::class, 'completePayment'])->name('complete.payment');
+
 
