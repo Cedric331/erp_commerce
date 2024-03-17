@@ -28,6 +28,7 @@ class Commercant extends Model
         'user_id',
     ];
 
+
     public function getNameAttribute(): string
     {
         return $this->enseigne;

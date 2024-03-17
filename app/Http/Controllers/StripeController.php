@@ -39,12 +39,12 @@ class StripeController extends CashierController
         }
     }
 
-    protected function handleCustomerSubscriptionCreated($event)
+    protected function handleCustomerSubscriptionCreated($payload)
     {
-        $commercant = $this->getCommercantFromEvent($event);
+        $commercant = $this->getCommercantFromEvent($payload);
         if (!$commercant) return;
 
-        $subscription = $event->data->object;
+        $subscription = $payload->data->object;
 
         $commercant->subscriptions()->create([
             'type' => 'default',
@@ -55,16 +55,14 @@ class StripeController extends CashierController
             'trial_ends_at' => isset($subscription->trial_end) ? \Carbon\Carbon::createFromTimestamp($subscription->trial_end) : null,
             'ends_at' => null,
         ]);
-
-        Log::info('Subscription created for commercant.', ['stripe_id' => $subscription->customer]);
     }
 
-    protected function handleCustomerSubscriptionUpdated($event)
+    protected function handleCustomerSubscriptionUpdated($payload)
     {
-        $commercant = $this->getCommercantFromEvent($event);
+        $commercant = $this->getCommercantFromEvent($payload);
         if (!$commercant) return;
 
-        $subscription = $event->data->object;
+        $subscription = $payload->data->object;
 
         $commercantSubscription = $commercant->subscriptions()->where('stripe_id', $subscription->id)->first();
         if ($commercantSubscription) {
@@ -83,33 +81,30 @@ class StripeController extends CashierController
         Log::info('Subscription status updated.', ['stripe_id' => $subscription->customer, 'status' => $subscription->status]);
     }
 
-    protected function handleCustomerSubscriptionDeleted($event)
+    protected function handleCustomerSubscriptionDeleted($payload)
     {
-        Log::info('Subscription deleted.', ['stripe_id' => $event]);
-        $commercant = $this->getCommercantFromEvent($event);
+        $commercant = $this->getCommercantFromEvent($payload);
         if (!$commercant) {
-            Log::error('Commercant not found for Stripe ID.', ['stripe_id' => $event->data->object->customer]);
+            Log::error('Commercant not found for Stripe ID.', ['stripe_id' => $payload->data->object->customer]);
             return response()->json(['error' => 'Commercant not found'], 404);
         }
 
         // Récupération de l'abonnement dans votre base de données
-        $subscription = $commercant->subscriptions()->where('stripe_id', $event->data->object->id)->first();
+        $subscription = $commercant->subscriptions()->where('stripe_id', $payload->data->object->id)->first();
 
         if ($subscription) {
-            // Mettez à jour l'état de l'abonnement pour refléter sa suppression
             $subscription->update([
                 'stripe_status' => 'canceled',
-                // Assurez-vous de mettre à jour tout autre champ pertinent, comme la date d'annulation
                 'ends_at' => now(),
             ]);
 
             // Log pour les opérations de débogage ou informations
-            Log::info('Subscription deleted for commercant.', ['stripe_id' => $event->data->object->customer]);
+            Log::info('Subscription deleted for commercant.', ['stripe_id' => $payload->data->object->customer]);
 
             // Ici, vous pouvez également ajouter une logique pour notifier l'utilisateur de la suppression de l'abonnement.
             // $this->notifyUserSubscriptionCancelled($commercant);
         } else {
-            Log::error('Subscription not found.', ['stripe_id' => $event->data->object->id]);
+            Log::error('Subscription not found.', ['stripe_id' => $payload->data->object->id]);
             return response()->json(['error' => 'Subscription not found'], 404);
         }
 

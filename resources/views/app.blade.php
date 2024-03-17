@@ -19,7 +19,5 @@
     <body class="font-sans antialiased">
         @inertia
         @filamentScripts
-        <script src="https://js.stripe.com/v3/"></script>
-
     </body>
 </html>

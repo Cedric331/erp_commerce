@@ -26,7 +26,9 @@ Route::get('login', function () {
     return redirect('/app');
 })->name('login')->middleware('guest');
 
-Route::post('stripe/stripe_webhooks', [StripeController::class, 'handleWebhook']);
+Route::post('/delete-shop/{slug}', [ProfileController::class, 'deleteShop'])->name('shop.delete');
+
+Route::post('/stripe_webhooks', [StripeController::class, 'handleWebhook']);
 Route::get('/complete-payment/{paymentIntent}', [StripeController::class, 'completePayment'])->name('complete.payment');
 
 

@@ -7,6 +7,7 @@ use App\Filament\Resources\FournisseurResource\RelationManagers;
 use App\Models\Fournisseur;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,6 +27,11 @@ class FournisseurResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des produits';
     protected static ?int $navigationSort = 2;
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public static function form(Form $form): Form
     {

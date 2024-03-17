@@ -22,6 +22,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
+use Filament\Panel;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -34,6 +35,11 @@ class CreateStock extends Component implements HasForms
     public ?array $data = [];
 
     public bool $showForm = true;
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public function mount(): void
     {

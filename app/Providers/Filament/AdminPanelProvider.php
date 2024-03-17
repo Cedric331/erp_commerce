@@ -9,9 +9,11 @@ use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
 use App\Models\Commercant;
+use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -42,7 +44,17 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('3rem')
             ->font('Poppins')
             ->tenantBillingProvider(new BillingProvider())
-            ->requiresTenantSubscription()
+//            ->requiresTenantSubscription()
+            ->tenantMenuItems([
+                // Mettre dans le Edit the shop
+                MenuItem::make()
+                    ->label('Supprimer le commerce')
+                    ->postAction(fn (): string => route('shop.delete', ['slug' => Filament::getTenant()->slug]))
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->sort(1000)
+                    ->visible(fn (): bool => auth()->user()->isAdministrateurOrGerant())
+            ])
             ->profile()
             ->login()
             ->loginRouteSlug('login')
@@ -75,7 +87,7 @@ class AdminPanelProvider extends PanelProvider
 //                Widgets\AccountWidget::class,
 //                Widgets\FilamentInfoWidget::class,
             ])
-            ->spa()
+            ->databaseTransactions()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

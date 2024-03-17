@@ -11,6 +11,7 @@ use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
@@ -31,6 +32,10 @@ class StockResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des stocks';
     protected static ?int $navigationSort = 1;
 
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public static function form(Form $form): Form
     {

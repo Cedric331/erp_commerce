@@ -13,6 +13,7 @@ use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
@@ -40,6 +41,11 @@ class ProduitResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des produits';
     protected static ?int $navigationSort = 3;
     protected static ?string $recordTitleAttribute = 'nom';
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public static function getWidgets(): array
     {

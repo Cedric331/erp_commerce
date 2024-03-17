@@ -14,6 +14,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -26,7 +27,10 @@ use Illuminate\Database\Eloquent\Model;
 class RoleResource extends Resource
 {
 
-
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
     public static function isScopedToTenant(): bool
     {
         return config('filament-spatie-roles-permissions.scope_to_tenant', true);

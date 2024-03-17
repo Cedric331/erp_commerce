@@ -8,6 +8,7 @@ use App\Models\CategorieProduit;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\CreateAction;
@@ -29,6 +30,11 @@ class CategorieProduitResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des produits';
     protected static ?int $navigationSort = 1;
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public static function form(Form $form): Form
     {

@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Commercant;
+use Filament\Support\Assets\Js;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 
@@ -24,5 +26,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Cashier::useCustomerModel(Commercant::class);
 
+//        FilamentAsset::register([
+//            Js::make('stripe-script', __DIR__ . '/../../resources/js/stripe.js'),
+//        ]);
+        // Faire la commande php artisan filament:assets pour générer le fichier
     }
 }

@@ -60,4 +60,12 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function deleteShop(Request $request, string $slug): RedirectResponse
+    {
+        $user = $request->user();
+        dd($user->commercant()->where('slug', $slug)->get());
+        $user->commercant()->where('slug', $slug)->delete();
+        return Redirect::to('/');
+    }
 }
