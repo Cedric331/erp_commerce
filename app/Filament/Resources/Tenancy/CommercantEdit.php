@@ -3,9 +3,6 @@
 namespace App\Filament\Resources\Tenancy;
 
 use App\Models\Commercant;
-use App\Models\Permission;
-use App\Models\Role;
-use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\EditTenantProfile;

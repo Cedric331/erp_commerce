@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Stripe\Stripe;
 
 class ProfileController extends Controller
 {
@@ -61,11 +62,21 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function deleteShop(Request $request, string $slug): RedirectResponse
+    public function deleteTenant(Request $request, $slug)
     {
         $user = $request->user();
-        dd($user->commercant()->where('slug', $slug)->get());
-        $user->commercant()->where('slug', $slug)->delete();
-        return Redirect::to('/');
+        $tenant = $user->commercant()->where('slug', $slug)->first();
+
+        if ($tenant) {
+            if ($tenant->subscribed('default')) {
+                 $tenant->subscription('default')->cancelNow();
+            }
+            $tenant->delete();
+
+            return redirect('/app');
+        }
+
+        // Gérer le cas où le tenant n'est pas trouvé
+        return Redirect::back()->withErrors(['error' => 'Tenant non trouvé']);
     }
 }

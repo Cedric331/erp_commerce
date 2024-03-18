@@ -69,6 +69,17 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
                 fn (): string => Blade::render('@livewire(\'create-stock\')')
             )
+            ->renderHook(
+                PanelsRenderHook::PAGE_START,
+                fn (): string => Blade::render('@livewire(\'banner-subscrib\')')
+            )
+            ->renderHook(
+                PanelsRenderHook::PAGE_END,
+                fn (): string => Blade::render('@livewire(\'delete-tenant\')'),
+                scopes: [
+                    \App\Filament\Resources\Tenancy\CommercantEdit::class,
+                ],
+            )
             ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => '#137863',
