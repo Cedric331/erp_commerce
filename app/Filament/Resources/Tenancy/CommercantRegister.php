@@ -88,8 +88,7 @@ class CommercantRegister extends RegisterTenant
         $tenantId = $this->tenant->id;
 
         $rolesWithPermissions = [
-            Role::ROLE_MANAGER => config('setting-permission.manager'),
-            Role::ROLE_SERVEUR => config('setting-permission.serveur'),
+            Role::ROLE_GERANT => config('setting-permission.gerant'),
         ];
 
         foreach ($rolesWithPermissions as $roleName => $permissions) {

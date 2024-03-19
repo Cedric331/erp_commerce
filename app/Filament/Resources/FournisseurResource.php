@@ -47,18 +47,40 @@ class FournisseurResource extends Resource
                     ->email()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
+                    ->label('Téléphone')
                     ->tel()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address')
+                    ->label('Adresse')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('city')
+                    ->label('Ville')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('country')
+                    ->label('Pays')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('postal_code')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('note')
-                    ->maxLength(255),
+                    ->label('Code postal')
+                    ->numeric()
+                    ->maxLength(5),
+                Forms\Components\RichEditor::make('note')
+                    ->toolbarButtons([
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'underline',
+                        'undo',
+                    ])
+                    ->label('Note')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -67,31 +89,44 @@ class FournisseurResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nom du fournisseur')
+                    ->label('Nom')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('produits_count')
-                    ->label('Nombre de produits chez ce fournisseur')
+                    ->label('Nombre de produits')
                     ->counts('produits')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
+                    ->label('Téléphone')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('address')
-                    ->searchable(),
+                    ->label('Adresse')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('city')
-                    ->searchable(),
+                    ->label('Ville')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('country')
-                    ->searchable(),
+                    ->label('Pays')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('postal_code')
-                    ->searchable(),
+                    ->label('Code postal')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Créé le')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifié le')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
