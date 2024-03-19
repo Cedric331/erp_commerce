@@ -1,5 +1,6 @@
 <div>
     <x-filament::modal
+        id="delete-commerce"
         alignment="center"
         icon="heroicon-o-exclamation-triangle"
         icon-color="danger">
@@ -28,7 +29,7 @@
 
         <x-slot name="footerActions">
             <x-filament::button
-                wire:click="deleteCommerce"
+                wire:click="close"
                 color="info"
                 size="sm"
                 icon="heroicon-o-x-mark"

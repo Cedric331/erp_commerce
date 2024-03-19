@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Filament\Actions\Concerns\HasName;
+use Filament\Models\Contracts\HasCurrentTenantLabel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Cashier\Billable;
@@ -10,7 +11,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class Commercant extends Model
+class Commercant extends Model implements HasCurrentTenantLabel
 {
     use HasFactory, HasName, Billable;
 
@@ -28,6 +29,11 @@ class Commercant extends Model
         'user_id',
     ];
 
+
+    public function getCurrentTenantLabel(): string
+    {
+        return $this->subscribed('default') ? 'Abonnement activé' : 'Abonnement inactif';
+    }
 
     public function getNameAttribute(): string
     {

@@ -23,6 +23,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
@@ -46,13 +47,7 @@ class AdminPanelProvider extends PanelProvider
             ->tenantBillingProvider(new BillingProvider())
 //            ->requiresTenantSubscription()
             ->tenantMenuItems([
-                // Mettre dans le Edit the shop
-                MenuItem::make()
-                    ->label('Supprimer le commerce')
-                    ->postAction(fn (): string => route('shop.delete', ['slug' => Filament::getTenant()->slug]))
-                    ->icon('heroicon-o-trash')
-                    ->color('danger')
-                    ->sort(1000)
+                'billing' => MenuItem::make()
                     ->visible(fn (): bool => auth()->user()->isAdministrateurOrGerant())
             ])
             ->profile()
@@ -122,6 +117,12 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
             ->tenant(Commercant::class, 'slug')
+            ->tenantMenu(function () {
+                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->commercant()->count() > 1) {
+                    return true;
+                }
+                return false;
+            })
             ->tenantRegistration(CommercantRegister::class)
             ->tenantProfile(CommercantEdit::class)
             ->tenantRoutePrefix('shop')

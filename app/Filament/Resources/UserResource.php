@@ -70,6 +70,7 @@ class UserResource extends Resource
                     ->columnSpanFull()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->multiple()
+                    ->required()
                     ->preload()
                     ->searchable(),
                 Forms\Components\Select::make('roles')

@@ -80,10 +80,11 @@ class StockResource extends Resource
                     ->searchable()
                     ->getStateUsing(function ($record) {
                         if (!empty($record->scheduled_date)) {
-                            if ($record->scheduled_date->isFuture()) {
+                            $date = Carbon::parse($record->scheduled_date);
+                            if ($date->isFuture()) {
                                 return 'En attente';
                             } else {
-                                return $record->schedule_date->format('d/m/Y');
+                                return $date->format('d/m/Y');
                             }
                         } else {
                             return $record->created_at->format('d/m/Y');
@@ -135,11 +136,12 @@ class StockResource extends Resource
                             return $record->scheduled_date->isFuture();
                     }),
             ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->orderBy('created_at', 'desc'))
             ->bulkActions([
-//                Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
-//                ]),
-            ]);
+    //                Tables\Actions\BulkActionGroup::make([
+    //                    Tables\Actions\DeleteBulkAction::make(),
+    //                ]),
+                ]);
     }
 
     public static function getRelations(): array

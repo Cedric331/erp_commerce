@@ -43,22 +43,22 @@ class FournisseurResource extends Resource
                     ->required()
                     ->columnSpanFull()
                     ->maxLength(255),
-//                Forms\Components\TextInput::make('email')
-//                    ->email()
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('phone')
-//                    ->tel()
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('address')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('city')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('country')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('postal_code')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('note')
-//                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('phone')
+                    ->tel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('address')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('city')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('country')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('postal_code')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('note')
+                    ->maxLength(255),
             ]);
     }
 
@@ -75,28 +75,26 @@ class FournisseurResource extends Resource
                     ->counts('produits')
                     ->sortable()
                     ->searchable(),
-//                Tables\Columns\TextColumn::make('email')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('phone')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('address')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('city')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('country')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('postal_code')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('note')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('created_at')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('updated_at')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('address')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('city')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('country')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('postal_code')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
