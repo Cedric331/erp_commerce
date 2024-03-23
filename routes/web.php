@@ -20,7 +20,7 @@ use Laravel\Cashier\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return redirect('/app');
-});
+})->name('app');
 
 Route::get('login', function () {
     return redirect('/app');
@@ -30,5 +30,4 @@ Route::post('/delete-shop/{slug}', [ProfileController::class, 'deleteTenant'])->
 
 Route::post('/webhooks/stripe', [StripeController::class, 'handleWebhook']);
 Route::get('/complete-payment/{paymentIntent}', [StripeController::class, 'completePayment'])->name('complete.payment');
-
 

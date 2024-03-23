@@ -90,4 +90,9 @@ class Commercant extends Model implements HasCurrentTenantLabel
         return $this->hasMany(Permission::class);
     }
 
+    public function storages()
+    {
+        return $this->hasMany(Storage::class);
+    }
+
 }

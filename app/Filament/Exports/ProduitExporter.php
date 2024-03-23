@@ -53,6 +53,8 @@ class ProduitExporter extends Exporter
                 ->label('Référence fournisseur'),
             ExportColumn::make('type')
                 ->label('Type de produit'),
+            ExportColumn::make('storage.name')
+                ->label('Zone de stockage'),
             ExportColumn::make('description')
                 ->label('Description'),
             ExportColumn::make('stock')

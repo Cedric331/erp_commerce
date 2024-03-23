@@ -24,6 +24,7 @@ class Produit extends Model implements HasMedia
         'prix_ttc',
         'tva',
         'stock',
+        'storage_id',
         'commercant_id',
         'fournisseur_id',
         'categorie_id',
@@ -34,6 +35,11 @@ class Produit extends Model implements HasMedia
     public function commercant()
     {
         return $this->belongsTo(Commercant::class);
+    }
+
+    public function storage()
+    {
+        return $this->belongsTo(Storage::class);
     }
 
     public function fournisseur()

@@ -15,7 +15,7 @@ class ABestProductChart extends ApexChartWidget
 {
     protected static string $chartId = 'bestProductChart';
 
-    protected static ?string $heading = 'Meilleurs produits par Statut';
+    protected static ?string $heading = 'Meilleurs produits';
     protected static bool $deferLoading = true;
 
     protected static ?string $loadingIndicator = 'Chargement des données...';

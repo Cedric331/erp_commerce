@@ -6,6 +6,7 @@ use App\Models\CategorieProduit;
 use App\Models\Fournisseur;
 use App\Models\Produit;
 use App\Models\Stock;
+use App\Models\Storage;
 use Closure;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
@@ -44,6 +45,10 @@ class ApplyTenantScopes
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant())
                 ->orWhere('name', '=', 'Administrateur')
                 ->orWhere('name', '=', 'Gérant')
+        );
+
+        Storage::addGlobalScope(
+            fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
         );
 
         return $next($request);

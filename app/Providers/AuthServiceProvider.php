@@ -11,6 +11,7 @@ use App\Models\Produit;
 use App\Models\Role;
 use App\Models\Stock;
 use App\Models\StockStatus;
+use App\Models\Storage;
 use App\Models\User;
 use App\Policies\CategorieProduitPolicy;
 use App\Policies\CommercantPolicy;
@@ -21,6 +22,7 @@ use App\Policies\ProduitPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\StockPolicy;
 use App\Policies\StockStatusPolicy;
+use App\Policies\StoragePolicy;
 use App\Policies\UserPolicy;
 use Filament\Actions\Exports\Models\Export;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -42,6 +44,7 @@ class AuthServiceProvider extends ServiceProvider
         Commercant::class => CommercantPolicy::class,
         Role::class => RolePolicy::class,
         Permission::class => PermissionPolicy::class,
+        Storage::class => StoragePolicy::class,
     ];
 
     /**
