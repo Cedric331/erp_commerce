@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProduitResource\Pages;
 
 use App\Filament\Resources\ProduitResource;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
@@ -22,6 +23,9 @@ class EditProduit extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('Détail du produit')
+                ->url(fn () => ViewProduitActivities::getUrl(['record' => $this->record]))
+                ->icon('heroicon-o-information-circle'),
             Actions\DeleteAction::make(),
         ];
     }

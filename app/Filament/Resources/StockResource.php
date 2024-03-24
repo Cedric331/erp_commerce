@@ -80,9 +80,12 @@ class StockResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('date_action')
                     ->label('Traité le')
-                    ->sortable()
                     ->searchable()
                     ->getStateUsing(function ($record) {
+                        if ($record->date_process) {
+                            return $record->date_process->format('d/m/Y');
+                        }
+
                         if (!empty($record->scheduled_date)) {
                             $date = Carbon::parse($record->scheduled_date);
                             if ($date->isFuture()) {

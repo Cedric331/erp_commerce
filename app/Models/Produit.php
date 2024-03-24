@@ -56,4 +56,12 @@ class Produit extends Model implements HasMedia
     {
         return $this->hasMany(Stock::class);
     }
+
+    public function ventes()
+    {
+        return $this->stocks()
+            ->whereHas('stockStatus', function ($query) {
+                $query->where('name', StockStatus::STATUS_VENTE);
+            });
+    }
 }

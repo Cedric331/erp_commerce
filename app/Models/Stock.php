@@ -15,7 +15,7 @@ class Stock extends Model
         'produit_id',
         'stock_status_id',
         'quantity',
-        'status',
+        'date_process',
         'note',
         'scheduled_date',
     ];
@@ -24,6 +24,7 @@ class Stock extends Model
 
     protected $casts = [
         'scheduled_date' => 'datetime',
+        'date_process' => 'datetime',
     ];
 
 

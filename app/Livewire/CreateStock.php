@@ -66,7 +66,7 @@ class CreateStock extends Component implements HasForms
             $this->data['scheduled_date'] = null;
         }
 
-        Stock::create($this->data);
+       $stock = Stock::create($this->data);
 
         if (!$this->data['scheduled_date']) {
             $type = StockStatus::find($this->data['stock_status_id'])->type;
@@ -81,6 +81,10 @@ class CreateStock extends Component implements HasForms
                     'stock' => $produit->stock - $this->data['quantity'],
                 ]);
             }
+            $stock->update([
+                'date_process' => now(),
+            ]);
+
             activity('Produit')
                 ->event('Stock modifié - ' . StockStatus::find($this->data['stock_status_id'])->name)
                 ->causedBy(Auth::user())

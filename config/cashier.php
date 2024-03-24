@@ -23,7 +23,7 @@ return [
     'plans' => [
         'default' => [
             'price_id' => ENV('CASHIER_STRIPE_SUBSCRIPTION_DEFAULT_PRICE_ID'),
-            'trial_days' => 0, // Optional
+            'trial_days' => 8, // Optional
             'collect_tax_ids' => false, // Optional
         ],
     ],

@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use App\Filament\Pages\Support;
 use App\Filament\Resources\Tenancy\CommercantEdit;
 use App\Filament\Resources\Tenancy\CommercantRegister;
 use App\Http\Middleware\ApplyTenantScopes;
@@ -50,6 +51,12 @@ class AdminPanelProvider extends PanelProvider
             ->tenantMenuItems([
                 'billing' => MenuItem::make()
                     ->visible(fn (): bool => auth()->user()->isAdministrateurOrGerant())
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Contacter le support')
+                    ->url(fn (): string => Support::getUrl())
+                    ->icon('heroicon-o-envelope'),
             ])
             ->profile()
             ->login()
