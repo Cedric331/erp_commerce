@@ -19,7 +19,7 @@ use Laravel\Cashier\Http\Controllers\PaymentController;
 */
 
 Route::get('/', function () {
-    return redirect('/app');
+    return Inertia::render('Welcome');
 })->name('app');
 
 Route::get('login', function () {

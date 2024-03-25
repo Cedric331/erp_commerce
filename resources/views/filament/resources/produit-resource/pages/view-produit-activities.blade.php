@@ -1,8 +1,10 @@
 <x-filament-panels::page>
     <div class="py-10 container mx-auto px-5">
-        <!-- component -->
+       <hr>
+        <div class="text-2xl text-black dark:text-white flex justify-center" style="margin-bottom: 30px; margin-top: 30px">
+            <h1>Historique du produit</h1>
+        </div>
         <div class="relative">
-            <div class="border-r-4 border-black absolute h-full top-0" style="margin-left: 9px"></div>
             <ul class="list-none m-0 p-0">
                 @foreach ($activities as $activity)
                 <li class="mb-5">

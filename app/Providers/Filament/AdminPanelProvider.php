@@ -40,6 +40,11 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('app')
             ->path('app')
+            ->profile()
+            ->login()
+            ->loginRouteSlug('login')
+            ->passwordReset()
+            ->registration()
             ->favicon(asset('/favicon.ico'))
             ->brandLogo(asset('images/logo.png'))
             ->darkModeBrandLogo(asset('images/logo-dark.png'))
@@ -58,10 +63,6 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn (): string => Support::getUrl())
                     ->icon('heroicon-o-envelope'),
             ])
-            ->profile()
-            ->login()
-            ->loginRouteSlug('login')
-            ->passwordReset()
             ->globalSearch()
             ->globalSearchDebounce(100)
             ->renderHook(
