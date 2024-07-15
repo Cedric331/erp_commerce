@@ -1,71 +1,27 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
+import {ref} from "vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 defineProps({
-    canLogin: {
+    isAuth: {
         type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
     },
 });
+
+const navbarOpen = ref(false);
 
 </script>
 
 <template>
     <Head title="Welcome" />
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <!--====== Required meta tags ======-->
-        <meta charset="utf-8" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <meta name="description" content="" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <title>Startup landing page by TailGrids UI Components</title>
-    </head>
-
-    <body
-        x-data="
-      {
-        scrolledFromTop: false
-      }
-    "
-        x-init="window.pageYOffset >= 50 ? scrolledFromTop = true : scrolledFromTop = false"
-        @scroll.window="window.pageYOffset >= 50 ? scrolledFromTop = true : scrolledFromTop = false"
-    >
-    <!-- ====== Navbar Section Start -->
-    <header
-        x-data="
-        {
-          navbarOpen: false,
-        }
-      "
-        :class="scrolledFromTop ? 'fixed z-50 bg-white bg-opacity-80 shadow-sm backdrop-blur-sm' : 'absolute' "
-        class="left-0 top-0 z-50 w-full"
-    >
+    <header class="bg-[#003366]">
         <div class="container mx-auto">
             <div class="relative -mx-4 flex items-center justify-between">
-                <div class="w-60 max-w-full px-4">
-                    <a href="javascript:void(0)" class="block w-full py-5">
-                        <img
-                            src="assets/images/logo/logo.svg"
-                            alt="logo"
-                            class="w-full"
-                        />
-                    </a>
+                <div>
+                    <ApplicationLogo class="h-24" />
+                    <span class="sr-only">Quanta</span>
                 </div>
                 <div class="flex w-full items-center justify-between px-4">
                     <div>
@@ -73,64 +29,56 @@ defineProps({
                             @click="navbarOpen = !navbarOpen"
                             :class="navbarOpen && 'navbarTogglerActive'"
                             id="navbarToggler"
-                            class="absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden"
-                        >
-                <span
-                    class="relative my-[6px] block h-[2px] w-[30px] bg-body-color"
-                ></span>
-                            <span
-                                class="relative my-[6px] block h-[2px] w-[30px] bg-body-color"
-                            ></span>
-                            <span
-                                class="relative my-[6px] block h-[2px] w-[30px] bg-body-color"
-                            ></span>
+                            class="absolute right-4 top-1/2 block -translate-y-1/2 rounded-lg px-3 py-[6px] ring-primary focus:ring-2 lg:hidden">
+                            <span class="relative my-[6px] block h-[2px] w-[30px] bg-body-color"></span>
+                            <span class="relative my-[6px] block h-[2px] w-[30px] bg-body-color"></span>
+                            <span class="relative my-[6px] block h-[2px] w-[30px] bg-body-color"></span>
                         </button>
                         <nav
-                            x-transition
-                            :class="!navbarOpen && 'hidden'"
+                            :class="!navbarOpen"
                             id="navbarCollapse"
-                            class="absolute right-4 top-full w-full max-w-[250px] rounded-lg bg-white py-5 px-6 shadow transition-all lg:static lg:block lg:w-full lg:max-w-full lg:bg-transparent lg:shadow-none"
+                            class="absolute right-4 top-full w-full max-w-[250px] rounded-lg bg-[#5AB9EA] py-5 px-6 shadow transition-all lg:static lg:block lg:w-full lg:max-w-full lg:bg-transparent lg:shadow-none"
                         >
                             <ul class="blcok lg:flex">
                                 <li>
                                     <a
-                                        href="javascript:void(0)"
-                                        class="flex py-2 text-base font-medium text-dark hover:text-primary lg:ml-12 lg:inline-flex"
+                                        href="#payment"
+                                        class="flex py-2 text-base font-medium text-white hover:text-[#5AB9EA] lg:ml-12 lg:inline-flex"
                                     >
-                                        Home
+                                        Détails sur l'abonement
                                     </a>
                                 </li>
                                 <li>
                                     <a
-                                        href="javascript:void(0)"
-                                        class="flex py-2 text-base font-medium text-dark hover:text-primary lg:ml-12 lg:inline-flex"
-                                    >
-                                        Payment
+                                        href="#faq"
+                                        class="flex py-2 text-base font-medium text-white  hover:text-[#5AB9EA] lg:ml-12 lg:inline-flex">
+                                        Foires aux questions
                                     </a>
                                 </li>
                                 <li>
                                     <a
-                                        href="javascript:void(0)"
-                                        class="flex py-2 text-base font-medium text-dark hover:text-primary lg:ml-12 lg:inline-flex"
-                                    >
-                                        Features
+                                        href="#contact"
+                                        class="flex py-2 text-base font-medium text-white  hover:text-[#5AB9EA] lg:ml-12 lg:inline-flex">
+                                       Contactez-nous
                                     </a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
-                    <div class="hidden justify-end pr-16 sm:flex lg:pr-0">
-                        <a
-                            href="javascript:void(0)"
-                            class="py-3 px-7 text-base font-medium text-dark hover:text-primary"
-                        >
-                            Login
+                    <div v-if="!isAuth" class="hidden justify-end pr-16 sm:flex lg:pr-0">
+                        <a :href="route('filament.app.auth.login')"
+                            class="py-3 px-7 text-base font-medium text-white hover:text-[#5AB9EA]">
+                            Connexion
                         </a>
-                        <a
-                            href="javascript:void(0)"
-                            class="rounded-lg bg-primary py-3 px-7 text-base font-medium text-white hover:bg-opacity-90"
-                        >
-                            Sign Up
+                        <a :href="route('filament.app.auth.register')"
+                            class="rounded-lg bg-[#5AB9EA] py-3 px-7 text-base font-medium text-white hover:bg-opacity-90">
+                           S'inscrire
+                        </a>
+                    </div>
+                    <div v-else class="hidden justify-end pr-16 sm:flex lg:pr-0">
+                        <a href="/app"
+                           class="rounded-lg bg-[#5AB9EA] py-3 px-7 text-base font-medium text-white hover:bg-opacity-90">
+                            <span class="btn-txt">Accéder à l'application</span>
                         </a>
                     </div>
                 </div>
@@ -146,10 +94,10 @@ defineProps({
                 <div class="w-full px-4 lg:w-5/12">
                     <div class="hero-content">
                         <h1 class="mb-3 text-4xl font-bold leading-snug text-dark sm:text-[42px] lg:text-[40px] xl:text-[42px]">
-                            SimpliStocks : La Solution de Gestion de Stock pour Petits Commerces
+                            Quanta : La Solution de Gestion de Stock pour Petits Commerces
                         </h1>
                         <p class="mb-8 max-w-[480px] text-base text-body-color">
-                            Simplifiez votre gestion d'inventaire avec SimpliStocks, la plateforme conçue spécifiquement pour les besoins des petits commerces. Notre outil intuitif vous aide à suivre vos stocks et prévenir les ruptures ou surstocks sans effort.<br> Rejoignez les centaines de commerçants qui propulsent leur efficacité et réduisent leurs coûts grâce à SimpliStocks.
+                            Simplifiez votre gestion d'inventaire avec Quanta, la plateforme conçue spécifiquement pour les besoins des petits commerces. Notre outil intuitif vous aide à suivre vos stocks et prévenir les ruptures ou surstocks sans effort.<br> Rejoignez les centaines de commerçants qui propulsent leur efficacité et réduisent leurs coûts grâce à Quanta.
                         </p>
 
                         <ul class="flex flex-wrap items-center">
@@ -168,7 +116,7 @@ defineProps({
                         <div class="relative z-10 inline-block pt-11 lg:pt-0">
                             <img
                                 src="/images/home/image1.jpg"
-                                alt="SimpliStocks : La Solution de Gestion de Stock pour Petits Commerces"
+                                alt="Quanta : La Solution de Gestion de Stock pour Petits Commerces"
                                 class="max-w-full lg:ml-auto rounded-2xl shadow-xl"
                             />
                             <span class="absolute -left-8 -bottom-8 z-[-1]">
@@ -227,7 +175,7 @@ defineProps({
                             Nos Services Exclusifs
                         </h2>
                         <p class="text-base text-body-color">
-                            SimpliStocks offre une gamme de solutions innovantes pour la gestion d'inventaire adaptées aux petits commerces. Nos services sont conçus pour maximiser votre efficacité et réduire les coûts. Découvrez comment nous pouvons transformer votre gestion de stock.
+                            Quanta offre une gamme de solutions innovantes pour la gestion d'inventaire adaptées aux petits commerces. Nos services sont conçus pour maximiser votre efficacité et réduire les coûts. Découvrez comment nous pouvons transformer votre gestion de stock.
                         </p>
                     </div>
                 </div>
@@ -253,7 +201,7 @@ defineProps({
                             Gestion des produits
                         </h4>
                         <p class="text-body-color">
-                            Gérer vos produits n'a jamais été aussi simple. SimpliStocks vous permet de suivre vos stocks.
+                            Gérer vos produits n'a jamais été aussi simple. Quanta vous permet de suivre vos stocks.
                         </p>
 
                         <span class="absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 bg-primary opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
@@ -322,7 +270,7 @@ defineProps({
                            Gestion des commerces
                         </h4>
                         <p class="text-body-color">
-                            Gérer vos commerces n'a jamais été aussi simple. SimpliStocks vous permet de suivre vos stocks sur vos différents commerces.
+                            Gérer vos commerces n'a jamais été aussi simple. Quanta vous permet de suivre vos stocks sur vos différents commerces.
                         </p>
 
                         <span class="absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 bg-primary opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
@@ -346,7 +294,7 @@ defineProps({
                             Un Plan Unique, Une Gestion Simplifiée
                         </h2>
                         <p class="text-base text-body-color">
-                            SimpliStocks vous propose un plan tarifaire unique, conçu pour répondre efficacement à tous vos besoins de gestion de stock, sans complexité ni coûts cachés. Profitez d'une solution complète de gestion d'inventaire avec un abonnement mensuel abordable, incluant la gestion des produits, les alertes de stock, et bien plus. Optimisez votre gestion de stock dès aujourd'hui avec SimpliStocks.
+                            Quanta vous propose un plan tarifaire unique, conçu pour répondre efficacement à tous vos besoins de gestion de stock, sans complexité ni coûts cachés. Profitez d'une solution complète de gestion d'inventaire avec un abonnement mensuel abordable, incluant la gestion des produits, les alertes de stock, et bien plus. Optimisez votre gestion de stock dès aujourd'hui avec Quanta.
                         </p>
                     </div>
 
@@ -354,7 +302,7 @@ defineProps({
                 </div>
             </div>
 
-            <div class="-mx-4 flex flex-wrap justify-center">
+            <div id="payment" class="-mx-4 flex flex-wrap justify-center">
                 <div class="w-full px-4 md:w-1/2 lg:w-1/3">
                     <div class="relative z-10 mb-10 overflow-hidden rounded-xl border border-primary border-opacity-20 bg-white py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-12">
                           <span class="mb-4 block text-lg font-semibold text-primary">
@@ -676,18 +624,18 @@ defineProps({
       "
         class="relative z-20 overflow-hidden bg-white pt-20 pb-12 lg:pt-[120px] lg:pb-[90px]"
     >
-        <div class="container mx-auto">
+        <div id="faq" class="container mx-auto">
             <div class="-mx-4 flex flex-wrap">
                 <div class="w-full px-4">
                     <div class="mx-auto mb-[60px] max-w-[520px] text-center lg:mb-20">
                     <span class="mb-2 block text-lg font-semibold text-primary">
-                        FAQ SimpliStocks
+                        FAQ Quanta
                     </span>
                         <h2 class="mb-4 text-3xl font-bold text-dark sm:text-4xl md:text-[40px]">
                             Vos Questions Fréquentes
                         </h2>
                         <p class="text-base text-body-color">
-                            Vous avez des questions sur la manière dont SimpliStocks peut transformer votre gestion de stock ? Découvrez les réponses aux questions fréquentes sur notre solution intuitive de gestion d'inventaire, conçue pour les petits commerces. De la mise en place à l'utilisation quotidienne, nous sommes là pour vous aider.
+                            Vous avez des questions sur la manière dont Quanta peut transformer votre gestion de stock ? Découvrez les réponses aux questions fréquentes sur notre solution intuitive de gestion d'inventaire, conçue pour les petits commerces. De la mise en place à l'utilisation quotidienne, nous sommes là pour vous aider.
                         </p>
                     </div>
 
@@ -699,12 +647,12 @@ defineProps({
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Quand puis-je commencer à utiliser SimpliStocks après mon inscription ?
+                                Quand puis-je commencer à utiliser Quanta après mon inscription ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Vous pouvez commencer à utiliser SimpliStocks immédiatement après votre inscription et souscription. Notre plateforme SaaS basée sur le navigateur web est conçue pour vous permettre un accès instantané à tous nos outils de gestion de stock. Il n'y a aucun délai d'attente pour l'installation ou la configuration initiale - vous êtes prêt à optimiser votre inventaire dès que vous vous connectez pour la première fois.
+                                Vous pouvez commencer à utiliser Quanta immédiatement après votre inscription et souscription. Notre plateforme SaaS basée sur le navigateur web est conçue pour vous permettre un accès instantané à tous nos outils de gestion de stock. Il n'y a aucun délai d'attente pour l'installation ou la configuration initiale - vous êtes prêt à optimiser votre inventaire dès que vous vous connectez pour la première fois.
                             </p>
                         </div>
                     </div>
@@ -718,7 +666,7 @@ defineProps({
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Dès votre première utilisation de SimpliStocks, vous commencez à bénéficier de nos analyses. Notre plateforme est conçue pour vous fournir des insights précieux sur votre inventaire immédiatement après la saisie de vos données de stock. Aucune attente n'est nécessaire : commencez à optimiser votre gestion d'inventaire dès le premier jour.
+                                Dès votre première utilisation de Quanta, vous commencez à bénéficier de nos analyses. Notre plateforme est conçue pour vous fournir des insights précieux sur votre inventaire immédiatement après la saisie de vos données de stock. Aucune attente n'est nécessaire : commencez à optimiser votre gestion d'inventaire dès le premier jour.
                             </p>
                         </div>
                     </div>
@@ -726,12 +674,12 @@ defineProps({
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Comment SimpliStocks assure-t-il la sécurité de mes données d'inventaire ?
+                                Comment Quanta assure-t-il la sécurité de mes données d'inventaire ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                La sécurité de vos données est notre priorité absolue chez SimpliStocks. Nous utilisons des technologies de cryptage de pointe et des protocoles de sécurité stricts pour protéger toutes les informations de votre inventaire.
+                                La sécurité de vos données est notre priorité absolue chez Quanta. Nous utilisons des technologies de cryptage de pointe et des protocoles de sécurité stricts pour protéger toutes les informations de votre inventaire.
                             </p>
                         </div>
                     </div>
@@ -741,36 +689,36 @@ defineProps({
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Que puis-je attendre des versions futures de SimpliStocks et comment gérez-vous les bugs ?
+                                Que puis-je attendre des versions futures de Quanta et comment gérez-vous les bugs ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                SimpliStocks est actuellement toujours en développement, ce qui signifie que nous sommes en phase active de développement et d'amélioration. Nous travaillons sans relâche pour ajouter de nouvelles fonctionnalités qui rendront la gestion de votre inventaire encore plus facile et intuitive. Bien que cette phase puisse inclure des bugs, notre équipe s'engage à les identifier et les corriger rapidement. Nous encourageons les retours de nos utilisateurs pour aider à améliorer constamment SimpliStocks. Votre feedback est précieux et joue un rôle crucial dans le développement de futures versions plus robustes et riches en fonctionnalités.
+                                Quanta est actuellement toujours en développement, ce qui signifie que nous sommes en phase active de développement et d'amélioration. Nous travaillons sans relâche pour ajouter de nouvelles fonctionnalités qui rendront la gestion de votre inventaire encore plus facile et intuitive. Bien que cette phase puisse inclure des bugs, notre équipe s'engage à les identifier et les corriger rapidement. Nous encourageons les retours de nos utilisateurs pour aider à améliorer constamment Quanta. Votre feedback est précieux et joue un rôle crucial dans le développement de futures versions plus robustes et riches en fonctionnalités.
                             </p>
                         </div>
                     </div>
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Comment SimpliStocks accompagne-t-il les nouveaux utilisateurs dans leur prise en main ?
+                                Comment Quanta accompagne-t-il les nouveaux utilisateurs dans leur prise en main ?
                             </h4>
                         </div>
                         <div class="faq-content ">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Chez SimpliStocks, nous comprenons l'importance d'une prise en main efficace pour maximiser les bénéfices de notre outil de gestion de stock dès le premier jour. Nous nous engageons à vous fournir l'assistance nécessaire pour assurer une expérience fluide et intuitive, vous permettant ainsi de tirer le meilleur parti de SimpliStocks sans délai.
+                                Chez Quanta, nous comprenons l'importance d'une prise en main efficace pour maximiser les bénéfices de notre outil de gestion de stock dès le premier jour. Nous nous engageons à vous fournir l'assistance nécessaire pour assurer une expérience fluide et intuitive, vous permettant ainsi de tirer le meilleur parti de Quanta sans délai.
                             </p>
                         </div>
                     </div>
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Que faire si je rencontre un bug ou un problème avec SimpliStocks ?
+                                Que faire si je rencontre un bug ou un problème avec Quanta ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Si vous rencontrez un bug ou un problème dans l'utilisation de SimpliStocks, nous vous encourageons à le signaler immédiatement afin que nous puissions y remédier rapidement. Vous pouvez nous contacter directement par email. Nous prenons chaque signalement au sérieux et nous nous engageons à fournir une réponse et une solution dans les plus brefs délais. Votre aide est inestimable pour nous aider à améliorer SimpliStocks et à vous offrir une expérience utilisateur optimale.
+                                Si vous rencontrez un bug ou un problème dans l'utilisation de Quanta, nous vous encourageons à le signaler immédiatement afin que nous puissions y remédier rapidement. Vous pouvez nous contacter directement par email. Nous prenons chaque signalement au sérieux et nous nous engageons à fournir une réponse et une solution dans les plus brefs délais. Votre aide est inestimable pour nous aider à améliorer Quanta et à vous offrir une expérience utilisateur optimale.
                             </p>
                         </div>
                     </div>
@@ -812,19 +760,19 @@ defineProps({
     <!-- ====== FAQ Section End -->
 
     <!-- ====== Contact Section Start -->
-    <section class="relative z-10 overflow-hidden bg-white py-20 lg:py-[120px]">
+    <section id="contact" class="relative z-10 overflow-hidden bg-white py-20 lg:py-[120px]">
         <div class="container mx-auto">
             <div class="-mx-4 flex flex-wrap lg:justify-between">
                 <div class="w-full px-4 lg:w-1/2 xl:w-6/12">
                     <div class="mb-12 max-w-[570px] lg:mb-0">
-              <span class="mb-4 block text-base font-semibold text-primary">
-                Contactez-nous
-              </span>
+                          <span class="mb-4 block text-base font-semibold text-primary">
+                            Contactez-nous
+                          </span>
                         <h2 class="mb-6 text-[32px] font-bold uppercase text-dark sm:text-[40px] lg:text-[36px] xl:text-[40px]">
-                            Vous avez une question ?
+                            Une question ?
                         </h2>
                         <p class="mb-9 text-base leading-relaxed text-body-color">
-                            Notre équipe est là pour vous aider. Contactez-nous pour toute question, suggestion ou demande d'assistance. Nous sommes disponibles pour répondre à vos questions et vous accompagner dans l'utilisation de SimpliStocks.
+                            Notre équipe est là pour vous aider. Contactez-nous pour toute question, suggestion ou demande d'assistance. Nous sommes disponibles pour répondre à vos questions et vous accompagner dans l'utilisation de Quanta.
                         </p>
                     </div>
                 </div>
@@ -1690,7 +1638,7 @@ defineProps({
                 <div class="-mx-4 flex flex-wrap">
                     <div class="w-full px-4 md:w-1/3 lg:w-1/2">
                         <div class="my-1 flex justify-center md:justify-start">
-                            <p class="text-base text-[#efefef]">&copy;  SimpliStocks</p>
+                            <p class="text-base text-[#efefef]">&copy;  Quanta</p>
                         </div>
                     </div>
                     <div class="w-full px-4 md:w-2/3 lg:w-1/2">
@@ -1720,10 +1668,6 @@ defineProps({
             </div>
         </div>
     </footer>
-    <!-- ====== Footer Section End -->
-    </body>
-    </html>
-
 </template>
 
 <style>

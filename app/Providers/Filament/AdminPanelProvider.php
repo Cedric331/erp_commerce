@@ -48,9 +48,9 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('/favicon.ico'))
             ->brandLogo(asset('images/logo.png'))
             ->darkModeBrandLogo(asset('images/logo-dark.png'))
+            ->brandLogoHeight('5rem')
             ->viteTheme('resources/css/filament/app/theme.css')
-            ->brandLogoHeight('3rem')
-            ->font('Poppins')
+            ->unsavedChangesAlerts()
             ->tenantBillingProvider(new BillingProvider())
 //            ->requiresTenantSubscription()
             ->tenantMenuItems([
@@ -86,11 +86,11 @@ class AdminPanelProvider extends PanelProvider
             )
             ->sidebarCollapsibleOnDesktop()
             ->colors([
-                'primary' => '#137863',
+                'primary' => '#003366',
                 'danger' => '#ff5f5f',
-                'info' => '#08493b',
+                'info' => '#5AB9EA',
                 'success' => '#4279bc',
-                'warning' => '#f6c14d',
+                'warning' => '#FFC107',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

@@ -19,7 +19,9 @@ use Laravel\Cashier\Http\Controllers\PaymentController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    return Inertia::render('Welcome', [
+        'isAuth' => \Illuminate\Support\Facades\Auth::check()
+    ]);
 })->name('app');
 
 Route::get('login', function () {
