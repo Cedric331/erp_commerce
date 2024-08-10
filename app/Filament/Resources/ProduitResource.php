@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Exports\ProduitExporter;
 use App\Filament\Resources\ProduitResource\Pages;
 use App\Filament\Resources\ProduitResource\Widgets\ValeurStockProduct;
+use App\Models\CategorieProduit;
 use App\Models\Produit;
+use App\Models\Storage;
 use Filament\Actions\CreateAction;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Actions\Exports\Models\Export;
@@ -13,6 +15,8 @@ use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
@@ -34,12 +38,17 @@ class ProduitResource extends Resource
     protected static bool $isScopedToTenant = true;
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
-    protected static ?string $label = 'Produit';
+    protected static ?string $label = 'un produit';
     protected static ?string $pluralModelLabel = 'Produits';
     protected static ?string $slug = 'products';
     protected static ?string $navigationGroup = 'Gestion des produits';
     protected static ?int $navigationSort = 3;
     protected static ?string $recordTitleAttribute = 'nom';
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public static function getWidgets(): array
     {
@@ -47,6 +56,7 @@ class ProduitResource extends Resource
             ValeurStockProduct::class
         ];
     }
+
 
     public static function form(Form $form): Form
     {
@@ -58,8 +68,64 @@ class ProduitResource extends Resource
                             ->label('Nom du produit')
                             ->unique(ignoreRecord: true)
                             ->required()
-                            ->columnSpanFull()
                             ->maxLength(255),
+
+                        Forms\Components\Select::make('storage_id')
+                            ->relationship(name: 'storage', titleAttribute: 'name')
+                            ->label('Zone de stockage')
+                            ->searchable()
+                            ->optionsLimit(10)
+                            ->searchDebounce(200)
+                            ->preload()
+                            ->loadingMessage('Recherche des zone de stockage...')
+                            ->createOptionForm([
+                                Forms\Components\Section::make([
+                                    Forms\Components\TextInput::make('name')
+                                        ->label('Nom de la zone de stockage')
+                                        ->maxLength(255)
+                                        ->columns(1)
+                                        ->required(),
+                                    Forms\Components\ToggleButtons::make('status')
+                                        ->label('Status')
+                                        ->colors([
+                                            Storage::STATUS_ACTIVE => 'primary',
+                                            Storage::STATUS_INACTIVE => 'danger',
+                                        ])
+                                        ->inline()
+                                        ->default(Storage::STATUS_ACTIVE)
+                                        ->options([
+                                            Storage::STATUS_ACTIVE => 'Active',
+                                            Storage::STATUS_INACTIVE => 'Inactive',
+                                        ])
+                                        ->required(),
+                                ])
+                                    ->columns(2),
+                                Forms\Components\RichEditor::make('note')
+                                    ->columnSpanFull()
+                                    ->toolbarButtons([
+                                        'blockquote',
+                                        'bold',
+                                        'bulletList',
+                                        'codeBlock',
+                                        'h2',
+                                        'h3',
+                                        'italic',
+                                        'link',
+                                        'orderedList',
+                                        'redo',
+                                        'strike',
+                                        'underline',
+                                        'undo',
+                                    ])
+                                    ->label('Note')
+                            ])
+                            ->createOptionAction(function (Action $action) {
+                                $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer zone de stockage'));
+                                $action->mutateFormDataUsing(function (array $data) {
+                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    return $data;
+                                });
+                            }),
 
                         Forms\Components\TextInput::make('type')
                             ->label('Type de produit')
@@ -97,6 +163,7 @@ class ProduitResource extends Resource
 
                             ])
                             ->createOptionAction(function (Action $action) {
+                                $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer catégorie'));
                                 $action->mutateFormDataUsing(function (array $data) {
                                     $data['commercant_id'] = Filament::getTenant()->id;
                                     return $data;
@@ -118,6 +185,7 @@ class ProduitResource extends Resource
                                     ->required(),
                             ])
                             ->createOptionAction(function (Action $action) {
+                                $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer Fournisseur'));
                                 $action->mutateFormDataUsing(function (array $data) {
                                     $data['commercant_id'] = Filament::getTenant()->id;
                                     return $data;
@@ -149,8 +217,23 @@ class ProduitResource extends Resource
                             ->default(0)
                             ->columnSpanFull(),
 
-                        Forms\Components\Textarea::make('description')
+                        Forms\Components\RichEditor::make('description')
                             ->maxLength(65535)
+                            ->label('Description du produit')
+                            ->toolbarButtons([
+                                'bold',
+                                'italic',
+                                'underline',
+                                'strike',
+                                'link',
+                                'heading',
+                                'code',
+                                'bulletList',
+                                'numberedList',
+                                'alignment',
+                                'undo',
+                                'redo',
+                            ])
                             ->columnSpanFull(),
                     ])
                     ->columns(2),
@@ -281,12 +364,19 @@ class ProduitResource extends Resource
                     })
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('storage.name')
+                    ->label('Zone de stockage')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('categorie.name')
                     ->label('Catégorie')
+                    ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('fournisseur.name')
                     ->label('Fournisseur')
+                    ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
@@ -312,6 +402,13 @@ class ProduitResource extends Resource
                     ->label('Fournisseur')
                     ->preload()
                     ->relationship('fournisseur', 'name')
+                    ->options(
+                        fn (Builder $query) => $query->pluck('name', 'id')->all()
+                    ),
+                SelectFilter::make('storage')
+                    ->label('Zone de stockage')
+                    ->preload()
+                    ->relationship('storage', 'name')
                     ->options(
                         fn (Builder $query) => $query->pluck('name', 'id')->all()
                     ),
@@ -360,6 +457,7 @@ class ProduitResource extends Resource
                         ExportFormat::Xlsx,
                         ExportFormat::Csv,
                     ])
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('commercant_id', Filament::getTenant()->id))
                     ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant() && !Auth::user()->isManager())
                     ->exporter(ProduitExporter::class)
             ]);

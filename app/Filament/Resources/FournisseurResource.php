@@ -7,6 +7,7 @@ use App\Filament\Resources\FournisseurResource\RelationManagers;
 use App\Models\Fournisseur;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -27,6 +28,11 @@ class FournisseurResource extends Resource
     protected static ?int $navigationSort = 2;
     protected static ?string $recordTitleAttribute = 'name';
 
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -37,22 +43,44 @@ class FournisseurResource extends Resource
                     ->required()
                     ->columnSpanFull()
                     ->maxLength(255),
-//                Forms\Components\TextInput::make('email')
-//                    ->email()
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('phone')
-//                    ->tel()
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('address')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('city')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('country')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('postal_code')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('note')
-//                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('phone')
+                    ->label('Téléphone')
+                    ->tel()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('address')
+                    ->label('Adresse')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('city')
+                    ->label('Ville')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('country')
+                    ->label('Pays')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('postal_code')
+                    ->label('Code postal')
+                    ->numeric()
+                    ->maxLength(5),
+                Forms\Components\RichEditor::make('note')
+                    ->toolbarButtons([
+                        'blockquote',
+                        'bold',
+                        'bulletList',
+                        'codeBlock',
+                        'h2',
+                        'h3',
+                        'italic',
+                        'link',
+                        'orderedList',
+                        'redo',
+                        'strike',
+                        'underline',
+                        'undo',
+                    ])
+                    ->label('Note')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -61,36 +89,47 @@ class FournisseurResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nom du fournisseur')
+                    ->label('Nom')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('produits_count')
-                    ->label('Nombre de produits chez ce fournisseur')
+                    ->label('Nombre de produits')
                     ->counts('produits')
                     ->sortable()
                     ->searchable(),
-//                Tables\Columns\TextColumn::make('email')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('phone')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('address')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('city')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('country')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('postal_code')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('note')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('created_at')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
-//                Tables\Columns\TextColumn::make('updated_at')
-//                    ->dateTime()
-//                    ->sortable()
-//                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('phone')
+                    ->label('Téléphone')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('address')
+                    ->label('Adresse')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('city')
+                    ->label('Ville')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('country')
+                    ->label('Pays')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('postal_code')
+                    ->label('Code postal')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Créé le')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifié le')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

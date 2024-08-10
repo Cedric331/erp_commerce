@@ -22,6 +22,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
+use Filament\Panel;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -34,6 +35,11 @@ class CreateStock extends Component implements HasForms
     public ?array $data = [];
 
     public bool $showForm = true;
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public function mount(): void
     {
@@ -60,7 +66,7 @@ class CreateStock extends Component implements HasForms
             $this->data['scheduled_date'] = null;
         }
 
-        Stock::create($this->data);
+       $stock = Stock::create($this->data);
 
         if (!$this->data['scheduled_date']) {
             $type = StockStatus::find($this->data['stock_status_id'])->type;
@@ -75,6 +81,10 @@ class CreateStock extends Component implements HasForms
                     'stock' => $produit->stock - $this->data['quantity'],
                 ]);
             }
+            $stock->update([
+                'date_process' => now(),
+            ]);
+
             activity('Produit')
                 ->event('Stock modifié - ' . StockStatus::find($this->data['stock_status_id'])->name)
                 ->causedBy(Auth::user())

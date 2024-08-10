@@ -22,7 +22,7 @@ class CommercantRegister extends RegisterTenant
 
     public static function canView(): bool
     {
-        return Auth::user()->isAdministrateurOrGerant();
+        return Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasTenant();
     }
 
     public function form(Form $form): Form
@@ -88,20 +88,18 @@ class CommercantRegister extends RegisterTenant
         $tenantId = $this->tenant->id;
 
         $rolesWithPermissions = [
-            Role::ROLE_MANAGER => config('setting-permission.manager'),
-            Role::ROLE_SERVEUR => config('setting-permission.serveur'),
+            Role::ROLE_GERANT => config('setting-permission.gerant'),
         ];
 
-        foreach ($rolesWithPermissions as $roleName => $permissions) {
-            $role = Role::create([
-                'name' => $roleName,
-                'commercant_id' => $tenantId,
-            ]);
-
-            if ($permissions) {
-                $role->syncPermissions($permissions);
-            }
-        }
+//        foreach ($rolesWithPermissions as $roleName => $permissions) {
+//            $role = Role::firstOrCreate([
+//                'name' => $roleName
+//            ]);
+//
+//            if ($permissions) {
+//                $role->syncPermissions($permissions);
+//            }
+//        }
         $role = Role::where('name', Role::ROLE_GERANT)->first();
         setPermissionsTeamId($tenantId);
         Auth::user()->assignRole($role);

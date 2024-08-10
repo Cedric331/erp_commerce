@@ -7,7 +7,12 @@ const colors = require("tailwindcss/colors");
 module.exports = {
     presets: [preset],
     content: [
+        "./*.html",
+        "./ecommerce/*.html",
+        "./assets/**/*.js",
         "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
         './vendor/jaocero/activity-timeline/resources/views/**/*.blade.php',
         './app/Filament/**/*.php',
         './resources/views/filament/**/*.blade.php',
@@ -27,5 +32,6 @@ module.exports = {
     plugins: [
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
+        require("tailgrids/plugin")
     ],
 };

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ProduitResource\Pages;
 
 use App\Filament\Resources\ProduitResource;
+use App\Filament\Resources\ProduitResource\Widgets\ProfitabilityProduct;
 use App\Models\Produit;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\Page;
@@ -23,6 +24,25 @@ class ViewProduitActivities extends ActivityTimelinePage
     protected static ?string $title = 'Activités du produit';
 
     public $activities;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            ProfitabilityProduct::class
+        ];
+    }
+
+    public function getHeaderWidgetsColumns(): int | array
+    {
+        return 1;
+    }
+
+    public function getWidgetData(): array
+    {
+        return [
+            'produit' => $this->record
+        ];
+    }
 
     public function mount($record): void
     {

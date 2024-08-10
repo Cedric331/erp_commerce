@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Commercant;
 use App\Models\Permission;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -18,7 +19,7 @@ class PermissionSeeder extends Seeder
         $permissions = config('setting-permission.permissions');
 
         $role = Role::create([
-            'name' => 'Gérant',
+            'name' => \App\Models\Role::ROLE_GERANT,
             'guard_name' => 'web'
         ]);
 

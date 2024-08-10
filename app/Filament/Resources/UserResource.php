@@ -9,6 +9,7 @@ use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -32,6 +33,11 @@ class UserResource extends Resource
     protected static ?string $navigationGroup = 'Gestion des utilisateurs';
     protected static ?int $navigationSort = 9;
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -64,6 +70,7 @@ class UserResource extends Resource
                     ->columnSpanFull()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->multiple()
+                    ->required()
                     ->preload()
                     ->searchable(),
                 Forms\Components\Select::make('roles')

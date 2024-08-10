@@ -51,6 +51,7 @@ class AddStock extends Command
 
             $stock->update([
                 'scheduled_date' => null,
+                'date_process' => now(),
             ]);
 
             $recipient = User::with('rolesAllTenant')->whereHas('commercant', function ($query) use ($stock) {

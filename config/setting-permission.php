@@ -22,7 +22,10 @@ return [
       'Modifier Utilisateur',
       'Supprimer Utilisateur',
       'Gérer les rôles',
-      'Gérer les permissions'
+      'Gérer les permissions',
+      'Créer zone de stockage',
+      'Modifier zone de stockage',
+      'Supprimer zone de stockage',
   ],
     'gerant' => [
         'Exporter des données',
@@ -44,7 +47,10 @@ return [
         'Modifier Utilisateur',
         'Supprimer Utilisateur',
         'Gérer les rôles',
-        'Gérer les permissions'
+        'Gérer les permissions',
+        'Créer zone de stockage',
+        'Modifier zone de stockage',
+        'Supprimer zone de stockage',
     ],
     'manager' => [
         'Exporter des données',
@@ -65,7 +71,10 @@ return [
         'Modifier Utilisateur',
         'Supprimer Utilisateur',
         'Gérer les rôles',
-        'Gérer les permissions'
+        'Gérer les permissions',
+        'Créer zone de stockage',
+        'Modifier zone de stockage',
+        'Supprimer zone de stockage',
     ],
     'serveur' => [
         'Créer stock',

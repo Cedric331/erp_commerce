@@ -8,6 +8,7 @@ use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
 use Filament\Facades\Filament;
+use Filament\Panel;
 
 function getValeurStock(): float
 {
@@ -23,6 +24,11 @@ function getValeurStock(): float
 class ProduitExporter extends Exporter
 {
     protected static ?string $model = Produit::class;
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public function getFileName(Export $export): string
     {
@@ -47,6 +53,8 @@ class ProduitExporter extends Exporter
                 ->label('Référence fournisseur'),
             ExportColumn::make('type')
                 ->label('Type de produit'),
+            ExportColumn::make('storage.name')
+                ->label('Zone de stockage'),
             ExportColumn::make('description')
                 ->label('Description'),
             ExportColumn::make('stock')

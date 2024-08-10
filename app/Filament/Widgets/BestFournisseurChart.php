@@ -3,11 +3,8 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Fournisseur;
-use App\Models\Produit;
-use App\Models\Stock;
 use App\Models\StockStatus;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Select;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class BestfournisseurChart extends ApexChartWidget

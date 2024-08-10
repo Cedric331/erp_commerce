@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            CommercantSeeder::class,
-            StockStatusSeeder::class,
-            UserSeeder::class,
+//            CommercantSeeder::class,
+//            StockStatusSeeder::class,
+//            UserSeeder::class,
             PermissionSeeder::class,
         ]);
     }

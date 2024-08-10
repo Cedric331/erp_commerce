@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Cashier\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +19,17 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return redirect('/app');
-});
+    return Inertia::render('Welcome', [
+        'isAuth' => \Illuminate\Support\Facades\Auth::check()
+    ]);
+})->name('app');
 
 Route::get('login', function () {
     return redirect('/app');
 })->name('login')->middleware('guest');
+
+Route::post('/delete-shop/{slug}', [ProfileController::class, 'deleteTenant'])->name('shop.delete');
+
+Route::post('/webhooks/stripe', [StripeController::class, 'handleWebhook']);
+Route::get('/complete-payment/{paymentIntent}', [StripeController::class, 'completePayment'])->name('complete.payment');
 

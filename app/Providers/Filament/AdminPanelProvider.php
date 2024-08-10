@@ -3,26 +3,35 @@
 namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use App\Filament\Pages\Support;
 use App\Filament\Resources\Tenancy\CommercantEdit;
+use App\Filament\Resources\Tenancy\CommercantRegister;
 use App\Http\Middleware\ApplyTenantScopes;
+use App\Http\Middleware\CheckTenantOwnership;
+use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
 use App\Models\Commercant;
+use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
+use Hugomyb\FilamentErrorMailer\FilamentErrorMailerPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use Maartenpaauw\Filament\Cashier\Stripe\BillingProvider;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 use Swis\Filament\Backgrounds\ImageProviders\MyImages;
 
@@ -33,16 +42,36 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('app')
             ->path('app')
-            ->favicon(asset('/favicon.ico'))
-            ->brandLogo(asset('images/logo.png'))
-            ->darkModeBrandLogo(asset('images/logo-dark.png'))
-            ->viteTheme('resources/css/filament/app/theme.css')
-            ->brandLogoHeight('3rem')
-            ->font('Poppins')
             ->profile()
             ->login()
             ->loginRouteSlug('login')
             ->passwordReset()
+            ->registration()
+            ->favicon(asset('/favicon.ico'))
+            ->brandLogo(asset('images/logo.png'))
+            ->darkModeBrandLogo(asset('images/logo-dark.png'))
+            ->brandLogoHeight('5rem')
+            ->viteTheme('resources/css/filament/app/theme.css')
+            ->unsavedChangesAlerts()
+            ->tenantBillingProvider(new BillingProvider())
+//            ->requiresTenantSubscription()
+            ->tenantMenuItems([
+                'billing' => MenuItem::make()
+                    ->visible(fn (): bool => auth()->user()->isAdministrateurOrGerant())
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->visible(function (): bool {
+                        if (Route::currentRouteName() === 'filament.app.tenant.registration' || !auth()->user()->hasTenant()) {
+                            return false;
+                        }
+
+                        return true;
+                    })
+                    ->label('Contacter le support')
+                    ->url(fn (): string => Support::getUrl())
+                    ->icon('heroicon-o-envelope'),
+            ])
             ->globalSearch()
             ->globalSearchDebounce(100)
             ->renderHook(
@@ -53,13 +82,24 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
                 fn (): string => Blade::render('@livewire(\'create-stock\')')
             )
+            ->renderHook(
+                PanelsRenderHook::PAGE_START,
+                fn (): string => Blade::render('@livewire(\'banner-subscrib\')')
+            )
+            ->renderHook(
+                PanelsRenderHook::PAGE_END,
+                fn (): string => Blade::render('@livewire(\'delete-tenant\')'),
+                scopes: [
+                    \App\Filament\Resources\Tenancy\CommercantEdit::class,
+                ],
+            )
             ->sidebarCollapsibleOnDesktop()
             ->colors([
-                'primary' => '#137863',
+                'primary' => '#003366',
                 'danger' => '#ff5f5f',
-                'info' => '#08493b',
+                'info' => '#5AB9EA',
                 'success' => '#4279bc',
-                'warning' => '#f6c14d',
+                'warning' => '#FFC107',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -71,7 +111,7 @@ class AdminPanelProvider extends PanelProvider
 //                Widgets\AccountWidget::class,
 //                Widgets\FilamentInfoWidget::class,
             ])
-            ->spa()
+            ->databaseTransactions()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -95,15 +135,23 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
             ->tenant(Commercant::class, 'slug')
-//            ->tenantRegistration(CommercantRegister::class)
+            ->tenantMenu(function () {
+                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->commercant()->count() > 1) {
+                    return true;
+                }
+                return false;
+            })
+            ->tenantRegistration(CommercantRegister::class)
             ->tenantProfile(CommercantEdit::class)
             ->tenantRoutePrefix('shop')
             ->tenantMiddleware([
                 SyncSpatiePermissionsWithFilamentTenants::class,
                 ApplyTenantScopes::class,
+                CheckTenantOwnership::class,
             ], isPersistent: true)
             ->plugins([
                 FilamentSpatieRolesPermissionsPlugin::make(),
+                FilamentErrorMailerPlugin::make(),
                 FilamentApexChartsPlugin::make(),
                 FilamentBackgroundsPlugin::make()
                     ->imageProvider(

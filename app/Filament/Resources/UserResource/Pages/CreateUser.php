@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\InvitationUser;
 use Filament\Actions;
 use Filament\Facades\Filament;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -20,10 +21,6 @@ class CreateUser extends CreateRecord
     {
         $data['password'] = Hash::make(Str::random(10));
 
-        if ($data['commercant_id'] === null) {
-            $data['commercant_id'] = Filament::getTenant()->id;
-        }
-
         return $data;
     }
 
@@ -33,5 +30,15 @@ class CreateUser extends CreateRecord
         $token = Password::getRepository()->create($user);
 
         $user->notify(new InvitationUser($token));
+
+        Notification::make()
+            ->title('Utilisateur créé')
+            ->body('Un email a été envoyé à l\'utilisateur pour qu\'il puisse définir son mot de passe.')
+            ->duration(5000)
+            ->icon('heroicon-o-check-circle')
+            ->iconColor('green')
+            ->status('success')
+            ->inline()
+            ->send();
     }
 }

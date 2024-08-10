@@ -6,5 +6,10 @@ export default {
         './app/Filament/**/*.php',
         './resources/views/filament/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
+        "./*.html",
+        "./ecommerce/*.html",
+        "./assets/**/*.js"
     ],
+    plugins: [require("tailgrids/plugin")],
+
 }
