@@ -14,7 +14,7 @@ const navbarOpen = ref(false);
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head title="Accueil" />
 
     <header class="bg-[#003366]">
         <div class="container mx-auto">
@@ -309,7 +309,7 @@ const navbarOpen = ref(false);
                             Abonnement Classique
                           </span>
                         <h2 class="mb-5 text-[42px] font-bold text-dark">
-                            20€
+                            29.99 €
                             <span class="text-base font-medium text-body-color">
                           / mois
                         </span>
@@ -628,9 +628,6 @@ const navbarOpen = ref(false);
             <div class="-mx-4 flex flex-wrap">
                 <div class="w-full px-4">
                     <div class="mx-auto mb-[60px] max-w-[520px] text-center lg:mb-20">
-                    <span class="mb-2 block text-lg font-semibold text-primary">
-                        FAQ Quanta
-                    </span>
                         <h2 class="mb-4 text-3xl font-bold text-dark sm:text-4xl md:text-[40px]">
                             Vos Questions Fréquentes
                         </h2>
@@ -1646,20 +1643,14 @@ const navbarOpen = ref(false);
                             <div
                                 class="-mx-3 flex flex-wrap items-center justify-center md:justify-end">
                                 <a
-                                    href="javascript:void(0)"
-                                    class="px-3 text-base text-[#efefef] hover:text-white">
-
-                                </a>
-                                <a
-                                    href="javascript:void(0)"
-                                    class="px-3 text-base text-[#efefef] hover:text-white"
-                                >
-                                   Notice Légale
-                                </a>
-                                <a
-                                    href="javascript:void(0)"
+                                    href="/cgv"
                                     class="px-3 text-base text-[#efefef] hover:text-white">
                                     Conditions Générales de Vente
+                                </a>
+                                <a
+                                    href="/mentions-legales"
+                                    class="px-3 text-base text-[#efefef] hover:text-white">
+                                    Mentions Légales
                                 </a>
                             </div>
                         </div>

@@ -24,6 +24,18 @@ Route::get('/', function () {
     ]);
 })->name('app');
 
+Route::get('/cgv', function () {
+    return Inertia::render('Cgv', [
+        'isAuth' => \Illuminate\Support\Facades\Auth::check()
+    ]);
+})->name('cgv');
+
+Route::get('/mentions-legales', function () {
+    return Inertia::render('LegalInformation', [
+        'isAuth' => \Illuminate\Support\Facades\Auth::check()
+    ]);
+})->name('legal.information');
+
 Route::get('login', function () {
     return redirect('/app');
 })->name('login')->middleware('guest');
