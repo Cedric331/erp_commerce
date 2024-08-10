@@ -66,7 +66,12 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $this->getAccessibleCommercants();
     }
 
-    public function isAdministrateur()
+    public function hasTenant(): bool
+    {
+        return $this->commercant->count() > 0;
+    }
+
+    public function isAdministrateur(): bool
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
 
@@ -77,7 +82,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         }
     }
 
-    public function isAdministrateurOrGerant()
+    public function isAdministrateurOrGerant(): bool
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
 
@@ -121,14 +126,14 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $relation->wherePivotNotNull('commercant_id');
     }
 
-    public function commercant()
+    public function commercant(): BelongsToMany
     {
         return $this->belongsToMany(Commercant::class, 'commercant_users', 'user_id', 'commercant_id');
     }
 
     public function getAccessibleCommercants()
     {
-        if ($this->isAdministrateurOrGerant()) {
+        if ($this->isAdministrateur()) {
             return Commercant::all();
         } else {
             return $this->commercant;

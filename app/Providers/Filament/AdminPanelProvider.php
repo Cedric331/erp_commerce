@@ -7,6 +7,7 @@ use App\Filament\Pages\Support;
 use App\Filament\Resources\Tenancy\CommercantEdit;
 use App\Filament\Resources\Tenancy\CommercantRegister;
 use App\Http\Middleware\ApplyTenantScopes;
+use App\Http\Middleware\CheckTenantOwnership;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
 use App\Models\Commercant;
@@ -27,6 +28,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use Maartenpaauw\Filament\Cashier\Stripe\BillingProvider;
@@ -59,6 +61,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 MenuItem::make()
+                    ->visible(function (): bool {
+                        if (Route::currentRouteName() === 'filament.app.tenant.registration' || !auth()->user()->hasTenant()) {
+                            return false;
+                        }
+
+                        return true;
+                    })
                     ->label('Contacter le support')
                     ->url(fn (): string => Support::getUrl())
                     ->icon('heroicon-o-envelope'),
@@ -138,6 +147,7 @@ class AdminPanelProvider extends PanelProvider
             ->tenantMiddleware([
                 SyncSpatiePermissionsWithFilamentTenants::class,
                 ApplyTenantScopes::class,
+                CheckTenantOwnership::class,
             ], isPersistent: true)
             ->plugins([
                 FilamentSpatieRolesPermissionsPlugin::make(),

@@ -43,8 +43,8 @@ class ApplyTenantScopes
 
         Role::addGlobalScope(
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant())
-                ->orWhere('name', '=', 'Administrateur')
-                ->orWhere('name', '=', 'Gérant')
+                ->orWhere('name', '=', Role::ROLE_ADMIN)
+                ->orWhere('name', '=', Role::ROLE_GERANT)
         );
 
         Storage::addGlobalScope(
