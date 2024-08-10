@@ -6,6 +6,7 @@ use Filament\Actions\Concerns\HasName;
 use Filament\Models\Contracts\HasCurrentTenantLabel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
@@ -13,7 +14,7 @@ use Spatie\Permission\Models\Role;
 
 class Commercant extends Model implements HasCurrentTenantLabel
 {
-    use HasFactory, HasName, Billable;
+    use HasFactory, HasName, Billable, Notifiable;
 
     protected $fillable = [
         'enseigne',

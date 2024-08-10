@@ -15,6 +15,8 @@ class StripeController extends CashierController
 {
     public function handleWebhook(Request $request)
     {
+        Log::info('Received webhook', ['payload' => $request->getContent()]);
+
         $payload = $request->getContent();
         $sig_header = $request->header('Stripe-Signature');
 
@@ -25,8 +27,10 @@ class StripeController extends CashierController
                 env('STRIPE_WEBHOOK_SECRET')
             );
         } catch (\UnexpectedValueException $e) {
+            Log::error('Invalid payload', ['exception' => $e->getMessage()]);
             return response()->json(['error' => 'Invalid Payload'], 400);
         } catch (SignatureVerificationException $e) {
+            Log::error('Invalid signature', ['exception' => $e->getMessage()]);
             return response()->json(['error' => 'Invalid Signature'], 400);
         }
 
@@ -35,16 +39,22 @@ class StripeController extends CashierController
         if (method_exists($this, $method)) {
             return $this->$method($event);
         } else {
+            Log::warning('Unhandled event type', ['event' => $event->type]);
             return response()->json(['message' => 'Unhandled event type'], 200);
         }
     }
 
     protected function handleCustomerSubscriptionCreated($payload)
     {
-        $commercant = $this->getCommercantFromEvent($payload);
-        if (!$commercant) return;
-
         $subscription = $payload->data->object;
+        if (!$subscription || !isset($subscription->id)) {
+            Log::error('Invalid subscription data', ['payload' => $payload]);
+            return response()->json(['error' => 'Invalid subscription data'], 400);
+        }
+
+        $commercant = $this->getCommercantFromEvent($payload);
+
+        if (!$commercant) return;
 
         $commercant->subscriptions()->create([
             'type' => 'default',
@@ -55,25 +65,32 @@ class StripeController extends CashierController
             'trial_ends_at' => isset($subscription->trial_end) ? \Carbon\Carbon::createFromTimestamp($subscription->trial_end) : null,
             'ends_at' => null,
         ]);
+
+        $commercantSubscription = $commercant->subscriptions()->where('stripe_id', $subscription->id)->first();
+        if ($commercantSubscription) {
+            $commercant->notify(new \App\Notifications\PaymentSuccessNotification($commercant, $commercantSubscription));
+        }
     }
 
     protected function handleCustomerSubscriptionUpdated($payload)
     {
+        $subscription = $payload->data->object;
+        if (!$subscription || !isset($subscription->id)) {
+            Log::error('Invalid subscription data', ['payload' => $payload]);
+            return response()->json(['error' => 'Invalid subscription data'], 400);
+        }
+
         $commercant = $this->getCommercantFromEvent($payload);
         if (!$commercant) return;
 
-        $subscription = $payload->data->object;
-
         $commercantSubscription = $commercant->subscriptions()->where('stripe_id', $subscription->id)->first();
+
         if ($commercantSubscription) {
             $commercantSubscription->update([
                 'stripe_status' => $subscription->status,
             ]);
 
-            // Si le statut de l'abonnement est 'incomplete', marquer pour action utilisateur
             if ($subscription->status === 'incomplete') {
-                // Ici, vous pouvez déclencher une notification à l'utilisateur pour qu'il complète le paiement
-                // Par exemple, enregistrer une tâche, envoyer un email, etc.
                 $this->notifyUserForPaymentCompletion($commercant, $commercantSubscription);
             }
         }
@@ -89,7 +106,6 @@ class StripeController extends CashierController
             return response()->json(['error' => 'Commercant not found'], 404);
         }
 
-        // Récupération de l'abonnement dans votre base de données
         $subscription = $commercant->subscriptions()->where('stripe_id', $payload->data->object->id)->first();
 
         if ($subscription) {
@@ -98,10 +114,9 @@ class StripeController extends CashierController
                 'ends_at' => now(),
             ]);
 
-            // Log pour les opérations de débogage ou informations
             Log::info('Subscription deleted for commercant.', ['stripe_id' => $payload->data->object->customer]);
 
-            // Ici, vous pouvez également ajouter une logique pour notifier l'utilisateur de la suppression de l'abonnement.
+            // Vous pouvez également ajouter une logique pour notifier l'utilisateur de la suppression de l'abonnement.
             // $this->notifyUserSubscriptionCancelled($commercant);
         } else {
             Log::error('Subscription not found.', ['stripe_id' => $payload->data->object->id]);
@@ -111,13 +126,11 @@ class StripeController extends CashierController
         return response()->json(['message' => 'Subscription deletion processed'], 200);
     }
 
-
     protected function handleInvoicePaid($event)
     {
         $commercant = $this->getCommercantFromEvent($event);
         if (!$commercant) return;
 
-        // Handle successful invoice payment
         Log::info('Invoice paid for commercant.', ['stripe_id' => $event->data->object->customer]);
     }
 
@@ -126,7 +139,6 @@ class StripeController extends CashierController
         $commercant = $this->getCommercantFromEvent($event);
         if (!$commercant) return;
 
-        // Handle failed invoice payment
         Log::info('Invoice payment failed for commercant.', ['stripe_id' => $event->data->object->customer]);
     }
 
@@ -146,22 +158,43 @@ class StripeController extends CashierController
     {
         $stripe = new StripeClient(env('STRIPE_SECRET'));
 
-        $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId, []);
+        try {
+            $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId, []);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve PaymentIntent', ['paymentIntentId' => $paymentIntentId, 'error' => $e->getMessage()]);
+            return redirect()->route('home')->with('error', 'Erreur lors de la récupération du paiement.');
+        }
 
         if ($paymentIntent && $paymentIntent->status === 'requires_action') {
-            // Redirigez vers la page Stripe pour compléter le paiement
             return redirect()->to($paymentIntent->next_action->use_stripe_sdk->stripe_js);
         } else {
-            // Redirigez vers une page d'erreur ou de succès selon le cas
             return redirect()->route('home')->with('error', 'Le paiement ne peut pas être complété.');
         }
     }
 
     protected function notifyUserForPaymentCompletion($commercant, $subscription)
     {
-        // Implémentez la logique pour notifier l'utilisateur.
-        // Cela pourrait être l'envoi d'un email avec un lien vers une page de paiement,
-        // où vous utilisez Stripe.js pour afficher le paiement requis.
-        Log::info('Notifying user to complete payment.', ['commercant_id' => $commercant->id, 'subscription_id' => $subscription->id]);
+        // Vérification que l'utilisateur a bien une adresse email
+        if (!$commercant->email) {
+            Log::error('No email found for commercant.', ['commercant_id' => $commercant->id]);
+            return;
+        }
+
+        // Créer le lien de paiement
+        $paymentLink = route('complete.payment', ['paymentIntent' => $subscription->stripe_id]);
+
+        // Envoi de la notification
+        try {
+            $commercant->notify(new \App\Notifications\PaymentCompletionNotification($commercant, $subscription, $paymentLink));
+            Log::info('Payment completion notification sent.', ['commercant_id' => $commercant->id, 'subscription_id' => $subscription->id]);
+        } catch (\Exception $e) {
+            Log::error('Failed to send payment completion notification.', [
+                'commercant_id' => $commercant->id,
+                'subscription_id' => $subscription->id,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
+
+
 }
