@@ -2,21 +2,20 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Fournisseur;
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\StockStatus;
 use Filament\Facades\Filament;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class BestfournisseurChart extends ApexChartWidget
+class BestCategoryChart extends ApexChartWidget
 {
-    protected static string $chartId = 'bestSupplierChart';
+    protected static string $chartId = 'bestCategoryChart';
 
-    protected static ?string $heading = 'Meilleurs fournisseurs';
+    protected static ?string $heading = 'Meilleures catégories';
     protected static bool $deferLoading = true;
 
     protected static ?string $loadingIndicator = 'Chargement des données...';
-
-
 
     /**
      * Prépare les données pour le graphique ApexCharts.
@@ -25,22 +24,22 @@ class BestfournisseurChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-        // Modifier ici pour agréger les ventes par fournisseur
-        $fournisseurs = Fournisseur::query()
-            ->where('commercant_id', Filament::getTenant()?->id)
-            ->with(['produits.stocks' => function ($query) {
+        // Modifier ici pour agréger les ventes par catégorie
+        $categories = Category::query()
+            ->where('merchant_id', Filament::getTenant()?->id)
+            ->with(['products.stocks' => function ($query) {
                 $query->whereHas('stockStatus', function ($query) {
-                    $query->where('name', StockStatus::STATUS_VENTE);
+                    $query->where('name', 'Vente');
                 });
             }])
             ->get()
-            ->map(function ($fournisseur) {
-                $totalVentes = $fournisseur->produits->flatMap(function ($produit) {
-                    return $produit->stocks->pluck('quantity');
+            ->map(function ($category) {
+                $totalVentes = $category->products->flatMap(function ($product) {
+                    return $product->stocks->pluck('quantity');
                 })->sum();
 
                 return [
-                    'name' => $fournisseur->name,
+                    'nom' => $category->name,
                     'totalVentes' => $totalVentes,
                 ];
             })
@@ -48,8 +47,8 @@ class BestfournisseurChart extends ApexChartWidget
             ->take(5)
             ->values();
 
-        $labels = $fournisseurs->pluck('name')->toArray();
-        $ventesTotales = $fournisseurs->pluck('totalVentes')->toArray();
+        $labels = $categories->pluck('nom')->toArray();
+        $ventesTotales = $categories->pluck('totalVentes')->toArray();
 
         return [
             'chart' => [
@@ -65,7 +64,7 @@ class BestfournisseurChart extends ApexChartWidget
             'xaxis' => [
                 'categories' => $labels,
             ],
-            'colors' => ['#df45df', '#5aa192', '#f4b30d', '#f4503d', '#3d5af4'],
+            'colors' => ['#5aa192', '#f5a623', '#f8e71c', '#9b9b9b', '#e74c3c'],
             'plotOptions' => [
                 'bar' => [
                     'horizontal' => false,

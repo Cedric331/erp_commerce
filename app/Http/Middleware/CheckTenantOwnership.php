@@ -21,7 +21,7 @@ class CheckTenantOwnership
     {
         $tenant = Filament::getTenant();
 
-        if ($tenant && !auth()->user()->commercant->contains($tenant)) {
+        if ($tenant && !auth()->user()->merchant->contains($tenant)) {
             return redirect()->back();
         }
 

@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Exports\ProduitExporter;
+use App\Filament\Exports\ProductExporter;
 use App\Filament\Resources\ProduitResource\Pages;
 use App\Filament\Resources\ProduitResource\Widgets\ValeurStockProduct;
-use App\Models\CategorieProduit;
-use App\Models\Produit;
+use App\Models\Category;
+use App\Models\Product;
 use App\Models\Storage;
 use Filament\Actions\CreateAction;
 use Filament\Actions\Exports\Enums\ExportFormat;
@@ -33,7 +33,7 @@ use Illuminate\Validation\Rules\Unique;
 
 class ProduitResource extends Resource
 {
-    protected static ?string $model = Produit::class;
+    protected static ?string $model = Product::class;
 
     protected static bool $isScopedToTenant = true;
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
@@ -122,7 +122,7 @@ class ProduitResource extends Resource
                             ->createOptionAction(function (Action $action) {
                                 $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer zone de stockage'));
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    $data['merchant_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
@@ -134,16 +134,16 @@ class ProduitResource extends Resource
                         Forms\Components\TextInput::make('reference')
                             ->label('Référence fournisseur')
                             ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
-                                return $rule->where('commercant_id', Filament::getTenant()->id);
+                                return $rule->where('merchant_id', Filament::getTenant()->id);
                             })
                             ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
-                                return $rule->where('commercant_id', Filament::getTenant()->id);
+                                return $rule->where('merchant_id', Filament::getTenant()->id);
                             })
                             ->required()
                             ->maxLength(255),
 
-                        Forms\Components\Select::make('categorie_id')
-                            ->relationship(name: 'categorie', titleAttribute: 'name')
+                        Forms\Components\Select::make('category_id')
+                            ->relationship(name: 'category', titleAttribute: 'name')
                             ->label('Catégorie')
                             ->searchable()
                             ->optionsLimit(10)
@@ -165,13 +165,13 @@ class ProduitResource extends Resource
                             ->createOptionAction(function (Action $action) {
                                 $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer catégorie'));
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    $data['merchant_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
 
-                        Forms\Components\Select::make('fournisseur_id')
-                            ->relationship(name: 'fournisseur', titleAttribute: 'name')
+                        Forms\Components\Select::make('brand_id')
+                            ->relationship(name: 'brand', titleAttribute: 'name')
                             ->label('Fournisseur')
                             ->searchable()
                             ->optionsLimit(10)
@@ -187,7 +187,7 @@ class ProduitResource extends Resource
                             ->createOptionAction(function (Action $action) {
                                 $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer Fournisseur'));
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    $data['merchant_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
@@ -369,12 +369,12 @@ class ProduitResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('categorie.name')
+                Tables\Columns\TextColumn::make('category.name')
                     ->label('Catégorie')
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('fournisseur.name')
+                Tables\Columns\TextColumn::make('brand.name')
                     ->label('Fournisseur')
                     ->searchable()
                     ->sortable()
@@ -391,17 +391,17 @@ class ProduitResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('categorie')
+                SelectFilter::make('category')
                     ->label('Catégorie')
-                    ->relationship('categorie', 'name')
+                    ->relationship('category', 'name')
                     ->preload()
                     ->options(
                         fn (Builder $query) => $query->pluck('name', 'id')->all()
                     ),
-                SelectFilter::make('fournisseur')
+                SelectFilter::make('brand')
                     ->label('Fournisseur')
                     ->preload()
-                    ->relationship('fournisseur', 'name')
+                    ->relationship('brand', 'name')
                     ->options(
                         fn (Builder $query) => $query->pluck('name', 'id')->all()
                     ),
@@ -457,9 +457,9 @@ class ProduitResource extends Resource
                         ExportFormat::Xlsx,
                         ExportFormat::Csv,
                     ])
-                    ->modifyQueryUsing(fn (Builder $query) => $query->where('commercant_id', Filament::getTenant()->id))
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('merchant_id', Filament::getTenant()->id))
                     ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant() && !Auth::user()->isManager())
-                    ->exporter(ProduitExporter::class)
+                    ->exporter(ProductExporter::class)
             ]);
     }
 

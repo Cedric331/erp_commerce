@@ -11,8 +11,8 @@ class Stock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'commercant_id',
-        'produit_id',
+        'merchant_id',
+        'product_id',
         'stock_status_id',
         'quantity',
         'date_process',
@@ -20,7 +20,7 @@ class Stock extends Model
         'scheduled_date',
     ];
 
-    protected static ?string $tenantRelationshipName = 'produit';
+    protected static ?string $tenantRelationshipName = 'product';
 
     protected $casts = [
         'scheduled_date' => 'datetime',
@@ -28,9 +28,9 @@ class Stock extends Model
     ];
 
 
-    public function produit()
+    public function product()
     {
-        return $this->belongsTo(Produit::class, 'produit_id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public function stockStatus()
@@ -38,9 +38,9 @@ class Stock extends Model
         return $this->belongsTo(StockStatus::class, 'stock_status_id');
     }
 
-    public function commercant()
+    public function merchant()
     {
-        return $this->belongsTo(Commercant::class, 'commercant_id');
+        return $this->belongsTo(Merchant::class, 'merchant_id');
     }
 
     public function getFormattedScheduledDateAttribute()

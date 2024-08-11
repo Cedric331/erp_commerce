@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Fournisseur extends Model
+class Brand extends Model
 {
     use HasFactory;
 
@@ -18,16 +18,16 @@ class Fournisseur extends Model
         'postal_code',
         'country',
         'note',
-        'commercant_id',
+        'merchant_id',
     ];
 
-    public function commercant()
+    public function merchant()
     {
-        return $this->belongsTo(Commercant::class);
+        return $this->belongsTo(Merchant::class);
     }
 
-    public function produits()
+    public function products()
     {
-        return $this->hasMany(Produit::class);
+        return $this->hasMany(Product::class);
     }
 }

@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Quanta est une application web de gestion de stock pour les petits commerçants avec un faible coût et uniquement pour les petits commerçants.">
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 

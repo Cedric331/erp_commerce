@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('produits', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('nom')->index();
             $table->longText('description')->nullable();
@@ -23,10 +23,10 @@ return new class extends Migration
             $table->decimal('tva', 5, 2);
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('commercant_id')->constrained('commercants')->onDelete('cascade');
-            $table->foreignId('fournisseur_id')->nullable()->constrained('fournisseurs')->nullOnDelete();
-            $table->foreignId('categorie_id')->nullable()->constrained('categorie_produits')->nullOnDelete();
-            $table->unique(['reference', 'commercant_id']);
+            $table->foreignId('merchant_id')->constrained('merchants')->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->unique(['reference', 'merchant_id']);
             $table->timestamps();
         });
     }
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('produits');
+        Schema::dropIfExists('products');
     }
 };

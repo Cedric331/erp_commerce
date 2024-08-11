@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\CategorieProduit;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class CategorieProduitPolicy
+class CategoryPolicy
 {
 
     /**
@@ -20,7 +20,7 @@ class CategorieProduitPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, CategorieProduit $categorie): bool
+    public function update(User $user, Category $category): bool
     {
         return $user->hasPermissionTo('Modifier catégorie') || $user->isAdministrateurOrGerant();
     }
@@ -28,7 +28,7 @@ class CategorieProduitPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, CategorieProduit $categorie): bool
+    public function delete(User $user, Category $category): bool
     {
         return $user->hasPermissionTo('Supprimer catégorie') || $user->isAdministrateurOrGerant();
     }

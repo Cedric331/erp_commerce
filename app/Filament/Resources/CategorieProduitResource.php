@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategorieProduitResource\Pages;
 use App\Filament\Resources\CategorieProduitResource\RelationManagers;
-use App\Models\CategorieProduit;
+use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategorieProduitResource extends Resource
 {
-    protected static ?string $model = CategorieProduit::class;
+    protected static ?string $model = Category::class;
 
     protected static bool $isScopedToTenant = true;
 
@@ -63,9 +63,9 @@ class CategorieProduitResource extends Resource
                 Tables\Columns\TextColumn::make('alert_stock')
                     ->label('Alerte de stock')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('produits_count')
+                Tables\Columns\TextColumn::make('products_count')
                     ->label('Nombre de produits dans cette catégorie')
-                    ->counts('produits')
+                    ->counts('products')
                     ->searchable(),
             ])
             ->filters([

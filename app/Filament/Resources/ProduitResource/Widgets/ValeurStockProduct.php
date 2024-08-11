@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ProduitResource\Widgets;
 
-use App\Models\Produit;
+use App\Models\Product;
 use Filament\Facades\Filament;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -11,7 +11,7 @@ class ValeurStockProduct extends BaseWidget
 {
     protected function getStats(): array
     {
-        $products = Produit::where('commercant_id', Filament::getTenant()->id)->get();
+        $products = Product::where('merchant_id', Filament::getTenant()->id)->get();
         $valeurStockHtBrut = $this->getValueStock($products, 'ht');
         $valeurStockTtcBrut = $this->getValueStock($products, 'ttc');
 

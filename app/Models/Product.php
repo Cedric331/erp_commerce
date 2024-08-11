@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Produit extends Model implements HasMedia
+class Product extends Model implements HasMedia
 {
     use InteractsWithMedia, HasFactory
 ;
@@ -25,16 +25,16 @@ class Produit extends Model implements HasMedia
         'tva',
         'stock',
         'storage_id',
-        'commercant_id',
-        'fournisseur_id',
-        'categorie_id',
+        'merchant_id',
+        'brand_id',
+        'category_id',
         'created_by',
         'updated_by',
     ];
 
-    public function commercant()
+    public function merchant()
     {
-        return $this->belongsTo(Commercant::class);
+        return $this->belongsTo(Merchant::class);
     }
 
     public function storage()
@@ -42,14 +42,14 @@ class Produit extends Model implements HasMedia
         return $this->belongsTo(Storage::class);
     }
 
-    public function fournisseur()
+    public function brand()
     {
-        return $this->belongsTo(Fournisseur::class);
+        return $this->belongsTo(Brand::class);
     }
 
-    public function categorie()
+    public function category()
     {
-        return $this->belongsTo(CategorieProduit::class, 'categorie_id', 'id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
     public function stocks()

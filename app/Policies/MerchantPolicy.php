@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Commercant;
+use App\Models\Merchant;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 
-class CommercantPolicy
+class MerchantPolicy
 {
 
     public function viewAny(User $user): bool
@@ -15,7 +15,7 @@ class CommercantPolicy
         return $user->hasPermissionTo('Gestion commerce') || $user->isAdministrateurOrGerant();
     }
 
-    public function view(User $user, Commercant $commercant): bool
+    public function view(User $user, Merchant $merchant): bool
     {
         return $user->hasPermissionTo('Gestion commerce') || $user->isAdministrateurOrGerant();
     }

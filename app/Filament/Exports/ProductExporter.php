@@ -2,7 +2,7 @@
 
 namespace App\Filament\Exports;
 
-use App\Models\Produit;
+use App\Models\Product;
 use App\Models\User;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
@@ -12,18 +12,18 @@ use Filament\Panel;
 
 function getValeurStock(): float
 {
-    $produits = Produit::where('commercant_id', Filament::getTenant()->id)->get();
+    $products = Product::where('merchant_id', Filament::getTenant()->id)->get();
     $value = 0;
-    foreach ($produits as $produit) {
-        $value += $produit->stock * $produit->prix_ht;
+    foreach ($products as $product) {
+        $value += $product->stock * $product->prix_ht;
     }
 
     return $value;
 }
 
-class ProduitExporter extends Exporter
+class ProductExporter extends Exporter
 {
-    protected static ?string $model = Produit::class;
+    protected static ?string $model = Product::class;
 
     public static function isTenantSubscriptionRequired(Panel $panel): bool
     {
@@ -63,12 +63,12 @@ class ProduitExporter extends Exporter
                 ->label('Stock Alerte'),
             ExportColumn::make('stock_total_ht')
                 ->label('Valeur Stock HT Produit')
-                ->state(function (Produit $record): float {
+                ->state(function (Product $record): float {
                     return $record->stock * $record->prix_ht;
                 }),
             ExportColumn::make('stock_total_ttc')
                 ->label('Valeur Stock TTC Produit')
-                ->state(function (Produit $record): float {
+                ->state(function (Product $record): float {
                     return $record->stock * $record->prix_ttc;
                 }),
             ExportColumn::make('prix_ht')
@@ -77,11 +77,11 @@ class ProduitExporter extends Exporter
                 ->label('Prix TTC'),
             ExportColumn::make('tva')
                 ->label('TVA'),
-            ExportColumn::make('fournisseur.name')
+            ExportColumn::make('brand.name')
                 ->label('Fournisseur'),
-            ExportColumn::make('categorie.name')
+            ExportColumn::make('category.name')
                 ->label('Categorie'),
-            ExportColumn::make('commercant.enseigne')
+            ExportColumn::make('merchant.enseigne')
                 ->label('Commerce'),
             ExportColumn::make('created_at')
                 ->enabledByDefault(false)
@@ -89,7 +89,7 @@ class ProduitExporter extends Exporter
             ExportColumn::make('updated_at')
                 ->enabledByDefault(false)
                 ->label('Date de modification'),
-            ExportColumn::make('produit_total_ht')
+            ExportColumn::make('product_total_ht')
                 ->label('Valeur Total HT')
                 ->state($value),
 

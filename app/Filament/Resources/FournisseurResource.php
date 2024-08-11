@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\FournisseurResource\Pages;
 use App\Filament\Resources\FournisseurResource\RelationManagers;
-use App\Models\Fournisseur;
+use App\Models\Brand;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Panel;
@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class FournisseurResource extends Resource
 {
-    protected static ?string $model = Fournisseur::class;
+    protected static ?string $model = Brand::class;
 
     protected static bool $isScopedToTenant = true;
     protected static ?string $navigationIcon = 'heroicon-o-truck';
@@ -92,9 +92,9 @@ class FournisseurResource extends Resource
                     ->label('Nom')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('produits_count')
+                Tables\Columns\TextColumn::make('products_count')
                     ->label('Nombre de produits')
-                    ->counts('produits')
+                    ->counts('products')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')

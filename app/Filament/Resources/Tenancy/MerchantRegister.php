@@ -2,25 +2,27 @@
 
 namespace App\Filament\Resources\Tenancy;
 
-use App\Models\Commercant;
+use App\Models\Merchant;
+use App\Models\Permission;
+use App\Models\Role;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Pages\Tenancy\EditTenantProfile;
+use Filament\Pages\Tenancy\RegisterTenant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class CommercantEdit extends EditTenantProfile
+class MerchantRegister extends RegisterTenant
 {
-    protected static ?string $model = Commercant::class;
+    protected static ?string $model = Merchant::class;
 
-    protected static ?string $label = 'Modifier le commerce';
+    protected static ?string $label = 'Ajouter un commerce';
     protected static ?string $pluralModelLabel = 'Commerces';
+    protected static ?string $slug = 'create-commerce';
 
-    protected static ?string $slug = 'edit-commerce';
-
-    public static function canView(\Illuminate\Database\Eloquent\Model $tenant): bool
+    public static function canView(): bool
     {
-       return Auth::user()->hasPermissionTo('Gestion commerce') || Auth::user()->isAdministrateurOrGerant();
+        return Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasTenant();
     }
 
     public function form(Form $form): Form
@@ -63,68 +65,44 @@ class CommercantEdit extends EditTenantProfile
             ]);
     }
 
-    protected function getRedirectUrl(): ?string
-    {
-        return '/app';
-    }
-
 
     public static function getLabel(): string
     {
         return static::$label;
     }
 
-    public function mutateFormDataBeforeSave(array $data): array
+    public function mutateFormDataBeforeRegister(array $data): array
     {
         $data['enseigne'] = ucwords(strtolower($data['enseigne']));
 
         $slug = Str::slug($data['enseigne'], '-');
-        $slug = $slug . '-' .Commercant::where('slug', 'like', $slug . '-%')->count();
+        $slug = $slug . '-' .Merchant::where('slug', 'like', $slug . '-%')->count();
         $data['slug'] = $slug;
-
 
         return $data;
     }
 
-//    protected function afterSave(): void
-//    {
-//        $this->tenant->users()->attach(Auth::user()->id);
-//        $tenantId = Filament::getTenant()->id;
-//
-//        $permissions = Permission::ALL_PERMISSION;
-//
-//        foreach ($permissions as $permission) {
-//            Permission::create([
-//                'name' => $permission,
-//                'guard_name' => 'web',
-//                'commercant_id' => $tenantId
+    protected function afterRegister(): void
+    {
+        $this->tenant->users()->attach(Auth::user()->id);
+        $tenantId = $this->tenant->id;
+
+        $rolesWithPermissions = [
+            Role::ROLE_GERANT => config('setting-permission.gerant'),
+        ];
+
+//        foreach ($rolesWithPermissions as $roleName => $permissions) {
+//            $role = Role::firstOrCreate([
+//                'name' => $roleName
 //            ]);
+//
+//            if ($permissions) {
+//                $role->syncPermissions($permissions);
+//            }
 //        }
-//
-//        Role::create([
-//            'name' => Role::ROLE_ADMIN,
-//            'commercant_id' => $tenantId
-//        ]);
-//
-//        $role = Role::create([
-//            'name' => Role::ROLE_MANAGER,
-//            'commercant_id' => $tenantId
-//        ]);
-//
-//        $role->syncPermissions(Permission::PERMISSION_MANAGER);
-//
-//        $role = Role::create([
-//            'name' => Role::ROLE_GERANT,
-//            'commercant_id' => $tenantId
-//        ]);
-//
-//        $role->syncPermissions(Permission::PERMISSION_GERANT);
-//
-//        $role = Role::create([
-//            'name' => Role::ROLE_SERVEUR,
-//            'commercant_id' => $tenantId
-//        ]);
-//        $role->syncPermissions(Permission::PERMISSION_SERVEUR);
-//
-//    }
+        $role = Role::where('name', Role::ROLE_GERANT)->first();
+        setPermissionsTeamId($tenantId);
+        Auth::user()->assignRole($role);
+    }
+
 }

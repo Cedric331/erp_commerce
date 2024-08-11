@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Fournisseur;
+use App\Models\Brand;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class FournisseurPolicy
+class BrandPolicy
 {
 
     /**
@@ -20,7 +20,7 @@ class FournisseurPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Fournisseur $fournisseur): bool
+    public function update(User $user, Brand $brand): bool
     {
         return $user->hasPermissionTo('Modifier Fournisseur') || $user->isAdministrateurOrGerant();
     }
@@ -28,7 +28,7 @@ class FournisseurPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Fournisseur $fournisseur): bool
+    public function delete(User $user, Brand $brand): bool
     {
         return $user->hasPermissionTo('Supprimer Fournisseur') || $user->isAdministrateurOrGerant();
     }

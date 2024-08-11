@@ -104,7 +104,7 @@ const navbarOpen = ref(false);
                             <li>
                                 <a :href="route('filament.app.auth.register')"
                                     class="inline-flex items-center justify-center rounded-lg bg-primary py-4 px-6 text-center text-base font-normal text-white hover:bg-opacity-90 sm:px-10 lg:px-8 xl:px-10">
-                                  Commencer
+                                  {{ isAuth ? 'Accéder à l\'application' : 'Commencer l\'essai gratuit' }}
                                 </a>
                             </li>
                         </ul>
@@ -306,7 +306,7 @@ const navbarOpen = ref(false);
                 <div class="w-full px-4 md:w-1/2 lg:w-1/3">
                     <div class="relative z-10 mb-10 overflow-hidden rounded-xl border border-primary border-opacity-20 bg-white py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-12">
                           <span class="mb-4 block text-lg font-semibold text-primary">
-                            Abonnement Classique
+                            Abonnement
                           </span>
                         <h2 class="mb-5 text-[42px] font-bold text-dark">
                             29.99 €
@@ -336,7 +336,7 @@ const navbarOpen = ref(false);
                         </div>
                         <a :href="route('filament.app.auth.register')"
                             class="block w-full rounded-md border border-primary bg-primary p-4 text-center text-base font-semibold text-white transition hover:bg-opacity-90">
-                            Commencer
+                            {{ isAuth ? 'Accéder à l\'application' : 'Commencer l\'essai gratuit' }}
                         </a>
 
                         <div>
@@ -642,7 +642,7 @@ const navbarOpen = ref(false);
             <div class="-mx-4 flex flex-wrap">
                 <div class="w-full px-4 lg:w-1/2">
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
-                        <div class="w-full">
+                        <div class="w-full">f
                             <h4 class="text-lg font-semibold text-black">
                                 Quand puis-je commencer à utiliser Quanta après mon inscription ?
                             </h4>
@@ -779,28 +779,28 @@ const navbarOpen = ref(false);
                             <div class="mb-6">
                                 <input
                                     type="text"
-                                    placeholder="Your Name"
+                                    placeholder="Votre Nom"
                                     class="w-full rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"
                                 />
                             </div>
                             <div class="mb-6">
                                 <input
                                     type="email"
-                                    placeholder="Your Email"
+                                    placeholder="Votre Email"
                                     class="w-full rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"
                                 />
                             </div>
                             <div class="mb-6">
                                 <input
                                     type="text"
-                                    placeholder="Your Phone"
+                                    placeholder="Votre Téléphone"
                                     class="w-full rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"
                                 />
                             </div>
                             <div class="mb-6">
                       <textarea
                           rows="6"
-                          placeholder="Your Message"
+                          placeholder="Votre Message"
                           class="w-full resize-none rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"></textarea>
                             </div>
                             <div>

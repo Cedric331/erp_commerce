@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\CategorieProduit;
-use App\Models\Fournisseur;
-use App\Models\Produit;
+use App\Models\Category;
+use App\Models\Brand;
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Storage;
 use Closure;
@@ -25,7 +25,7 @@ class ApplyTenantScopes
     public function handle(Request $request, Closure $next): Response
     {
 
-        Produit::addGlobalScope(
+        Product::addGlobalScope(
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
         );
 
@@ -33,11 +33,11 @@ class ApplyTenantScopes
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
         );
 
-        CategorieProduit::addGlobalScope(
+        Category::addGlobalScope(
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
         );
 
-        Fournisseur::addGlobalScope(
+        Brand::addGlobalScope(
             fn (Builder $query) => $query->whereBelongsTo(Filament::getTenant()),
         );
 

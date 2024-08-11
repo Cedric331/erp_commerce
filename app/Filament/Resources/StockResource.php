@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Exports\StockExporter;
 use App\Filament\Resources\StockResource\Pages;
-use App\Models\Produit;
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockStatus;
 use Carbon\Carbon;
@@ -45,12 +45,12 @@ class StockResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('produit_id')
+                Forms\Components\Select::make('product_id')
                     ->label('Produit')
                     ->options(
-                        Produit::where('commercant_id', Filament::getTenant()->id)
+                        Product::where('merchant_id', Filament::getTenant()->id)
                             ->get()
-                            ->mapWithKeys(fn ($produit) => [$produit->id => $produit->nom])
+                            ->mapWithKeys(fn ($product) => [$product->id => $product->nom])
                             ->toArray()
                     )
                     ->required(),
@@ -61,7 +61,7 @@ class StockResource extends Resource
                 Forms\Components\Select::make('stock_status_id')
                     ->label('Statut')
                     ->options(
-                       StockStatus::where('commercant_id', Filament::getTenant()->id)
+                       StockStatus::where('merchant_id', Filament::getTenant()->id)
                             ->get()
                             ->mapWithKeys(fn ($stockStatus) => [$stockStatus->id => $stockStatus->name])
                             ->toArray()
@@ -97,7 +97,7 @@ class StockResource extends Resource
                             return $record->created_at->format('d/m/Y');
                         }
                     }),
-                Tables\Columns\TextColumn::make('produit.nom')
+                Tables\Columns\TextColumn::make('product.nom')
                     ->searchable()
                     ->sortable()
                     ->label('Produit'),
@@ -121,7 +121,7 @@ class StockResource extends Resource
             ->filters([
                 SelectFilter::make('quantity')
                     ->label('Produit')
-                    ->relationship('produit', 'nom')
+                    ->relationship('product', 'nom')
                     ->preload()
                     ->options(
                         fn (Builder $query) => $query->pluck('nom', 'id')->all()
@@ -155,7 +155,7 @@ class StockResource extends Resource
                         ExportFormat::Xlsx,
                         ExportFormat::Csv,
                     ])
-                    ->modifyQueryUsing(fn (Builder $query) => $query->where('commercant_id', Filament::getTenant()->id))
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('merchant_id', Filament::getTenant()->id))
                     ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant() && !Auth::user()->isManager())
                     ->exporter(StockExporter::class)
             ])

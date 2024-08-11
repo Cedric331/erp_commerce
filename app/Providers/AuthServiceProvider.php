@@ -3,22 +3,22 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
-use App\Models\CategorieProduit;
-use App\Models\Commercant;
-use App\Models\Fournisseur;
+use App\Models\Category;
+use App\Models\Merchant;
+use App\Models\Brand;
 use App\Models\Permission;
-use App\Models\Produit;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\Stock;
 use App\Models\StockStatus;
 use App\Models\Storage;
 use App\Models\User;
-use App\Policies\CategorieProduitPolicy;
-use App\Policies\CommercantPolicy;
+use App\Policies\CategoryPolicy;
+use App\Policies\MerchantPolicy;
 use App\Policies\ExportPolicy;
-use App\Policies\FournisseurPolicy;
+use App\Policies\BrandPolicy;
 use App\Policies\PermissionPolicy;
-use App\Policies\ProduitPolicy;
+use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\StockPolicy;
 use App\Policies\StockStatusPolicy;
@@ -35,13 +35,13 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        Produit::class => ProduitPolicy::class,
-        CategorieProduit::class => CategorieProduitPolicy::class,
-        Fournisseur::class => FournisseurPolicy::class,
+        Product::class => ProductPolicy::class,
+        Category::class => CategoryPolicy::class,
+        Brand::class => BrandPolicy::class,
         Stock::class => StockPolicy::class,
         StockStatus::class => StockStatusPolicy::class,
         User::class => UserPolicy::class,
-        Commercant::class => CommercantPolicy::class,
+        Merchant::class => MerchantPolicy::class,
         Role::class => RolePolicy::class,
         Permission::class => PermissionPolicy::class,
         Storage::class => StoragePolicy::class,

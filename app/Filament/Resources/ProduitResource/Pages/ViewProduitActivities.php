@@ -4,7 +4,7 @@ namespace App\Filament\Resources\ProduitResource\Pages;
 
 use App\Filament\Resources\ProduitResource;
 use App\Filament\Resources\ProduitResource\Widgets\ProfitabilityProduct;
-use App\Models\Produit;
+use App\Models\Product;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\Page;
 use JaOcero\ActivityTimeline\Components\ActivityDate;
@@ -50,7 +50,7 @@ class ViewProduitActivities extends ActivityTimelinePage
 
         $this->activities = Activity::where('subject_id', $record)
             ->with('causer')
-            ->where('subject_type', Produit::class)
+            ->where('subject_type', Product::class)
             ->orderBy('created_at', 'desc')
             ->get();
 

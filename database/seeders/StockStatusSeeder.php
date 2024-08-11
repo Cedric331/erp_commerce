@@ -22,21 +22,21 @@ class StockStatusSeeder extends Seeder
             'name' => self::STATUS_VENTE,
             'color' =>  '#008000',
             'type' => StockStatus::TYPE_SORTIE,
-            'commercant_id' => 1,
+            'merchant_id' => 1,
         ]);
 
         StockStatus::create([
             'name' => self::STATUS_LIVRAISON,
             'color' => '#FFA500',
             'type' => StockStatus::TYPE_ENTREE,
-            'commercant_id' => 1,
+            'merchant_id' => 1,
         ]);
 
         StockStatus::create([
             'name' => self::STATUS_PERTE,
             'color' => '#FF0000',
             'type' => StockStatus::TYPE_SORTIE,
-            'commercant_id' => 1,
+            'merchant_id' => 1,
         ]);
     }
 }

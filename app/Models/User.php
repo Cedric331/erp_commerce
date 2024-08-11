@@ -63,19 +63,19 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function getTenants(Panel $panel): Collection
     {
-        return $this->getAccessibleCommercants();
+        return $this->getAccessibleMerchants();
     }
 
     public function hasTenant(): bool
     {
-        return $this->commercant->count() > 0;
+        return $this->merchant->count() > 0;
     }
 
     public function isAdministrateur(): bool
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
 
-        if ($userRoles->contains('Administrateur')) {
+        if ($userRoles->contains(Role::ROLE_ADMIN)) {
             return true;
         } else {
             return false;
@@ -86,7 +86,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
 
-        if ($userRoles->contains('Administrateur') || $userRoles->contains('Gérant')) {
+        if ($userRoles->contains(Role::ROLE_ADMIN) || $userRoles->contains(Role::ROLE_GERANT)) {
             return true;
         } else {
             return false;
@@ -95,14 +95,14 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function isManager(): bool
     {
-        return $this->hasRole('Manager');
+        return $this->hasRole(Role::ROLE_MANAGER);
     }
 
     public function isGerant(): bool
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
 
-        if ($userRoles->contains('Gérant')) {
+        if ($userRoles->contains(Role::ROLE_GERANT)) {
             return true;
         } else {
             return false;
@@ -123,20 +123,20 @@ class User extends Authenticatable implements FilamentUser, HasTenants
             return $relation;
         }
 
-        return $relation->wherePivotNotNull('commercant_id');
+        return $relation->wherePivotNotNull('merchant_id');
     }
 
-    public function commercant(): BelongsToMany
+    public function merchant(): BelongsToMany
     {
-        return $this->belongsToMany(Commercant::class, 'commercant_users', 'user_id', 'commercant_id');
+        return $this->belongsToMany(Merchant::class, 'merchant_users', 'user_id', 'merchant_id');
     }
 
-    public function getAccessibleCommercants()
+    public function getAccessibleMerchants()
     {
         if ($this->isAdministrateur()) {
-            return Commercant::all();
+            return Merchant::all();
         } else {
-            return $this->commercant;
+            return $this->merchant;
         }
     }
 
@@ -146,7 +146,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         if ($this->isAdministrateurOrGerant()) {
             return true;
         }
-        return $this->commercant->contains('id', $tenant->id);
+        return $this->merchant->contains('id', $tenant->id);
     }
 
 }

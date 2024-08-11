@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class Commercant extends Model implements HasCurrentTenantLabel
+class Merchant extends Model implements HasCurrentTenantLabel
 {
     use HasFactory, HasName, Billable, Notifiable;
 
@@ -48,17 +48,17 @@ class Commercant extends Model implements HasCurrentTenantLabel
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'commercant_users', 'commercant_id', 'user_id');
+        return $this->belongsToMany(User::class, 'merchant_users', 'merchant_id', 'user_id');
     }
 
-    public function produits()
+    public function products()
     {
-        return $this->hasMany(Produit::class);
+        return $this->hasMany(Product::class);
     }
 
-    public function categorieProduits()
+    public function categories()
     {
-        return $this->hasMany(CategorieProduit::class);
+        return $this->hasMany(Category::class);
     }
 
     public function stocks()
@@ -66,9 +66,9 @@ class Commercant extends Model implements HasCurrentTenantLabel
         return $this->hasMany(Stock::class);
     }
 
-    public function fournisseurs()
+    public function brand()
     {
-        return $this->hasMany(Fournisseur::class);
+        return $this->hasMany(Brand::class);
     }
 
     public function stockStatuses()

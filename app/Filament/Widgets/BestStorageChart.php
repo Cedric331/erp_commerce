@@ -23,7 +23,7 @@ class BestStorageChart extends ApexChartWidget
     protected function getOptions(): array
     {
         $storages = Storage::query()
-            ->where('commercant_id', Filament::getTenant()?->id)
+            ->where('merchant_id', Filament::getTenant()?->id)
             ->with('products')
             ->get()
             ->map(function ($store) {

@@ -5,23 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CategorieProduit extends Model
+class Category extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
         'alert_stock',
-        'commercant_id',
+        'merchant_id',
     ];
 
-    public function produits()
+    public function products()
     {
-        return $this->hasMany(Produit::class, 'categorie_id');
+        return $this->hasMany(Product::class, 'category_id');
     }
 
-    public function commercant()
+    public function merchant()
     {
-        return $this->belongsTo(Commercant::class);
+        return $this->belongsTo(Merchant::class);
     }
 }

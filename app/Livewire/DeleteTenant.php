@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Produit;
+use App\Models\Product;
 use Filament\Facades\Filament;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -21,18 +21,18 @@ class DeleteTenant extends Component implements HasForms
             if ($tenant->subscribed('default')) {
                 $tenant->subscription('default')->cancelNow();
             }
-            $products = $tenant->produits;
+            $products = $tenant->products;
             foreach ($products as $product) {
                 Activity::where('subject_id', $product->id)
                     ->with('causer')
-                    ->where('subject_type', Produit::class)
+                    ->where('subject_type', Product::class)
                     ->orderBy('created_at', 'desc')
                     ->delete();
             }
 
             $users = $tenant->users;
             foreach ($users as $user) {
-                if ($user->commercant->count() === 1) {
+                if ($user->merchant->count() === 1) {
                     if ($user !== auth()->user()) {
                         $user->delete();
                     }

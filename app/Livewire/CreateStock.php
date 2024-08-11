@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Filament\Resources\ProduitResource;
 use App\Filament\Resources\StockStatusResource;
-use App\Models\Produit;
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockStatus;
 use Carbon\Carbon;
@@ -43,7 +43,7 @@ class CreateStock extends Component implements HasForms
 
     public function mount(): void
     {
-        if (StockStatus::where('commercant_id', Filament::getTenant()->id)->count() > 0 && Produit::where('commercant_id', Filament::getTenant()->id)->count() > 0) {
+        if (StockStatus::where('merchant_id', Filament::getTenant()->id)->count() > 0 && Product::where('merchant_id', Filament::getTenant()->id)->count() > 0) {
             $this->form->fill();
         } else {
             $this->showForm = false;
@@ -53,14 +53,14 @@ class CreateStock extends Component implements HasForms
     public function create(): void
     {
         $this->validate([
-            'data.produit_id' => 'required',
+            'data.product_id' => 'required',
             'data.quantity' => 'required|numeric',
             'data.stock_status_id' => 'required',
             'data.scheduled_date' => 'nullable|date',
             'data.note' => 'nullable|string',
         ]);
 
-        $this->data['commercant_id'] = Filament::getTenant()->id;
+        $this->data['merchant_id'] = Filament::getTenant()->id;
 
         if ($this->data['scheduled_date'] === "") {
             $this->data['scheduled_date'] = null;
@@ -71,14 +71,14 @@ class CreateStock extends Component implements HasForms
         if (!$this->data['scheduled_date']) {
             $type = StockStatus::find($this->data['stock_status_id'])->type;
 
-            $produit = Produit::find($this->data['produit_id']);
+            $product = Product::find($this->data['product_id']);
             if ($type === StockStatus::TYPE_ENTREE) {
-                $produit->update([
-                    'stock' => $produit->stock + $this->data['quantity'],
+                $product->update([
+                    'stock' => $product->stock + $this->data['quantity'],
                 ]);
             } else {
-                $produit->update([
-                    'stock' => $produit->stock - $this->data['quantity'],
+                $product->update([
+                    'stock' => $product->stock - $this->data['quantity'],
                 ]);
             }
             $stock->update([
@@ -88,8 +88,8 @@ class CreateStock extends Component implements HasForms
             activity('Produit')
                 ->event('Stock modifié - ' . StockStatus::find($this->data['stock_status_id'])->name)
                 ->causedBy(Auth::user())
-                ->performedOn($produit)
-                ->log('Le stock a été modifié avec succès. Le stock du produit est maintenant de ' . $produit->stock . '.');
+                ->performedOn($product)
+                ->log('Le stock a été modifié avec succès. Le stock du produit est maintenant de ' . $product->stock . '.');
         }
 
         Notification::make()
@@ -105,9 +105,9 @@ class CreateStock extends Component implements HasForms
         }
         return $form
             ->schema([
-                Select::make('produit_id')
+                Select::make('product_id')
                     ->label('Sélectionner un produit')
-                    ->options(Produit::where('commercant_id', Filament::getTenant()->id)->pluck('nom', 'id'))
+                    ->options(Product::where('merchant_id', Filament::getTenant()->id)->pluck('nom', 'id'))
                     ->searchable()
                     ->required()
                     ->optionsLimit(5)
@@ -121,10 +121,10 @@ class CreateStock extends Component implements HasForms
                     ->step(0.01),
                 Select::make('stock_status_id')
                     ->label('Sélectionner un statut')
-                    ->options(StockStatus::where('commercant_id', Filament::getTenant()->id)->pluck('name', 'id'))
+                    ->options(StockStatus::where('merchant_id', Filament::getTenant()->id)->pluck('name', 'id'))
                     ->default(
                         StockStatus::where([
-                            ['commercant_id', Filament::getTenant()->id],
+                            ['merchant_id', Filament::getTenant()->id],
                             ['name', 'Vente'],
                         ])->first()?->id
                     )
@@ -174,7 +174,7 @@ class CreateStock extends Component implements HasForms
                     ->label('Créer un produit')
                     ->outlined()
                     ->hidden(function () {
-                        return Produit::where('commercant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', Produit::class);
+                        return Product::where('merchant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', Product::class);
                     })
                     ->url(ProduitResource::getUrl('create')),
                 Action::make('create_statut')
@@ -182,7 +182,7 @@ class CreateStock extends Component implements HasForms
                     ->label('Créer un statut')
                     ->outlined()
                     ->hidden(function () {
-                        return StockStatus::where('commercant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', StockStatus::class);
+                        return StockStatus::where('merchant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', StockStatus::class);
                     })
                     ->url(StockStatusResource::getUrl('create')),
             ])

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Commercant;
+use App\Models\Merchant;
 use App\Notifications\Contact;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\RichEditor;
@@ -47,7 +47,7 @@ class Support extends Page implements HasForms
             'data.message' => 'required|string',
         ]);
 
-        Auth::user()->notify(new Contact($this->data, Commercant::find(Filament::getTenant()->id), Auth::user()));
+        Auth::user()->notify(new Contact($this->data, Merchant::find(Filament::getTenant()->id), Auth::user()));
 
         Notification::make()
             ->title('Message envoyé avec succès')

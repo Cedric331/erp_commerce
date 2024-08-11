@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Commercant;
+use App\Models\Merchant;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Cashier::useCustomerModel(Commercant::class);
+        Cashier::useCustomerModel(Merchant::class);
 
 //        FilamentAsset::register([
 //            Js::make('stripe-script', __DIR__ . '/../../resources/js/stripe.js'),

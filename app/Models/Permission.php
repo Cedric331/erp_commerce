@@ -10,9 +10,9 @@ use Spatie\Permission\PermissionRegistrar;
 class Permission extends SpatiePermission
 {
 
-    public function commercant()
+    public function merchant()
     {
-        return $this->belongsTo(Commercant::class);
+        return $this->belongsTo(Merchant::class);
     }
 
 }

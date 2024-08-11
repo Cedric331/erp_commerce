@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class CommercantUser extends Pivot
+class MerchantUser extends Pivot
 {
     use HasFactory;
 
     protected $fillable = [
-        'commercant_id',
+        'merchant_id',
         'user_id',
     ];
 }

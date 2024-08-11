@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('note')->nullable();
             $table->string('status');
-            $table->foreignId('commercant_id')->constrained();
+            $table->foreignId('merchant_id')->constrained();
             $table->timestamps();
         });
     }

@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Produit;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 
-class ProduitPolicy
+class ProductPolicy
 {
 
     /**
@@ -21,7 +21,7 @@ class ProduitPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Produit $produit): bool
+    public function update(User $user, Product $product): bool
     {
         return $user->hasPermissionTo('Créer produit') || $user->isAdministrateurOrGerant();
     }
@@ -29,7 +29,7 @@ class ProduitPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Produit $produit): bool
+    public function delete(User $user, Product $product): bool
     {
         return $user->hasPermissionTo('Supprimer produit') || $user->isAdministrateurOrGerant();
     }

@@ -4,13 +4,13 @@ namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use App\Filament\Pages\Support;
-use App\Filament\Resources\Tenancy\CommercantEdit;
-use App\Filament\Resources\Tenancy\CommercantRegister;
+use App\Filament\Resources\Tenancy\MerchantEdit;
+use App\Filament\Resources\Tenancy\MerchantRegister;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CheckTenantOwnership;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
-use App\Models\Commercant;
+use App\Models\Merchant;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -90,7 +90,7 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::PAGE_END,
                 fn (): string => Blade::render('@livewire(\'delete-tenant\')'),
                 scopes: [
-                    \App\Filament\Resources\Tenancy\CommercantEdit::class,
+                    \App\Filament\Resources\Tenancy\MerchantEdit::class,
                 ],
             )
             ->sidebarCollapsibleOnDesktop()
@@ -134,15 +134,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
-            ->tenant(Commercant::class, 'slug')
+            ->tenant(Merchant::class, 'slug')
             ->tenantMenu(function () {
-                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->commercant()->count() > 1) {
+                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->merchant()->count() > 1) {
                     return true;
                 }
                 return false;
             })
-            ->tenantRegistration(CommercantRegister::class)
-            ->tenantProfile(CommercantEdit::class)
+            ->tenantRegistration(MerchantRegister::class)
+            ->tenantProfile(MerchantEdit::class)
             ->tenantRoutePrefix('shop')
             ->tenantMiddleware([
                 SyncSpatiePermissionsWithFilamentTenants::class,

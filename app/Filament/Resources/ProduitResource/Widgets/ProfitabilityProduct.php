@@ -29,11 +29,11 @@ class ProfitabilityProduct extends ApexChartWidget
 
     protected $data = [];
 
-    public $produit = null;
+    public $product = null;
 
     protected function getFooter(): string
     {
-        if (!$this->produit->prix_buy || !$this->produit->prix_ht) {
+        if (!$this->product->prix_buy || !$this->product->prix_ht) {
             return '<p class="dark:text-info-300 text-info-800 text-sm">Ce graphique nécessite d\'avoir renseigné les prix d\'achat et de vente du produit.</p>';
         } else {
             return '';
@@ -112,7 +112,7 @@ class ProfitabilityProduct extends ApexChartWidget
     {
         $year = $this->filterFormData['year'];
 
-        $produit = $this->produit;
+        $product = $this->product;
 
         // Initialisation d'un tableau pour stocker les bénéfices par mois
         $beneficesParMois = [];
@@ -124,13 +124,13 @@ class ProfitabilityProduct extends ApexChartWidget
             $dateFin = now()->month($mois)->year($year)->endOfMonth();
 
             // Récupération des ventes pour le mois courant
-            $ventes = $produit->ventes()
+            $ventes = $product->ventes()
                 ->whereBetween('date_process', [$dateDebut, $dateFin])
                 ->get();
 
             // Calculer le bénéfice pour chaque vente et les additionner pour obtenir le bénéfice total du mois
-            $beneficeTotalMois = $ventes->reduce(function ($carry, $vente) use ($produit) {
-                $beneficeVente = ($produit->prix_ht - $produit->prix_buy) * $vente->quantity;
+            $beneficeTotalMois = $ventes->reduce(function ($carry, $vente) use ($product) {
+                $beneficeVente = ($product->prix_ht - $product->prix_buy) * $vente->quantity;
                 return $carry + $beneficeVente;
             }, 0);
 

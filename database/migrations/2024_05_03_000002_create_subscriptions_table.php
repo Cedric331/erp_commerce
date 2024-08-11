@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('commercant_id');
+            $table->foreignId('merchant_id')->constrained()->onDelete('cascade');
             $table->string('type');
             $table->string('stripe_id')->unique();
             $table->string('stripe_status');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
 
-            $table->index(['commercant_id', 'stripe_status']);
+            $table->index(['merchant_id', 'stripe_status']);
         });
     }
 

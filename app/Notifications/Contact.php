@@ -12,17 +12,17 @@ class Contact extends Notification
     use Queueable;
 
     public array $data;
-    public object $commercant;
+    public object $merchant;
     public object $user;
 
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($data, $commercant, $user)
+    public function __construct($data, $merchant, $user)
     {
         $this->data = $data;
-        $this->commercant = $commercant;
+        $this->merchant = $merchant;
         $this->user = $user;
     }
 
@@ -49,11 +49,11 @@ class Contact extends Notification
     {
         return (new MailMessage)
             ->subject('Demande de contact')
-            ->line('Vous avez reçu une demande de contact de la part de ' . $this->commercant->enseigne . '.')
+            ->line('Vous avez reçu une demande de contact de la part de ' . $this->merchant->enseigne . '.')
             ->line('Sujet :' . $this->data['subject'])
             ->line('Message :' . $this->data['message'])
             ->line('Informations du commercant : ')
-            ->line('Enseigne : ' . $this->commercant->enseigne)
+            ->line('Enseigne : ' . $this->merchant->enseigne)
             ->line('Informations de contact : ')
             ->line('Nom : ' . $this->user->name)
             ->line('Email : ' . $this->user->email)

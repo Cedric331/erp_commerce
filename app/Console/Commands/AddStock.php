@@ -38,32 +38,32 @@ class AddStock extends Command
             $type = $stock->stockStatus->type;
 
             if ($type === StockStatus::TYPE_ENTREE) {
-                $stock->produit->increment('stock', $stock->quantity);
+                $stock->product->increment('stock', $stock->quantity);
             } else if ($type === StockStatus::TYPE_SORTIE) {
-                $stock->produit->decrement('stock', $stock->quantity);
+                $stock->product->decrement('stock', $stock->quantity);
             }
 
             activity('Produit')
                 ->event('Stock modifié')
                 ->causedBy($stock->user)
                 ->performedOn($stock)
-                ->log('Le stock a été modifié avec succès le '. date('d/m/Y', strtotime(now())) .'. Le stock du produit est maintenant de ' . $stock->produit->stock . '.');
+                ->log('Le stock a été modifié avec succès le '. date('d/m/Y', strtotime(now())) .'. Le stock du produit est maintenant de ' . $stock->product->stock . '.');
 
             $stock->update([
                 'scheduled_date' => null,
                 'date_process' => now(),
             ]);
 
-            $recipient = User::with('rolesAllTenant')->whereHas('commercant', function ($query) use ($stock) {
-                $query->where('commercant_id', $stock->commercant_id);
+            $recipient = User::with('rolesAllTenant')->whereHas('merchant', function ($query) use ($stock) {
+                $query->where('merchant_id', $stock->merchant_id);
             })->get();
             $recipient = $recipient->filter(function ($user) {
                 return $user->rolesAllTenant()->whereIn('name', ['Gérant', 'Manager'])->exists();
             });
 
             Notification::make()
-                ->title('Stock mis à jour pour le produit ' . $stock->produit->nom . ' - ' . $stock->commercant->enseigne)
-                ->body('Le stock du produit ' . $stock->produit->nom . ' sur le commerce ' . $stock->commercant->enseigne . ' a été mis à jour. Il est maintenant de ' . $stock->produit->stock . ' unités.')
+                ->title('Stock mis à jour pour le produit ' . $stock->product->nom . ' - ' . $stock->merchant->enseigne)
+                ->body('Le stock du produit ' . $stock->product->nom . ' sur le commerce ' . $stock->merchant->enseigne . ' a été mis à jour. Il est maintenant de ' . $stock->product->stock . ' unités.')
                 ->sendToDatabase($recipient);
         }
     }

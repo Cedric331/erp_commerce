@@ -41,16 +41,16 @@ class ProduitsRelationManager extends RelationManager
                         Forms\Components\TextInput::make('reference')
                             ->label('Référence fournisseur')
                             ->rules([
-                                Rule::unique('produits', 'reference')
+                                Rule::unique('products', 'reference')
                                     ->where(function ($query) {
-                                        return $query->where('commercant_id', Filament::getTenant()->id);
+                                        return $query->where('merchant_id', Filament::getTenant()->id);
                                     }),
                             ])
                             ->required()
                             ->maxLength(255),
 
-                        Forms\Components\Select::make('categorie_id')
-                            ->relationship(name: 'categorie', titleAttribute: 'name')
+                        Forms\Components\Select::make('category_id')
+                            ->relationship(name: 'category', titleAttribute: 'name')
                             ->label('Catégorie')
                             ->searchable()
                             ->optionsLimit(10)
@@ -71,13 +71,13 @@ class ProduitsRelationManager extends RelationManager
                             ])
                             ->createOptionAction(function (Action $action) {
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    $data['merchant_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
 
-                        Forms\Components\Select::make('fournisseur_id')
-                            ->relationship(name: 'fournisseur', titleAttribute: 'name')
+                        Forms\Components\Select::make('brand_id')
+                            ->relationship(name: 'brand', titleAttribute: 'name')
                             ->label('Fournisseur')
                             ->searchable()
                             ->optionsLimit(10)
@@ -92,7 +92,7 @@ class ProduitsRelationManager extends RelationManager
                             ])
                             ->createOptionAction(function (Action $action) {
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['commercant_id'] = Filament::getTenant()->id;
+                                    $data['merchant_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),

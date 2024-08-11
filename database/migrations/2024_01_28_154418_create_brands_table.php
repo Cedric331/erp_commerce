@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fournisseurs', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->id();
             $table->string('name')->index();
             $table->string('email')->nullable();
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('note')->nullable();
-            $table->foreignId('commercant_id')->constrained()->onDelete('cascade');
-            $table->unique(['name', 'commercant_id']);
+            $table->foreignId('merchant_id')->constrained()->onDelete('cascade');
+            $table->unique(['name', 'merchant_id']);
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fournisseurs');
+        Schema::dropIfExists('brands');
     }
 };
