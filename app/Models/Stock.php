@@ -11,9 +11,11 @@ class Stock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'merchant_id',
+        'shop_id',
         'product_id',
         'stock_status_id',
+        'prix_product_ht',
+        'prix_product_buy',
         'quantity',
         'date_process',
         'note',
@@ -38,9 +40,9 @@ class Stock extends Model
         return $this->belongsTo(StockStatus::class, 'stock_status_id');
     }
 
-    public function merchant()
+    public function shop()
     {
-        return $this->belongsTo(Merchant::class, 'merchant_id');
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 
     public function getFormattedScheduledDateAttribute()

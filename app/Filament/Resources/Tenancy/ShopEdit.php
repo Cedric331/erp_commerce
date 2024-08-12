@@ -2,27 +2,25 @@
 
 namespace App\Filament\Resources\Tenancy;
 
-use App\Models\Merchant;
-use App\Models\Permission;
-use App\Models\Role;
-use Filament\Facades\Filament;
+use App\Models\Shop;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Pages\Tenancy\RegisterTenant;
+use Filament\Pages\Tenancy\EditTenantProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class MerchantRegister extends RegisterTenant
+class ShopEdit extends EditTenantProfile
 {
-    protected static ?string $model = Merchant::class;
+    protected static ?string $model = Shop::class;
 
-    protected static ?string $label = 'Ajouter un commerce';
+    protected static ?string $label = 'Modifier le commerce';
     protected static ?string $pluralModelLabel = 'Commerces';
-    protected static ?string $slug = 'create-commerce';
 
-    public static function canView(): bool
+    protected static ?string $slug = 'edit-commerce';
+
+    public static function canView(\Illuminate\Database\Eloquent\Model $tenant): bool
     {
-        return Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasTenant();
+       return Auth::user()->hasPermissionTo('Gestion commerce') || Auth::user()->isAdministrateurOrGerant();
     }
 
     public function form(Form $form): Form
@@ -65,44 +63,68 @@ class MerchantRegister extends RegisterTenant
             ]);
     }
 
+    protected function getRedirectUrl(): ?string
+    {
+        return '/app';
+    }
+
 
     public static function getLabel(): string
     {
         return static::$label;
     }
 
-    public function mutateFormDataBeforeRegister(array $data): array
+    public function mutateFormDataBeforeSave(array $data): array
     {
         $data['enseigne'] = ucwords(strtolower($data['enseigne']));
 
         $slug = Str::slug($data['enseigne'], '-');
-        $slug = $slug . '-' .Merchant::where('slug', 'like', $slug . '-%')->count();
+        $slug = $slug . '-' .Shop::where('slug', 'like', $slug . '-%')->count();
         $data['slug'] = $slug;
+
 
         return $data;
     }
 
-    protected function afterRegister(): void
-    {
-        $this->tenant->users()->attach(Auth::user()->id);
-        $tenantId = $this->tenant->id;
-
-        $rolesWithPermissions = [
-            Role::ROLE_GERANT => config('setting-permission.gerant'),
-        ];
-
-//        foreach ($rolesWithPermissions as $roleName => $permissions) {
-//            $role = Role::firstOrCreate([
-//                'name' => $roleName
-//            ]);
+//    protected function afterSave(): void
+//    {
+//        $this->tenant->users()->attach(Auth::user()->id);
+//        $tenantId = Filament::getTenant()->id;
 //
-//            if ($permissions) {
-//                $role->syncPermissions($permissions);
-//            }
+//        $permissions = Permission::ALL_PERMISSION;
+//
+//        foreach ($permissions as $permission) {
+//            Permission::create([
+//                'name' => $permission,
+//                'guard_name' => 'web',
+//                'shop_id' => $tenantId
+//            ]);
 //        }
-        $role = Role::where('name', Role::ROLE_GERANT)->first();
-        setPermissionsTeamId($tenantId);
-        Auth::user()->assignRole($role);
-    }
-
+//
+//        Role::create([
+//            'name' => Role::ROLE_ADMIN,
+//            'shop_id' => $tenantId
+//        ]);
+//
+//        $role = Role::create([
+//            'name' => Role::ROLE_MANAGER,
+//            'shop_id' => $tenantId
+//        ]);
+//
+//        $role->syncPermissions(Permission::PERMISSION_MANAGER);
+//
+//        $role = Role::create([
+//            'name' => Role::ROLE_GERANT,
+//            'shop_id' => $tenantId
+//        ]);
+//
+//        $role->syncPermissions(Permission::PERMISSION_GERANT);
+//
+//        $role = Role::create([
+//            'name' => Role::ROLE_SERVEUR,
+//            'shop_id' => $tenantId
+//        ]);
+//        $role->syncPermissions(Permission::PERMISSION_SERVEUR);
+//
+//    }
 }

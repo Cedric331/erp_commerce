@@ -2,19 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\Merchant;
+use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class MerchantSeeder extends Seeder
+class ShopSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Merchant::create([
+        Shop::create([
             'enseigne' => 'Web Discovery',
             'email' => 'test@test.com',
             'slug' => 'web-discovery',

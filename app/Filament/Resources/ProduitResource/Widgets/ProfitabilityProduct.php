@@ -17,8 +17,6 @@ class ProfitabilityProduct extends ApexChartWidget
      */
     protected static string $chartId = 'profitabilityProduct';
 
-
-
     /**
      * Widget Title
      *
@@ -33,8 +31,8 @@ class ProfitabilityProduct extends ApexChartWidget
 
     protected function getFooter(): string
     {
-        if (!$this->product->prix_buy || !$this->product->prix_ht) {
-            return '<p class="dark:text-info-300 text-info-800 text-sm">Ce graphique nécessite d\'avoir renseigné les prix d\'achat et de vente du produit.</p>';
+        if ($this->product->ventes->count() > 0) {
+            return '<p class="dark:text-info-300 text-info-800 text-sm">Ce graphique nécessite d\'avoir renseigné des ventes.</p>';
         } else {
             return '';
         }
@@ -129,8 +127,8 @@ class ProfitabilityProduct extends ApexChartWidget
                 ->get();
 
             // Calculer le bénéfice pour chaque vente et les additionner pour obtenir le bénéfice total du mois
-            $beneficeTotalMois = $ventes->reduce(function ($carry, $vente) use ($product) {
-                $beneficeVente = ($product->prix_ht - $product->prix_buy) * $vente->quantity;
+            $beneficeTotalMois = $ventes->reduce(function ($carry, $vente) {
+                $beneficeVente = ($vente->prix_product_ht - $vente->prix_product_buy) * $vente->quantity;
                 return $carry + $beneficeVente;
             }, 0);
 

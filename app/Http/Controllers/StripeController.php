@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Merchant;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -21,14 +21,14 @@ class StripeController extends CashierController
 
         $customerStripeId = $payload['data']['object']['customer'];
 
-        $merchant = Merchant::where('stripe_id', $customerStripeId)->first();
+        $shop = Shop::where('stripe_id', $customerStripeId)->first();
 
-        if (!$merchant) return;
+        if (!$shop) return;
 
-        $merchantSubscription = $merchant->subscriptions()->where('stripe_id', $subscription['id'])->first();
+        $shopSubscription = $shop->subscriptions()->where('stripe_id', $subscription['id'])->first();
 
-        if ($merchantSubscription) {
-            $merchant->notify(new \App\Notifications\PaymentSuccessNotification($merchant, $merchantSubscription));
+        if ($shopSubscription) {
+            $shop->notify(new \App\Notifications\PaymentSuccessNotification($shop, $shopSubscription));
         }
         return $response;
     }

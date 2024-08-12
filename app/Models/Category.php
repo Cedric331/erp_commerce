@@ -12,7 +12,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'alert_stock',
-        'merchant_id',
+        'shop_id',
     ];
 
     public function products()
@@ -20,8 +20,8 @@ class Category extends Model
         return $this->hasMany(Product::class, 'category_id');
     }
 
-    public function merchant()
+    public function shop()
     {
-        return $this->belongsTo(Merchant::class);
+        return $this->belongsTo(Shop::class);
     }
 }

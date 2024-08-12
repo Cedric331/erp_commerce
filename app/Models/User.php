@@ -63,12 +63,12 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function getTenants(Panel $panel): Collection
     {
-        return $this->getAccessibleMerchants();
+        return $this->getAccessibleShops();
     }
 
     public function hasTenant(): bool
     {
-        return $this->merchant->count() > 0;
+        return $this->shop->count() > 0;
     }
 
     public function isAdministrateur(): bool
@@ -123,20 +123,20 @@ class User extends Authenticatable implements FilamentUser, HasTenants
             return $relation;
         }
 
-        return $relation->wherePivotNotNull('merchant_id');
+        return $relation->wherePivotNotNull('shop_id');
     }
 
-    public function merchant(): BelongsToMany
+    public function shop(): BelongsToMany
     {
-        return $this->belongsToMany(Merchant::class, 'merchant_users', 'user_id', 'merchant_id');
+        return $this->belongsToMany(Shop::class, 'shop_users', 'user_id', 'shop_id');
     }
 
-    public function getAccessibleMerchants()
+    public function getAccessibleShops()
     {
         if ($this->isAdministrateur()) {
-            return Merchant::all();
+            return Shop::all();
         } else {
-            return $this->merchant;
+            return $this->shop;
         }
     }
 
@@ -146,7 +146,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         if ($this->isAdministrateurOrGerant()) {
             return true;
         }
-        return $this->merchant->contains('id', $tenant->id);
+        return $this->shop->contains('id', $tenant->id);
     }
 
 }

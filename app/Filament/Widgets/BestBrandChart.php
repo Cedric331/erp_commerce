@@ -27,7 +27,7 @@ class BestBrandChart extends ApexChartWidget
     {
         // Modifier ici pour agréger les ventes par fournisseur
         $brands = Brand::query()
-            ->where('merchant_id', Filament::getTenant()?->id)
+            ->where('shop_id', Filament::getTenant()?->id)
             ->with(['products.stocks' => function ($query) {
                 $query->whereHas('stockStatus', function ($query) {
                     $query->where('name', StockStatus::STATUS_VENTE);

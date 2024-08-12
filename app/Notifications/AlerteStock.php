@@ -12,15 +12,15 @@ class AlerteStock extends Notification
     use Queueable;
 
     public array $data;
-    public object $merchant;
+    public object $shop;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($data, $merchant)
+    public function __construct($data, $shop)
     {
         $this->data = $data;
-        $this->merchant = $merchant;
+        $this->shop = $shop;
     }
 
     /**
@@ -40,7 +40,7 @@ class AlerteStock extends Notification
     {
         return (new MailMessage)
                     ->subject('Alerte Stock - Quanta Stock')
-                    ->line('Voici la liste des produits dont le stock est en dessous du seuil d\'alerte sur votre commerce ' . $this->merchant->enseigne . '.')
+                    ->line('Voici la liste des produits dont le stock est en dessous du seuil d\'alerte sur votre commerce ' . $this->shop->enseigne . '.')
                     ->line('Merci de prendre les mesures nécessaires pour réapprovisionner votre stock.')
                     ->line('Liste des produits :')
                     ->line(implode("\n", array_map(function ($item) {

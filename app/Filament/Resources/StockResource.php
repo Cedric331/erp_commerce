@@ -48,7 +48,7 @@ class StockResource extends Resource
                 Forms\Components\Select::make('product_id')
                     ->label('Produit')
                     ->options(
-                        Product::where('merchant_id', Filament::getTenant()->id)
+                        Product::where('shop_id', Filament::getTenant()->id)
                             ->get()
                             ->mapWithKeys(fn ($product) => [$product->id => $product->nom])
                             ->toArray()
@@ -61,7 +61,7 @@ class StockResource extends Resource
                 Forms\Components\Select::make('stock_status_id')
                     ->label('Statut')
                     ->options(
-                       StockStatus::where('merchant_id', Filament::getTenant()->id)
+                       StockStatus::where('shop_id', Filament::getTenant()->id)
                             ->get()
                             ->mapWithKeys(fn ($stockStatus) => [$stockStatus->id => $stockStatus->name])
                             ->toArray()
@@ -155,8 +155,8 @@ class StockResource extends Resource
                         ExportFormat::Xlsx,
                         ExportFormat::Csv,
                     ])
-                    ->modifyQueryUsing(fn (Builder $query) => $query->where('merchant_id', Filament::getTenant()->id))
-                    ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant() && !Auth::user()->isManager())
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('shop_id', Filament::getTenant()->id))
+                    ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant())
                     ->exporter(StockExporter::class)
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->orderBy('created_at', 'desc'))

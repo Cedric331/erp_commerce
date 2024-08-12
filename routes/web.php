@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StripeController;
 use Illuminate\Foundation\Application;
@@ -42,6 +43,8 @@ Route::get('login', function () {
 })->name('login')->middleware('guest');
 
 Route::post('/delete-shop/{slug}', [ProfileController::class, 'deleteTenant'])->name('shop.delete');
+
+Route::post('/contact', [ContactController::class, 'sendMessage'])->name('contact');
 
 Route::post('/webhooks/stripe', [StripeController::class, 'handleWebhook']);
 Route::get('/complete-payment/{paymentIntent}', [StripeController::class, 'completePayment'])->name('complete.payment');

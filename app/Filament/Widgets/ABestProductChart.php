@@ -26,7 +26,7 @@ class ABestProductChart extends ApexChartWidget
     protected function getFormSchema(): array
     {
         $status = StockStatus::query()
-            ->where('merchant_id', Filament::getTenant()?->id)
+            ->where('shop_id', Filament::getTenant()?->id)
             ->pluck('name' , 'id')
             ->toArray();
 
@@ -53,7 +53,7 @@ class ABestProductChart extends ApexChartWidget
         $activeFilter = $this->filterStatusId ? StockStatus::find($this->filterStatusId)?->name : StockStatus::STATUS_VENTE;
 
         $products = Product::query()
-            ->where('merchant_id', Filament::getTenant()?->id)
+            ->where('shop_id', Filament::getTenant()?->id)
             ->withSum(['stocks as ventes_total' => function ($query) use ($activeFilter) {
                 $query->whereHas('stockStatus', function ($query) use ($activeFilter) {
                     $query->where('name', $activeFilter);

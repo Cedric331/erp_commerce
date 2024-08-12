@@ -20,7 +20,7 @@ class CreateCategorieProduit extends CreateRecord
     {
         $tenant = Filament::getTenant();
 
-        $data['merchant_id'] = $tenant->id;
+        $data['shop_id'] = $tenant->id;
 
         return $data;
     }

@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('note')->nullable();
-            $table->foreignId('merchant_id')->constrained()->onDelete('cascade');
-            $table->unique(['name', 'merchant_id']);
+            $table->foreignId('shop_id')->constrained()->onDelete('cascade');
+            $table->unique(['name', 'shop_id']);
             $table->timestamps();
         });
     }

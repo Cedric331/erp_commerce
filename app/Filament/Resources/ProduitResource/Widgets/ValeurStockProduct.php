@@ -11,7 +11,7 @@ class ValeurStockProduct extends BaseWidget
 {
     protected function getStats(): array
     {
-        $products = Product::where('merchant_id', Filament::getTenant()->id)->get();
+        $products = Product::where('shop_id', Filament::getTenant()->id)->get();
         $valeurStockHtBrut = $this->getValueStock($products, 'ht');
         $valeurStockTtcBrut = $this->getValueStock($products, 'ttc');
 

@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import {ref} from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import Contact from "@/Components/Contact.vue";
 
 defineProps({
     isAuth: {
@@ -775,42 +776,7 @@ const navbarOpen = ref(false);
                 </div>
                 <div class="w-full px-4 lg:w-1/2 xl:w-5/12">
                     <div class="relative rounded-lg bg-white p-8 shadow-lg sm:p-12">
-                        <form>
-                            <div class="mb-6">
-                                <input
-                                    type="text"
-                                    placeholder="Votre Nom"
-                                    class="w-full rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"
-                                />
-                            </div>
-                            <div class="mb-6">
-                                <input
-                                    type="email"
-                                    placeholder="Votre Email"
-                                    class="w-full rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"
-                                />
-                            </div>
-                            <div class="mb-6">
-                                <input
-                                    type="text"
-                                    placeholder="Votre Téléphone"
-                                    class="w-full rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"
-                                />
-                            </div>
-                            <div class="mb-6">
-                      <textarea
-                          rows="6"
-                          placeholder="Votre Message"
-                          class="w-full resize-none rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"></textarea>
-                            </div>
-                            <div>
-                                <button
-                                    type="submit"
-                                    class="w-full rounded border border-primary bg-primary p-3 text-white transition hover:bg-opacity-90">
-                                    Envoyer
-                                </button>
-                            </div>
-                        </form>
+                        <Contact></Contact>
                         <div>
                 <span class="absolute -top-10 -right-9 z-[-1]">
                   <svg

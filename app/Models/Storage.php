@@ -13,7 +13,7 @@ class Storage extends Model
         'name',
         'note',
         'status',
-        'merchant_id',
+        'shop_id',
     ];
 
     const STATUS_ACTIVE = 'active';
@@ -24,8 +24,8 @@ class Storage extends Model
         return $this->hasMany(Product::class);
     }
 
-    public function merchant()
+    public function shop()
     {
-        return $this->belongsTo(Merchant::class);
+        return $this->belongsTo(Shop::class);
     }
 }

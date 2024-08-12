@@ -14,11 +14,11 @@ class Role extends SpatieRole
     const ROLE_GERANT = 'Gerant';
     const ROLE_SERVEUR = 'Serveur';
 
-    protected $fillable = ['name', 'guard_name', 'merchant_id'];
+    protected $fillable = ['name', 'guard_name', 'shop_id'];
 
-    public function merchant()
+    public function shop()
     {
-        return $this->belongsTo(Merchant::class);
+        return $this->belongsTo(Shop::class);
     }
 
     public function users(): BelongsToMany
@@ -30,7 +30,7 @@ class Role extends SpatieRole
                 config('permission.table_names.model_has_roles'),
                 app(PermissionRegistrar::class)->pivotRole,
                 config('permission.column_names.model_morph_key')
-            )->withPivotValue('merchant_id', Filament::getTenant()->id);
+            )->withPivotValue('shop_id', Filament::getTenant()->id);
         } else {
             return $this->morphedByMany(
                 getModelForGuard($this->attributes['guard_name'] ?? config('auth.defaults.guard')),

@@ -1,5 +1,5 @@
 <div>
-    @if(Auth::user()->hasPermissionTo('Créer stock') || Auth::user()->isAdministrateurOrGerant() || Auth::user()->isManager())
+    @if(Auth::user()->hasPermissionTo('Créer stock') || Auth::user()->isAdministrateurOrGerant())
         @if(!$this->showForm)
                 <x-filament::button
                     wire:click="showFormNotShown"

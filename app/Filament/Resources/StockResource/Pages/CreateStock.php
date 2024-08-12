@@ -22,10 +22,14 @@ class CreateStock extends CreateRecord
 
     public function mutateFormDataBeforeCreate(array $data): array
     {
-        $this->data['merchant_id'] = Filament::getTenant()->id;
+        $this->data['shop_id'] = Filament::getTenant()->id;
         if ($this->data['scheduled_date'] === "") {
             $this->data['scheduled_date'] = null;
         }
+
+        $product =  Product::find($this->data['product_id']);
+        $this->data['prix_product_ht'] = $product->prix_ht;
+        $this->data['prix_product_buy'] = $product->prix_buy;
 
         return $data;
     }

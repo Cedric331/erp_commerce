@@ -4,13 +4,13 @@ namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
 use App\Filament\Pages\Support;
-use App\Filament\Resources\Tenancy\MerchantEdit;
-use App\Filament\Resources\Tenancy\MerchantRegister;
+use App\Filament\Resources\Tenancy\ShopEdit;
+use App\Filament\Resources\Tenancy\ShopRegister;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CheckTenantOwnership;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
-use App\Models\Merchant;
+use App\Models\Shop;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -90,7 +90,7 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::PAGE_END,
                 fn (): string => Blade::render('@livewire(\'delete-tenant\')'),
                 scopes: [
-                    \App\Filament\Resources\Tenancy\MerchantEdit::class,
+                    \App\Filament\Resources\Tenancy\ShopEdit::class,
                 ],
             )
             ->sidebarCollapsibleOnDesktop()
@@ -134,15 +134,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
-            ->tenant(Merchant::class, 'slug')
+            ->tenant(Shop::class, 'slug')
             ->tenantMenu(function () {
-                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->merchant()->count() > 1) {
+                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shop()->count() > 1) {
                     return true;
                 }
                 return false;
             })
-            ->tenantRegistration(MerchantRegister::class)
-            ->tenantProfile(MerchantEdit::class)
+            ->tenantRegistration(ShopRegister::class)
+            ->tenantProfile(ShopEdit::class)
             ->tenantRoutePrefix('shop')
             ->tenantMiddleware([
                 SyncSpatiePermissionsWithFilamentTenants::class,

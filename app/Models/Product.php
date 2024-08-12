@@ -25,16 +25,16 @@ class Product extends Model implements HasMedia
         'tva',
         'stock',
         'storage_id',
-        'merchant_id',
+        'shop_id',
         'brand_id',
         'category_id',
         'created_by',
         'updated_by',
     ];
 
-    public function merchant()
+    public function shop()
     {
-        return $this->belongsTo(Merchant::class);
+        return $this->belongsTo(Shop::class);
     }
 
     public function storage()

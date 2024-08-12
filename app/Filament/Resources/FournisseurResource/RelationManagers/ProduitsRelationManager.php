@@ -43,7 +43,7 @@ class ProduitsRelationManager extends RelationManager
                             ->rules([
                                 Rule::unique('products', 'reference')
                                     ->where(function ($query) {
-                                        return $query->where('merchant_id', Filament::getTenant()->id);
+                                        return $query->where('shop_id', Filament::getTenant()->id);
                                     }),
                             ])
                             ->required()
@@ -71,7 +71,7 @@ class ProduitsRelationManager extends RelationManager
                             ])
                             ->createOptionAction(function (Action $action) {
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['merchant_id'] = Filament::getTenant()->id;
+                                    $data['shop_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
@@ -92,7 +92,7 @@ class ProduitsRelationManager extends RelationManager
                             ])
                             ->createOptionAction(function (Action $action) {
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['merchant_id'] = Filament::getTenant()->id;
+                                    $data['shop_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),

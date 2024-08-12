@@ -13,7 +13,7 @@ class StockStatus extends Model
         'name',
         'type',
         'color',
-        'merchant_id',
+        'shop_id',
     ];
 
     const TYPE_ENTREE = 'entrée';
@@ -23,9 +23,13 @@ class StockStatus extends Model
     const STATUS_LIVRAISON = 'Livraison';
     const STATUS_PERTE = 'Perte';
 
-    public function merchant()
+    const COLOR_VERTE = '#008000';
+    const COLOR_ORANGE = '#FFA500';
+    const COLOR_ROUGE = '#FF0000';
+
+    public function shop()
     {
-        return $this->belongsTo(Merchant::class);
+        return $this->belongsTo(Shop::class);
     }
 
     public function stocks()

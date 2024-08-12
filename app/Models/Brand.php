@@ -18,12 +18,12 @@ class Brand extends Model
         'postal_code',
         'country',
         'note',
-        'merchant_id',
+        'shop_id',
     ];
 
-    public function merchant()
+    public function shop()
     {
-        return $this->belongsTo(Merchant::class);
+        return $this->belongsTo(Shop::class);
     }
 
     public function products()

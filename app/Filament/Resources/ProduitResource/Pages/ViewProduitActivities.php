@@ -40,7 +40,7 @@ class ViewProduitActivities extends ActivityTimelinePage
     public function getWidgetData(): array
     {
         return [
-            'produit' => $this->record
+            'product' => $this->record
         ];
     }
 

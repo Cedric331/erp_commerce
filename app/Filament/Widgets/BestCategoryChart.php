@@ -26,7 +26,7 @@ class BestCategoryChart extends ApexChartWidget
     {
         // Modifier ici pour agréger les ventes par catégorie
         $categories = Category::query()
-            ->where('merchant_id', Filament::getTenant()?->id)
+            ->where('shop_id', Filament::getTenant()?->id)
             ->with(['products.stocks' => function ($query) {
                 $query->whereHas('stockStatus', function ($query) {
                     $query->where('name', 'Vente');

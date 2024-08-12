@@ -64,9 +64,9 @@ class UserResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('merchant')
+                Forms\Components\Select::make('shop')
                     ->label('Commerce autorisé')
-                    ->relationship(name: 'merchant', titleAttribute: 'enseigne')
+                    ->relationship(name: 'shop', titleAttribute: 'enseigne')
                     ->columnSpanFull()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->multiple()
@@ -77,13 +77,13 @@ class UserResource extends Resource
                     ->label('Rôles')
                     ->relationship(name: 'roles', titleAttribute: 'name', modifyQueryUsing: function ($query) {
                         if (Auth::user()->isAdministrateur()) {
-                            $query->where('roles.merchant_id', '=', Filament::getTenant()->id)
-                                ->orWhere('roles.merchant_id', '=', null);
+                            $query->where('roles.shop_id', '=', Filament::getTenant()->id)
+                                ->orWhere('roles.shop_id', '=', null);
                         } else if (Auth::user()->isGerant()) {
-                            $query->where('roles.merchant_id', '=', Filament::getTenant()->id)
+                            $query->where('roles.shop_id', '=', Filament::getTenant()->id)
                                 ->orWhere('roles.name', '=', 'Gérant');
                         } else {
-                            $query->where('roles.merchant_id', '=', Filament::getTenant()->id);
+                            $query->where('roles.shop_id', '=', Filament::getTenant()->id);
                         }
 
                     })
@@ -107,7 +107,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('merchant.enseigne')
+                Tables\Columns\TextColumn::make('shop.enseigne')
                     ->badge()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->label('Commerce autorisé')
@@ -119,9 +119,9 @@ class UserResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('merchant')
+                Tables\Filters\SelectFilter::make('shop')
                     ->label('Commerce autorisé')
-                    ->relationship('merchant', 'enseigne')
+                    ->relationship('shop', 'enseigne')
                     ->searchable()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->preload()

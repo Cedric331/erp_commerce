@@ -7,23 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Contact extends Notification
+class ContactSupport extends Notification
 {
     use Queueable;
 
     public array $data;
-    public object $merchant;
-    public object $user;
-
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($data, $merchant, $user)
+    public function __construct($data)
     {
         $this->data = $data;
-        $this->merchant = $merchant;
-        $this->user = $user;
     }
 
 
@@ -49,14 +44,15 @@ class Contact extends Notification
     {
         return (new MailMessage)
             ->subject('Demande de contact')
-            ->line('Vous avez reçu une demande de contact de la part de ' . $this->merchant->enseigne . '.')
+            ->line('Vous avez reçu une demande de contact.')
             ->line('Sujet :' . $this->data['subject'])
             ->line('Message :' . $this->data['message'])
-            ->line('Informations du commercant : ')
-            ->line('Enseigne : ' . $this->merchant->enseigne)
+            ->line('Informations du contact : ')
             ->line('Informations de contact : ')
-            ->line('Nom : ' . $this->user->name)
-            ->line('Email : ' . $this->user->email)
+            ->line('Nom : ' .  $this->data['user_name'])
+            ->line('Email : ' .  $this->data['user_email'])
+            ->line('Enseigne : ' . $this->data['shop_enseigne'])
+            ->line('Email du Magasin: ' . $this->data['shop_email'])
             ->action('Accéder au site', url('/'))
             ->line('Merci.');
     }

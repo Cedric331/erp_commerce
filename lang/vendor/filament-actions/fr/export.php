@@ -67,7 +67,7 @@ return [
 
         'started' => [
             'title' => 'Export en cours',
-            'body' => 'Votre export a commencé.|Votre export a commencé et :count lignes sera traité en arrière-plan.',
+            'body' => 'Votre export a commencé.| Une fois terminé, vous recevrez une notification avec un lien pour télécharger le fichier.',
         ],
 
     ],

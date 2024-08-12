@@ -43,7 +43,7 @@ class CreateStock extends Component implements HasForms
 
     public function mount(): void
     {
-        if (StockStatus::where('merchant_id', Filament::getTenant()->id)->count() > 0 && Product::where('merchant_id', Filament::getTenant()->id)->count() > 0) {
+        if (StockStatus::where('shop_id', Filament::getTenant()->id)->count() > 0 && Product::where('shop_id', Filament::getTenant()->id)->count() > 0) {
             $this->form->fill();
         } else {
             $this->showForm = false;
@@ -60,7 +60,7 @@ class CreateStock extends Component implements HasForms
             'data.note' => 'nullable|string',
         ]);
 
-        $this->data['merchant_id'] = Filament::getTenant()->id;
+        $this->data['shop_id'] = Filament::getTenant()->id;
 
         if ($this->data['scheduled_date'] === "") {
             $this->data['scheduled_date'] = null;
@@ -107,7 +107,7 @@ class CreateStock extends Component implements HasForms
             ->schema([
                 Select::make('product_id')
                     ->label('Sélectionner un produit')
-                    ->options(Product::where('merchant_id', Filament::getTenant()->id)->pluck('nom', 'id'))
+                    ->options(Product::where('shop_id', Filament::getTenant()->id)->pluck('nom', 'id'))
                     ->searchable()
                     ->required()
                     ->optionsLimit(5)
@@ -121,10 +121,10 @@ class CreateStock extends Component implements HasForms
                     ->step(0.01),
                 Select::make('stock_status_id')
                     ->label('Sélectionner un statut')
-                    ->options(StockStatus::where('merchant_id', Filament::getTenant()->id)->pluck('name', 'id'))
+                    ->options(StockStatus::where('shop_id', Filament::getTenant()->id)->pluck('name', 'id'))
                     ->default(
                         StockStatus::where([
-                            ['merchant_id', Filament::getTenant()->id],
+                            ['shop_id', Filament::getTenant()->id],
                             ['name', 'Vente'],
                         ])->first()?->id
                     )
@@ -174,7 +174,7 @@ class CreateStock extends Component implements HasForms
                     ->label('Créer un produit')
                     ->outlined()
                     ->hidden(function () {
-                        return Product::where('merchant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', Product::class);
+                        return Product::where('shop_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', Product::class);
                     })
                     ->url(ProduitResource::getUrl('create')),
                 Action::make('create_statut')
@@ -182,7 +182,7 @@ class CreateStock extends Component implements HasForms
                     ->label('Créer un statut')
                     ->outlined()
                     ->hidden(function () {
-                        return StockStatus::where('merchant_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', StockStatus::class);
+                        return StockStatus::where('shop_id', Filament::getTenant()->id)->count() > 0 && Auth::user()->can('create', StockStatus::class);
                     })
                     ->url(StockStatusResource::getUrl('create')),
             ])

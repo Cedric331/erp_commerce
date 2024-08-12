@@ -11,15 +11,15 @@ class PaymentSuccessNotification extends Notification
 {
     use Queueable;
 
-    protected $merchant;
+    protected $shop;
     protected $subscription;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($merchant, $subscription)
+    public function __construct($shop, $subscription)
     {
-        $this->merchant = $merchant;
+        $this->shop = $shop;
         $this->subscription = $subscription;
     }
 
@@ -40,7 +40,7 @@ class PaymentSuccessNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Paiement réussi : Votre abonnement est confirmé')
-            ->greeting('Bonjour ' . $this->merchant->name . ',')
+            ->greeting('Bonjour ' . $this->shop->name . ',')
             ->line('Nous vous confirmons que votre paiement pour l\'abonnement a été effectué avec succès.')
             ->line('Votre abonnement est maintenant actif.')
             ->action('Voir votre compte', url('/app'))

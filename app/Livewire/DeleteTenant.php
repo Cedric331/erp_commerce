@@ -32,7 +32,7 @@ class DeleteTenant extends Component implements HasForms
 
             $users = $tenant->users;
             foreach ($users as $user) {
-                if ($user->merchant->count() === 1) {
+                if ($user->shop->count() === 1) {
                     if ($user !== auth()->user()) {
                         $user->delete();
                     }

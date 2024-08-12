@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Merchant;
+use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -34,12 +34,12 @@ class UserSeeder extends Seeder
             'guard_name' => 'web'
         ]);
 
-        setPermissionsTeamId(Merchant::first()->id);
+        setPermissionsTeamId(Shop::first()->id);
 
         $userA->assignRole($role);
-        $userA->merchant()->attach(Merchant::first());
+        $userA->shop()->attach(Shop::first());
 
         $userB->assignRole($role);
-        $userB->merchant()->attach(Merchant::first());
+        $userB->shop()->attach(Shop::first());
     }
 }

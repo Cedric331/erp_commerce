@@ -12,7 +12,7 @@ use Filament\Panel;
 
 function getValeurStock(): float
 {
-    $products = Product::where('merchant_id', Filament::getTenant()->id)->get();
+    $products = Product::where('shop_id', Filament::getTenant()->id)->get();
     $value = 0;
     foreach ($products as $product) {
         $value += $product->stock * $product->prix_ht;
@@ -81,7 +81,7 @@ class ProductExporter extends Exporter
                 ->label('Fournisseur'),
             ExportColumn::make('category.name')
                 ->label('Categorie'),
-            ExportColumn::make('merchant.enseigne')
+            ExportColumn::make('shop.enseigne')
                 ->label('Commerce'),
             ExportColumn::make('created_at')
                 ->enabledByDefault(false)

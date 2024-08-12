@@ -19,7 +19,7 @@ class CreateStockStatus extends CreateRecord
     public function mutateFormDataBeforeCreate(array $data): array
     {
         $tenant = Filament::getTenant();
-        $data['merchant_id'] = $tenant->id;
+        $data['shop_id'] = $tenant->id;
 
         return $data;
     }

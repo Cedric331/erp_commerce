@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name')->index();
             $table->enum('type', ['entrée', 'sortie'])->default('entrée');
             $table->string('color')->nullable();
-            $table->foreignId('merchant_id')->constrained('merchants')->onDelete('cascade');
-            $table->unique(['name', 'merchant_id']);
+            $table->foreignId('shop_id')->constrained('shops')->onDelete('cascade');
+            $table->unique(['name', 'shop_id']);
             $table->timestamps();
         });
     }

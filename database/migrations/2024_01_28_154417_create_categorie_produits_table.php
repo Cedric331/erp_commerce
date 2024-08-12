@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->index();
             $table->integer('alert_stock')->default(0);
-            $table->foreignId('merchant_id')->constrained()->onDelete('cascade');
-            $table->unique(['name', 'merchant_id']);
+            $table->foreignId('shop_id')->constrained()->onDelete('cascade');
+            $table->unique(['name', 'shop_id']);
             $table->timestamps();
         });
     }

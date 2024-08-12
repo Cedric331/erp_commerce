@@ -4,7 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Category;
-use App\Models\Merchant;
+use App\Models\Shop;
 use App\Models\Brand;
 use App\Models\Permission;
 use App\Models\Product;
@@ -14,7 +14,7 @@ use App\Models\StockStatus;
 use App\Models\Storage;
 use App\Models\User;
 use App\Policies\CategoryPolicy;
-use App\Policies\MerchantPolicy;
+use App\Policies\ShopPolicy;
 use App\Policies\ExportPolicy;
 use App\Policies\BrandPolicy;
 use App\Policies\PermissionPolicy;
@@ -41,7 +41,7 @@ class AuthServiceProvider extends ServiceProvider
         Stock::class => StockPolicy::class,
         StockStatus::class => StockStatusPolicy::class,
         User::class => UserPolicy::class,
-        Merchant::class => MerchantPolicy::class,
+        Shop::class => ShopPolicy::class,
         Role::class => RolePolicy::class,
         Permission::class => PermissionPolicy::class,
         Storage::class => StoragePolicy::class,

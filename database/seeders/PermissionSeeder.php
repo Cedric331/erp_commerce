@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Merchant;
+use App\Models\Shop;
 use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;

@@ -122,7 +122,7 @@ class ProduitResource extends Resource
                             ->createOptionAction(function (Action $action) {
                                 $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer zone de stockage'));
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['merchant_id'] = Filament::getTenant()->id;
+                                    $data['shop_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
@@ -134,10 +134,10 @@ class ProduitResource extends Resource
                         Forms\Components\TextInput::make('reference')
                             ->label('Référence fournisseur')
                             ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
-                                return $rule->where('merchant_id', Filament::getTenant()->id);
+                                return $rule->where('shop_id', Filament::getTenant()->id);
                             })
                             ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
-                                return $rule->where('merchant_id', Filament::getTenant()->id);
+                                return $rule->where('shop_id', Filament::getTenant()->id);
                             })
                             ->required()
                             ->maxLength(255),
@@ -165,7 +165,7 @@ class ProduitResource extends Resource
                             ->createOptionAction(function (Action $action) {
                                 $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer catégorie'));
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['merchant_id'] = Filament::getTenant()->id;
+                                    $data['shop_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
@@ -187,7 +187,7 @@ class ProduitResource extends Resource
                             ->createOptionAction(function (Action $action) {
                                 $action->hidden(!Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasPermissionTo('Créer Fournisseur'));
                                 $action->mutateFormDataUsing(function (array $data) {
-                                    $data['merchant_id'] = Filament::getTenant()->id;
+                                    $data['shop_id'] = Filament::getTenant()->id;
                                     return $data;
                                 });
                             }),
@@ -457,8 +457,8 @@ class ProduitResource extends Resource
                         ExportFormat::Xlsx,
                         ExportFormat::Csv,
                     ])
-                    ->modifyQueryUsing(fn (Builder $query) => $query->where('merchant_id', Filament::getTenant()->id))
-                    ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant() && !Auth::user()->isManager())
+                    ->modifyQueryUsing(fn (Builder $query) => $query->where('shop_id', Filament::getTenant()->id))
+                    ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant())
                     ->exporter(ProductExporter::class)
             ]);
     }
