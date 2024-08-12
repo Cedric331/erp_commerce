@@ -4,7 +4,7 @@
             <input
                 v-model="form.name"
                 type="text"
-                placeholder="Votre name"
+                placeholder="Votre Nom"
                 class="w-full rounded border border-[#f0f0f0] py-3 px-[14px] text-base text-body-color outline-none focus:border-primary focus-visible:shadow-none"
             />
             <span v-if="form.errors.name" class="text-red-500 text-sm">{{ form.errors.name }}</span>
