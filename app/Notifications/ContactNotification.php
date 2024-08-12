@@ -61,9 +61,9 @@ class ContactNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'nom' => $this->data['nom'],
+            'name' => $this->data['name'],
             'email' => $this->data['email'],
-            'telephone' => $this->data['telephone'],
+            'phone' => $this->data['phone'],
             'message' => $this->data['message'],
         ];
     }
