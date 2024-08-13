@@ -66,7 +66,7 @@ class AdminPanelProvider extends PanelProvider
                             return false;
                         }
 
-                        return true;
+                        return false;
                     })
                     ->label('Contacter le support')
                     ->url(fn (): string => Support::getUrl())

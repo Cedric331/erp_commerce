@@ -3,6 +3,7 @@
 namespace Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
 
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
+use App\Models\Role;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Notifications\Notification;
@@ -20,9 +21,9 @@ class EditRole extends EditRecord
         ];
     }
 
-    public function beforeValidate(array $data): array
+    public function beforeValidate(): void
     {
-        if ($data['name'] === 'Administrateur' || $data['name'] === 'Gérant') {
+        if ($this->data['name'] === Role::ROLE_GERANT || $this->data['name'] === Role::ROLE_ADMIN) {
             Notification::make()
                 ->title('Erreur d\'autorisation')
                 ->body('Vous ne pouvez pas créer un rôle avec ce nom.')
@@ -30,7 +31,5 @@ class EditRole extends EditRecord
                 ->send();
             $this->halt();
         }
-
-        return $data;
     }
 }

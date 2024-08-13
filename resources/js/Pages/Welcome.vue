@@ -22,7 +22,7 @@ const navbarOpen = ref(false);
             <div class="relative -mx-4 flex items-center justify-between">
                 <div>
                     <ApplicationLogo class="h-24" />
-                    <span class="sr-only">Quanta</span>
+                    <span class="sr-only">Quantisys</span>
                 </div>
                 <div class="flex w-full items-center justify-between px-4">
                     <div>
@@ -95,10 +95,10 @@ const navbarOpen = ref(false);
                 <div class="w-full px-4 lg:w-5/12">
                     <div class="hero-content">
                         <h1 class="mb-3 text-4xl font-bold leading-snug text-dark sm:text-[42px] lg:text-[40px] xl:text-[42px]">
-                            Quanta : La Solution de Gestion de Stock pour Petits Commerces
+                            Quantisys : La Solution de Gestion de Stock pour Petits Commerces
                         </h1>
                         <p class="mb-8 max-w-[480px] text-base text-body-color">
-                            Simplifiez votre gestion d'inventaire avec Quanta, la plateforme conçue spécifiquement pour les besoins des petits commerces. Notre outil intuitif vous aide à suivre vos stocks et prévenir les ruptures ou surstocks sans effort.<br> Rejoignez les centaines de commerçants qui propulsent leur efficacité et réduisent leurs coûts grâce à Quanta.
+                            Simplifiez votre gestion d'inventaire avec Quantisys, la plateforme conçue spécifiquement pour les besoins des petits commerces. Notre outil intuitif vous aide à suivre vos stocks et prévenir les ruptures ou surstocks sans effort.<br> Rejoignez les centaines de commerçants qui propulsent leur efficacité et réduisent leurs coûts grâce à Quantisys.
                         </p>
 
                         <ul class="flex flex-wrap items-center">
@@ -117,7 +117,7 @@ const navbarOpen = ref(false);
                         <div class="relative z-10 inline-block pt-11 lg:pt-0">
                             <img
                                 src="/images/home/image1.jpg"
-                                alt="Quanta : La Solution de Gestion de Stock pour Petits Commerces"
+                                alt="Quantisys : La Solution de Gestion de Stock pour Petits Commerces"
                                 class="max-w-full lg:ml-auto rounded-2xl shadow-xl"
                             />
                             <span class="absolute -left-8 -bottom-8 z-[-1]">
@@ -176,7 +176,7 @@ const navbarOpen = ref(false);
                             Nos Services Exclusifs
                         </h2>
                         <p class="text-base text-body-color">
-                            Quanta offre une gamme de solutions innovantes pour la gestion d'inventaire adaptées aux petits commerces. Nos services sont conçus pour maximiser votre efficacité et réduire les coûts. Découvrez comment nous pouvons transformer votre gestion de stock.
+                            Quantisys offre une gamme de solutions innovantes pour la gestion d'inventaire adaptées aux petits commerces. Nos services sont conçus pour maximiser votre efficacité et réduire les coûts. Découvrez comment nous pouvons transformer votre gestion de stock.
                         </p>
                     </div>
                 </div>
@@ -202,7 +202,7 @@ const navbarOpen = ref(false);
                             Gestion des produits
                         </h4>
                         <p class="text-body-color">
-                            Gérer vos produits n'a jamais été aussi simple. Quanta vous permet de suivre vos stocks.
+                            Gérer vos produits n'a jamais été aussi simple. Quantisys vous permet de suivre vos stocks.
                         </p>
 
                         <span class="absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 bg-primary opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
@@ -271,7 +271,7 @@ const navbarOpen = ref(false);
                            Gestion des commerces
                         </h4>
                         <p class="text-body-color">
-                            Gérer vos commerces n'a jamais été aussi simple. Quanta vous permet de suivre vos stocks sur vos différents commerces.
+                            Gérer vos commerces n'a jamais été aussi simple. Quantisys vous permet de suivre vos stocks sur vos différents commerces.
                         </p>
 
                         <span class="absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 bg-primary opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
@@ -295,7 +295,7 @@ const navbarOpen = ref(false);
                             Un Plan Unique, Une Gestion Simplifiée
                         </h2>
                         <p class="text-base text-body-color">
-                            Quanta vous propose un plan tarifaire unique, conçu pour répondre efficacement à tous vos besoins de gestion de stock, sans complexité ni coûts cachés. Profitez d'une solution complète de gestion d'inventaire avec un abonnement mensuel abordable, incluant la gestion des produits, les alertes de stock, et bien plus. Optimisez votre gestion de stock dès aujourd'hui avec Quanta.
+                            Quantisys vous propose un plan tarifaire unique, conçu pour répondre efficacement à tous vos besoins de gestion de stock, sans complexité ni coûts cachés. Profitez d'une solution complète de gestion d'inventaire avec un abonnement mensuel abordable, incluant la gestion des produits, les alertes de stock, et bien plus. Optimisez votre gestion de stock dès aujourd'hui avec Quantisys.
                         </p>
                     </div>
 
@@ -633,7 +633,7 @@ const navbarOpen = ref(false);
                             Vos Questions Fréquentes
                         </h2>
                         <p class="text-base text-body-color">
-                            Vous avez des questions sur la manière dont Quanta peut transformer votre gestion de stock ? Découvrez les réponses aux questions fréquentes sur notre solution intuitive de gestion d'inventaire, conçue pour les petits commerces. De la mise en place à l'utilisation quotidienne, nous sommes là pour vous aider.
+                            Vous avez des questions sur la manière dont Quantisys peut transformer votre gestion de stock ? Découvrez les réponses aux questions fréquentes sur notre solution intuitive de gestion d'inventaire, conçue pour les petits commerces. De la mise en place à l'utilisation quotidienne, nous sommes là pour vous aider.
                         </p>
                     </div>
 
@@ -645,12 +645,12 @@ const navbarOpen = ref(false);
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">f
                             <h4 class="text-lg font-semibold text-black">
-                                Quand puis-je commencer à utiliser Quanta après mon inscription ?
+                                Quand puis-je commencer à utiliser Quantisys après mon inscription ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Vous pouvez commencer à utiliser Quanta immédiatement après votre inscription et souscription. Notre plateforme SaaS basée sur le navigateur web est conçue pour vous permettre un accès instantané à tous nos outils de gestion de stock. Il n'y a aucun délai d'attente pour l'installation ou la configuration initiale - vous êtes prêt à optimiser votre inventaire dès que vous vous connectez pour la première fois.
+                                Vous pouvez commencer à utiliser Quantisys immédiatement après votre inscription et souscription. Notre plateforme SaaS basée sur le navigateur web est conçue pour vous permettre un accès instantané à tous nos outils de gestion de stock. Il n'y a aucun délai d'attente pour l'installation ou la configuration initiale - vous êtes prêt à optimiser votre inventaire dès que vous vous connectez pour la première fois.
                             </p>
                         </div>
                     </div>
@@ -664,7 +664,7 @@ const navbarOpen = ref(false);
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Dès votre première utilisation de Quanta, vous commencez à bénéficier de nos analyses. Notre plateforme est conçue pour vous fournir des insights précieux sur votre inventaire immédiatement après la saisie de vos données de stock. Aucune attente n'est nécessaire : commencez à optimiser votre gestion d'inventaire dès le premier jour.
+                                Dès votre première utilisation de Quantisys, vous commencez à bénéficier de nos analyses. Notre plateforme est conçue pour vous fournir des insights précieux sur votre inventaire immédiatement après la saisie de vos données de stock. Aucune attente n'est nécessaire : commencez à optimiser votre gestion d'inventaire dès le premier jour.
                             </p>
                         </div>
                     </div>
@@ -672,12 +672,12 @@ const navbarOpen = ref(false);
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Comment Quanta assure-t-il la sécurité de mes données d'inventaire ?
+                                Comment Quantisys assure-t-il la sécurité de mes données d'inventaire ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                La sécurité de vos données est notre priorité absolue chez Quanta. Nous utilisons des technologies de cryptage de pointe et des protocoles de sécurité stricts pour protéger toutes les informations de votre inventaire.
+                                La sécurité de vos données est notre priorité absolue chez Quantisys. Nous utilisons des technologies de cryptage de pointe et des protocoles de sécurité stricts pour protéger toutes les informations de votre inventaire.
                             </p>
                         </div>
                     </div>
@@ -687,36 +687,36 @@ const navbarOpen = ref(false);
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Que puis-je attendre des versions futures de Quanta et comment gérez-vous les bugs ?
+                                Que puis-je attendre des versions futures de Quantisys et comment gérez-vous les bugs ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Quanta est actuellement toujours en développement, ce qui signifie que nous sommes en phase active de développement et d'amélioration. Nous travaillons sans relâche pour ajouter de nouvelles fonctionnalités qui rendront la gestion de votre inventaire encore plus facile et intuitive. Bien que cette phase puisse inclure des bugs, notre équipe s'engage à les identifier et les corriger rapidement. Nous encourageons les retours de nos utilisateurs pour aider à améliorer constamment Quanta. Votre feedback est précieux et joue un rôle crucial dans le développement de futures versions plus robustes et riches en fonctionnalités.
+                                Quantisys est actuellement toujours en développement, ce qui signifie que nous sommes en phase active de développement et d'amélioration. Nous travaillons sans relâche pour ajouter de nouvelles fonctionnalités qui rendront la gestion de votre inventaire encore plus facile et intuitive. Bien que cette phase puisse inclure des bugs, notre équipe s'engage à les identifier et les corriger rapidement. Nous encourageons les retours de nos utilisateurs pour aider à améliorer constamment Quantisys. Votre feedback est précieux et joue un rôle crucial dans le développement de futures versions plus robustes et riches en fonctionnalités.
                             </p>
                         </div>
                     </div>
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Comment Quanta accompagne-t-il les nouveaux utilisateurs dans leur prise en main ?
+                                Comment Quantisys accompagne-t-il les nouveaux utilisateurs dans leur prise en main ?
                             </h4>
                         </div>
                         <div class="faq-content ">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Chez Quanta, nous comprenons l'importance d'une prise en main efficace pour maximiser les bénéfices de notre outil de gestion de stock dès le premier jour. Nous nous engageons à vous fournir l'assistance nécessaire pour assurer une expérience fluide et intuitive, vous permettant ainsi de tirer le meilleur parti de Quanta sans délai.
+                                Chez Quantisys, nous comprenons l'importance d'une prise en main efficace pour maximiser les bénéfices de notre outil de gestion de stock dès le premier jour. Nous nous engageons à vous fournir l'assistance nécessaire pour assurer une expérience fluide et intuitive, vous permettant ainsi de tirer le meilleur parti de Quantisys sans délai.
                             </p>
                         </div>
                     </div>
                     <div class="single-faq mb-8 w-full rounded-lg border border-[#F3F4FE] bg-white p-4 sm:p-8 lg:px-6 xl:px-8">
                         <div class="w-full">
                             <h4 class="text-lg font-semibold text-black">
-                                Que faire si je rencontre un bug ou un problème avec Quanta ?
+                                Que faire si je rencontre un bug ou un problème avec Quantisys ?
                             </h4>
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Si vous rencontrez un bug ou un problème dans l'utilisation de Quanta, nous vous encourageons à le signaler immédiatement afin que nous puissions y remédier rapidement. Vous pouvez nous contacter directement par email. Nous prenons chaque signalement au sérieux et nous nous engageons à fournir une réponse et une solution dans les plus brefs délais. Votre aide est inestimable pour nous aider à améliorer Quanta et à vous offrir une expérience utilisateur optimale.
+                                Si vous rencontrez un bug ou un problème dans l'utilisation de Quantisys, nous vous encourageons à le signaler immédiatement afin que nous puissions y remédier rapidement. Vous pouvez nous contacter directement par email. Nous prenons chaque signalement au sérieux et nous nous engageons à fournir une réponse et une solution dans les plus brefs délais. Votre aide est inestimable pour nous aider à améliorer Quantisys et à vous offrir une expérience utilisateur optimale.
                             </p>
                         </div>
                     </div>
@@ -770,7 +770,7 @@ const navbarOpen = ref(false);
                             Une question ?
                         </h2>
                         <p class="mb-9 text-base leading-relaxed text-body-color">
-                            Notre équipe est là pour vous aider. Contactez-nous pour toute question, suggestion ou demande d'assistance. Nous sommes disponibles pour répondre à vos questions et vous accompagner dans l'utilisation de Quanta.
+                            Notre équipe est là pour vous aider. Contactez-nous pour toute question, suggestion ou demande d'assistance. Nous sommes disponibles pour répondre à vos questions et vous accompagner dans l'utilisation de Quantisys.
                         </p>
                     </div>
                 </div>
@@ -1601,7 +1601,7 @@ const navbarOpen = ref(false);
                 <div class="-mx-4 flex flex-wrap">
                     <div class="w-full px-4 md:w-1/3 lg:w-1/2">
                         <div class="my-1 flex justify-center md:justify-start">
-                            <p class="text-base text-[#efefef]">&copy;  Quanta</p>
+                            <p class="text-base text-[#efefef]">&copy;  Quantisys</p>
                         </div>
                     </div>
                     <div class="w-full px-4 md:w-2/3 lg:w-1/2">

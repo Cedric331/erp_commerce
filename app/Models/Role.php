@@ -10,9 +10,7 @@ use Spatie\Permission\PermissionRegistrar;
 class Role extends SpatieRole
 {
     const ROLE_ADMIN = 'Administrateur';
-    const ROLE_MANAGER = 'Manager';
     const ROLE_GERANT = 'Gerant';
-    const ROLE_SERVEUR = 'Serveur';
 
     protected $fillable = ['name', 'guard_name', 'shop_id'];
 

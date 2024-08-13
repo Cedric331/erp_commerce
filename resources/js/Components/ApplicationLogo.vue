@@ -1,3 +1,3 @@
 <template>
-    <img src="/images/logo-dark.png" alt="Quanta Logo">
+    <img src="/images/logo-dark.png" alt="Quantisys Logo">
 </template>

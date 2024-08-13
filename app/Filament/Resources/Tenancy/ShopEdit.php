@@ -106,10 +106,6 @@ class ShopEdit extends EditTenantProfile
 //            'shop_id' => $tenantId
 //        ]);
 //
-//        $role = Role::create([
-//            'name' => Role::ROLE_MANAGER,
-//            'shop_id' => $tenantId
-//        ]);
 //
 //        $role->syncPermissions(Permission::PERMISSION_MANAGER);
 //
@@ -117,14 +113,6 @@ class ShopEdit extends EditTenantProfile
 //            'name' => Role::ROLE_GERANT,
 //            'shop_id' => $tenantId
 //        ]);
-//
-//        $role->syncPermissions(Permission::PERMISSION_GERANT);
-//
-//        $role = Role::create([
-//            'name' => Role::ROLE_SERVEUR,
-//            'shop_id' => $tenantId
-//        ]);
-//        $role->syncPermissions(Permission::PERMISSION_SERVEUR);
 //
 //    }
 }

@@ -93,11 +93,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         }
     }
 
-    public function isManager(): bool
-    {
-        return $this->hasRole(Role::ROLE_MANAGER);
-    }
-
     public function isGerant(): bool
     {
         $userRoles = Auth::user()->rolesAllTenant()->pluck('name');

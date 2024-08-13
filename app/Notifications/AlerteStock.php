@@ -39,7 +39,7 @@ class AlerteStock extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Alerte Stock - Quanta Stock')
+                    ->subject('Alerte Stock - Quantisys Stock')
                     ->line('Voici la liste des produits dont le stock est en dessous du seuil d\'alerte sur votre commerce ' . $this->shop->enseigne . '.')
                     ->line('Merci de prendre les mesures nécessaires pour réapprovisionner votre stock.')
                     ->line('Liste des produits :')

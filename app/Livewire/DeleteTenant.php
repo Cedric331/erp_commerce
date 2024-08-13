@@ -3,9 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\Product;
+use App\Providers\RouteServiceProvider;
 use Filament\Facades\Filament;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
 use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
@@ -17,34 +19,51 @@ class DeleteTenant extends Component implements HasForms
     {
         $tenant = Filament::getTenant();
 
-        if ($tenant) {
-            if ($tenant->subscribed('default')) {
-                $tenant->subscription('default')->cancelNow();
-            }
-            $products = $tenant->products;
-            foreach ($products as $product) {
-                Activity::where('subject_id', $product->id)
-                    ->with('causer')
-                    ->where('subject_type', Product::class)
-                    ->orderBy('created_at', 'desc')
-                    ->delete();
-            }
-
-            $users = $tenant->users;
-            foreach ($users as $user) {
-                if ($user->shop->count() === 1) {
-                    if ($user !== auth()->user()) {
-                        $user->delete();
-                    }
-                }
-            }
-            $tenant->roles()->delete();
-            $tenant->permissions()->delete();
-            $tenant->delete();
+        if (!$tenant) {
+            return redirect('/app');
         }
 
-        return redirect('/app');
+        if ($tenant->subscribed('default')) {
+            $tenant->subscription('default')->cancelNow();
+        }
+
+        $productIds = $tenant->products->pluck('id');
+        Activity::whereIn('subject_id', $productIds)
+            ->where('subject_type', Product::class)
+            ->delete();
+        $tenant->products()->delete();
+
+        $tenant->stocks()->delete();
+        $tenant->categories()->delete();
+        $tenant->stockStatuses()->delete();
+        $tenant->storages()->delete();
+        $tenant->brand()->delete();
+
+        $tenant->users->each(function ($user) {
+            if ($user->shop->count() === 1 && $user->isNot(auth()->user())) {
+                $user->delete();
+            }
+        });
+
+        $tenant->roles()->delete();
+
+        $tenant->delete();
+
+        $tenantFirst = auth()->user()->shop->first();
+        Notification::make()
+            ->title('Commerce supprimé')
+            ->body('Le commerce a été supprimé avec succès.')
+            ->success()
+            ->duration(10000)
+            ->send();
+
+        if ($tenantFirst) {
+            $this->redirect('/app/shop/' . $tenantFirst->slug);
+        } else {
+            $this->redirect(RouteServiceProvider::CREATED_APP);
+        }
     }
+
 
     public function close()
     {

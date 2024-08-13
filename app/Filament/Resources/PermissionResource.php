@@ -7,6 +7,8 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ListPermissions;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager\RoleRelationManager;
+use App\Models\Role;
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -27,7 +29,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+
 
 class PermissionResource extends Resource
 {
@@ -188,9 +190,10 @@ class PermissionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-                BulkAction::make('Attach to roles')
+                BulkAction::make('Attacher les rôles')
                     ->action(function (Collection $records, array $data): void {
-                        Role::whereIn('id', $data['roles'])->each(function (Role $role) use ($records): void {
+                        Role::whereIn('id', $data['roles'])
+                            ->each(function (Role $role) use ($records): void {
                             $records->each(fn (Permission $permission) => $role->givePermissionTo($permission));
                         });
                     })
@@ -198,7 +201,13 @@ class PermissionResource extends Resource
                         Select::make('roles')
                             ->multiple()
                             ->label(__('filament-spatie-roles-permissions::filament-spatie.field.role'))
-                            ->options(Role::query()->pluck('name', 'id'))
+                            ->options(Role::query()
+                                ->where('shop_id', Filament::getTenant()->id)
+                                ->where(function ($query) {
+                                    $query->whereIn('name', [Role::ROLE_ADMIN, Role::ROLE_GERANT])
+                                        ->whereNotNull('shop_id');
+                                })
+                                ->pluck('name', 'id'))
                             ->required(),
                     ])->deselectRecordsAfterCompletion(),
             ])
