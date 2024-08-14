@@ -11,24 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('declination_products', function (Blueprint $table) {
             $table->id();
-            $table->string('nom')->index();
-            $table->longText('description')->nullable();
-            $table->string('reference')->unique()->index();
+            $table->string('reference');
             $table->decimal('stock', 5, 2)->nullable();
             $table->integer('stock_alert')->default(0);
-            $table->boolean('has_declination')->default(false);
-            $table->string('type')->nullable();
             $table->decimal('prix_ht', 10, 2)->nullable();
             $table->decimal('prix_ttc', 10, 2);
             $table->decimal('prix_buy', 10, 2)->nullable();
-            $table->decimal('tva', 5, 2);
             $table->foreignId('shop_id')->constrained('shops')->onDelete('cascade');
-            $table->foreignId('brand_id')->nullable()->constrained('brands')->nullOnDelete();
-            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->unique(['reference', 'shop_id']);
             $table->timestamps();
         });
@@ -39,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('declination_products');
     }
 };

@@ -64,9 +64,9 @@ class UserResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('shop')
+                Forms\Components\Select::make('shops')
                     ->label('Commerce autorisé')
-                    ->relationship(name: 'shop', titleAttribute: 'enseigne')
+                    ->relationship(name: 'shops', titleAttribute: 'enseigne')
                     ->columnSpanFull()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->multiple()
@@ -107,7 +107,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('shop.enseigne')
+                Tables\Columns\TextColumn::make('shops.enseigne')
                     ->badge()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->label('Commerce autorisé')
@@ -121,7 +121,7 @@ class UserResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('shop')
                     ->label('Commerce autorisé')
-                    ->relationship('shop', 'enseigne')
+                    ->relationship('shops', 'enseigne')
                     ->searchable()
                     ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
                     ->preload()

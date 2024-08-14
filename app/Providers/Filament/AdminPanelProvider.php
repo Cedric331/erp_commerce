@@ -136,7 +136,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotificationsPolling('300s')
             ->tenant(Shop::class, 'slug')
             ->tenantMenu(function () {
-                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shop()->count() > 1) {
+                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shops()->count() > 1) {
                     return true;
                 }
                 return false;

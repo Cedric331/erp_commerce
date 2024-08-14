@@ -17,6 +17,7 @@ class Product extends Model implements HasMedia
         'type',
         'description',
         'reference',
+        'has_declination',
         'stock',
         'stock_alert',
         'prix_buy',
@@ -32,32 +33,32 @@ class Product extends Model implements HasMedia
         'updated_by',
     ];
 
-    public function shop()
+    public function shop(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Shop::class);
     }
 
-    public function storage()
+    public function storage(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Storage::class);
     }
 
-    public function brand()
+    public function brand(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
 
-    public function category()
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function stocks()
+    public function stocks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Stock::class);
     }
 
-    public function ventes()
+    public function ventes(): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->stocks()
             ->whereHas('stockStatus', function ($query) {

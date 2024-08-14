@@ -68,7 +68,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
 
     public function hasTenant(): bool
     {
-        return $this->shop->count() > 0;
+        return $this->shops->count() > 0;
     }
 
     public function isAdministrateur(): bool
@@ -121,7 +121,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $relation->wherePivotNotNull('shop_id');
     }
 
-    public function shop(): BelongsToMany
+    public function shops(): BelongsToMany
     {
         return $this->belongsToMany(Shop::class, 'shop_users', 'user_id', 'shop_id');
     }
@@ -131,7 +131,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         if ($this->isAdministrateur()) {
             return Shop::all();
         } else {
-            return $this->shop;
+            return $this->shops;
         }
     }
 
@@ -141,7 +141,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         if ($this->isAdministrateurOrGerant()) {
             return true;
         }
-        return $this->shop->contains('id', $tenant->id);
+        return $this->shops->contains('id', $tenant->id);
     }
 
 }
