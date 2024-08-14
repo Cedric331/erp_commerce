@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('storage_id')->nullable();
-            $table->foreign('storage_id')->references('id')->on('storages');
+            $table->foreignId('storage_id')->nullable()->constrained('storages')->nullOnDelete();
+
         });
     }
 

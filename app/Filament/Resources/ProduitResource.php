@@ -26,6 +26,7 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -48,6 +49,11 @@ class ProduitResource extends Resource
     public static function isTenantSubscriptionRequired(Panel $panel): bool
     {
         return true;
+    }
+
+    public static function canReplicate(Product|\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return Auth::user()->isAdministrateurOrGerant() || Auth::user()->hasPermissionTo('Créer produit');
     }
 
     public static function getWidgets(): array
@@ -436,6 +442,15 @@ class ProduitResource extends Resource
                         ->color('purple')
                         ->url(fn ($record) => ProduitResource::getUrl('activities', ['record' => $record])),
                     Tables\Actions\EditAction::make(),
+                    Tables\Actions\ReplicateAction::make()
+                        ->hidden(!Auth::user()->isAdministrateurOrGerant() && !Auth::user()->hasPermissionTo('Créer produit'))
+                        ->beforeReplicaSaved(function (Model $replica, $record): void {
+                            $replica->reference = $record->reference . '-copie';
+                            $replica->stock = 0;
+                            $replica->stock_alert = 0;
+                        })
+                        ->label('Dupliquer'),
+
                     Tables\Actions\DeleteAction::make(),
 
                 ]),

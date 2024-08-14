@@ -6,6 +6,7 @@ use App\Filament\Resources\StockStatusResource\Pages;
 use App\Models\StockStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -89,11 +90,18 @@ class StockStatusResource extends Resource
                         else
                             return true;
                     }),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(function ($record) {
+                        if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE || $record->stocks_count > 0)
+                            return false;
+                        else
+                            return true;
+                    })
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+//                Tables\Actions\BulkActionGroup::make([
+//                    Tables\Actions\DeleteBulkAction::make(),
+//                ]),
             ]);
     }
 
