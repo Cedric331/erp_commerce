@@ -10,7 +10,7 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class BestCategoryChart extends ApexChartWidget
 {
-    protected static string $chartId = 'bestCategoryChart';
+    protected static ?string $chartId = 'bestCategoryChart';
 
     protected static ?string $heading = 'Meilleures catégories';
     protected static bool $deferLoading = true;

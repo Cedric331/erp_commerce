@@ -13,7 +13,7 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class ABestProductChart extends ApexChartWidget
 {
-    protected static string $chartId = 'bestProductChart';
+    protected static ?string $chartId = 'bestProductChart';
 
     protected static ?string $heading = 'Meilleurs produits';
     protected static bool $deferLoading = true;

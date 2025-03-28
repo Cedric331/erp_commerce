@@ -15,7 +15,7 @@ class ProfitabilityProduct extends ApexChartWidget
      *
      * @var string
      */
-    protected static string $chartId = 'profitabilityProduct';
+    protected static ?string $chartId = 'profitabilityProduct';
 
     /**
      * Widget Title

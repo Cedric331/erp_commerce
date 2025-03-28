@@ -34,19 +34,30 @@ class BannerSubscrib extends Component
     {
         if ($this->tenant) {
             $plan = 'default';
-            $priceId = config("cashier.plans.$plan.price_id");
-            $trialDays = config("cashier.plans.$plan.trial_days", false);
-            $collectTaxIds = config("cashier.plans.$plan.collect_tax_ids", false);
+            $priceId = config("cashier.plans.{$plan}.price_id");
 
-            return $this->tenant->newSubscription($plan, $priceId)
-                ->allowPromotionCodes()
-                ->when($trialDays, static fn (SubscriptionBuilder $subscription) => $subscription->trialDays($trialDays))
-                ->when($collectTaxIds, static fn (SubscriptionBuilder $subscription) => $subscription->collectTaxIds())
-                ->checkout([
-                    'success_url' => Dashboard::getUrl(),
-                    'cancel_url' => Dashboard::getUrl(),
-                ])
-                ->redirect();
+            if (empty($priceId)) {
+                throw new \Exception('Price ID not configured for plan: ' . $plan);
+            }
+
+            $trialDays = config("cashier.plans.{$plan}.trial_days", false);
+            $collectTaxIds = config("cashier.plans.{$plan}.collect_tax_ids", false);
+
+            $subscription = $this->tenant->newSubscription($plan, $priceId)
+                ->allowPromotionCodes();
+
+            if ($trialDays) {
+                $subscription->trialDays($trialDays);
+            }
+
+            if ($collectTaxIds) {
+                $subscription->collectTaxIds();
+            }
+
+            return $subscription->checkout([
+                'success_url' => Dashboard::getUrl(),
+                'cancel_url' => Dashboard::getUrl(),
+            ])->redirect();
         }
     }
 

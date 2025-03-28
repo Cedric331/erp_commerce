@@ -1,6 +1,6 @@
 <?php
 
-namespace Althinect\FilamentSpatieRolesPermissions\Resources;
+namespace App\Filament\Resources;
 
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\CreateRole;
 use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\EditRole;
