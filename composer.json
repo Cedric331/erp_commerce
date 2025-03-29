@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.10",
         "leandrocfe/filament-apex-charts": "^3.2",
         "maartenpaauw/filament-cashier-billing-provider": "*",
+        "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-medialibrary": "^11.12",
         "spatie/laravel-permission": "*",
         "swisnl/filament-backgrounds": "^1.1",

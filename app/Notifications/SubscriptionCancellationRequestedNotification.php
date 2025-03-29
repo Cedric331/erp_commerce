@@ -11,6 +11,7 @@ class SubscriptionCancellationRequestedNotification extends Notification
     use Queueable;
 
     protected $shop;
+
     protected $subscription;
 
     public function __construct($shop, $subscription)
@@ -28,9 +29,9 @@ class SubscriptionCancellationRequestedNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Demande de résiliation enregistrée')
-            ->greeting('Bonjour ' . $this->shop->name . ',')
+            ->greeting('Bonjour '.$this->shop->name.',')
             ->line('Nous avons bien pris en compte votre demande de résiliation.')
-            ->line('Votre abonnement restera actif jusqu\'au ' . $this->subscription->ends_at->format('d/m/Y') . '.')
+            ->line('Votre abonnement restera actif jusqu\'au '.$this->subscription->ends_at->format('d/m/Y').'.')
             ->line('Vous pouvez continuer à utiliser tous nos services jusqu\'à cette date.')
             ->action('Gérer votre abonnement', url('/app/billing'))
             ->line('Nous espérons vous revoir bientôt !');

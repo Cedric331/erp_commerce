@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
-use Stripe\Stripe;
 
 class ProfileController extends Controller
 {
@@ -69,7 +68,7 @@ class ProfileController extends Controller
 
         if ($tenant) {
             if ($tenant->subscribed('default')) {
-                 $tenant->subscription('default')->cancelNow();
+                $tenant->subscription('default')->cancelNow();
             }
             $tenant->delete();
 

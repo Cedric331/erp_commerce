@@ -23,5 +23,4 @@ class GeneratePermissions extends Command
 
         $this->info('Permissions generated successfully.');
     }
-
 }

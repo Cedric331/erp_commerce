@@ -2,10 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Shop;
 use App\Models\Permission;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -20,13 +17,13 @@ class PermissionSeeder extends Seeder
 
         $role = Role::create([
             'name' => \App\Models\Role::ROLE_GERANT,
-            'guard_name' => 'web'
+            'guard_name' => 'web',
         ]);
 
         foreach ($permissions as $permission) {
-           \Spatie\Permission\Models\Permission::create([
+            \Spatie\Permission\Models\Permission::create([
                 'name' => $permission,
-                'guard_name' => 'web'
+                'guard_name' => 'web',
             ]);
         }
 

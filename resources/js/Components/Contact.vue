@@ -61,6 +61,7 @@
 <script>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3'
+import { toast } from 'vue3-toastify'
 
 export default {
     setup() {
@@ -79,7 +80,12 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     form.reset()
+                    // Ajouter un feedback visuel
+                    toast.success('Message envoyé avec succès')
                 },
+                onError: () => {
+                    toast.error('Erreur lors de l\'envoi du message')
+                }
             })
         };
 

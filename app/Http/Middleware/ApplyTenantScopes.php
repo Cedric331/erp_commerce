@@ -2,19 +2,18 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Role;
 use App\Models\Stock;
 use App\Models\Storage;
 use Closure;
 use Filament\Facades\Filament;
-use Illuminate\Http\Request;
-use App\Models\Role;
-use Laravel\Cashier\Billable;
-use Laravel\Cashier\Cashier;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 class ApplyTenantScopes
 {
     /**

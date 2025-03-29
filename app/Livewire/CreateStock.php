@@ -8,12 +8,8 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockStatus;
 use Carbon\Carbon;
-use Carbon\CarbonInterface;
-use Filament\Notifications\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -21,6 +17,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Panel;
 use Illuminate\Support\Facades\Auth;
@@ -62,13 +59,13 @@ class CreateStock extends Component implements HasForms
 
         $this->data['shop_id'] = Filament::getTenant()->id;
 
-        if ($this->data['scheduled_date'] === "") {
+        if ($this->data['scheduled_date'] === '') {
             $this->data['scheduled_date'] = null;
         }
 
-       $stock = Stock::create($this->data);
+        $stock = Stock::create($this->data);
 
-        if (!$this->data['scheduled_date']) {
+        if (! $this->data['scheduled_date']) {
             $type = StockStatus::find($this->data['stock_status_id'])->type;
 
             $product = Product::find($this->data['product_id']);
@@ -86,10 +83,10 @@ class CreateStock extends Component implements HasForms
             ]);
 
             activity('Produit')
-                ->event('Stock modifié - ' . StockStatus::find($this->data['stock_status_id'])->name)
+                ->event('Stock modifié - '.StockStatus::find($this->data['stock_status_id'])->name)
                 ->causedBy(Auth::user())
                 ->performedOn($product)
-                ->log('Le stock a été modifié avec succès. Le stock du produit est maintenant de ' . $product->stock . '.');
+                ->log('Le stock a été modifié avec succès. Le stock du produit est maintenant de '.$product->stock.'.');
         }
 
         Notification::make()
@@ -100,14 +97,15 @@ class CreateStock extends Component implements HasForms
 
     public function form(Form $form): Form
     {
-        if (!$this->showForm) {
+        if (! $this->showForm) {
             $this->showFormNotShown();
         }
+
         return $form
             ->schema([
                 Select::make('product_id')
                     ->label('Sélectionner un produit')
-                    ->options(Product::where('shop_id', Filament::getTenant()->id)->pluck('nom', 'id'))
+                    ->options(Product::where('shop_id', Filament::getTenant()->id)->pluck('name', 'id'))
                     ->searchable()
                     ->required()
                     ->optionsLimit(5)
@@ -134,15 +132,15 @@ class CreateStock extends Component implements HasForms
                     ->optionsLimit(5)
                     ->live(true)
                     ->hint(function (Get $get) {
-                      $status = StockStatus::find($get('stock_status_id'));
-                      if (!$status) {
-                          return 'Sélectionnez un statut pour obtenir des informations.';
-                      }
-                      if ($status->type === 'entrée') {
+                        $status = StockStatus::find($get('stock_status_id'));
+                        if (! $status) {
+                            return 'Sélectionnez un statut pour obtenir des informations.';
+                        }
+                        if ($status->type === 'entrée') {
                             return 'Le stock sera augmenté de la quantité indiquée.';
-                      } else {
+                        } else {
                             return 'Le stock sera diminué de la quantité indiquée.';
-                      }
+                        }
                     })
                     ->searchDebounce(200)
                     ->loadingMessage('Recherche des statuts...'),

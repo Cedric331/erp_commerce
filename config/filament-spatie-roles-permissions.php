@@ -53,7 +53,7 @@ return [
 
     'sort' => [
         'role_navigation' => 10,
-        'permission_navigation' => 10
+        'permission_navigation' => 10,
     ],
 
     'generator' => [
@@ -106,7 +106,7 @@ return [
          */
         'model_directories' => [
             app_path('Models'),
-            //app_path('Domains/Forum')
+            // app_path('Domains/Forum')
         ],
 
         /*
@@ -131,7 +131,7 @@ return [
          * Define any other permission that should be synced with the DB
          */
         'custom_permissions' => [
-            //'view-log'
+            // 'view-log'
         ],
 
         'user_model' => \App\Models\User::class,

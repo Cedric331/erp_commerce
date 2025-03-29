@@ -11,29 +11,32 @@ use Carbon\Carbon;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class StockResource extends Resource
 {
     protected static ?string $model = Stock::class;
+
     protected static bool $isScopedToTenant = true;
+
     protected static ?string $navigationIcon = 'heroicon-o-archive-box-arrow-down';
 
     protected static ?string $label = 'Historique du stock';
+
     protected static ?string $pluralModelLabel = 'Historique des stocks';
+
     protected static ?string $slug = 'historique-stocks';
+
     protected static ?string $navigationGroup = 'Gestion des stocks';
+
     protected static ?int $navigationSort = 1;
 
     public static function isTenantSubscriptionRequired(Panel $panel): bool
@@ -50,7 +53,7 @@ class StockResource extends Resource
                     ->options(
                         Product::where('shop_id', Filament::getTenant()->id)
                             ->get()
-                            ->mapWithKeys(fn ($product) => [$product->id => $product->nom])
+                            ->mapWithKeys(fn ($product) => [$product->id => $product->name])
                             ->toArray()
                     )
                     ->required(),
@@ -61,7 +64,7 @@ class StockResource extends Resource
                 Forms\Components\Select::make('stock_status_id')
                     ->label('Statut')
                     ->options(
-                       StockStatus::where('shop_id', Filament::getTenant()->id)
+                        StockStatus::where('shop_id', Filament::getTenant()->id)
                             ->get()
                             ->mapWithKeys(fn ($stockStatus) => [$stockStatus->id => $stockStatus->name])
                             ->toArray()
@@ -86,7 +89,7 @@ class StockResource extends Resource
                             return $record->date_process->format('d/m/Y');
                         }
 
-                        if (!empty($record->scheduled_date)) {
+                        if (! empty($record->scheduled_date)) {
                             $date = Carbon::parse($record->scheduled_date);
                             if ($date->isFuture()) {
                                 return 'En attente';
@@ -97,7 +100,7 @@ class StockResource extends Resource
                             return $record->created_at->format('d/m/Y');
                         }
                     }),
-                Tables\Columns\TextColumn::make('product.nom')
+                Tables\Columns\TextColumn::make('product.name')
                     ->searchable()
                     ->sortable()
                     ->label('Produit'),
@@ -121,26 +124,28 @@ class StockResource extends Resource
             ->filters([
                 SelectFilter::make('quantity')
                     ->label('Produit')
-                    ->relationship('product', 'nom')
+                    ->relationship('product', 'name')
                     ->preload()
                     ->options(
-                        fn (Builder $query) => $query->pluck('nom', 'id')->all()
+                        fn (Builder $query) => $query->pluck('name', 'id')->all()
                     ),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->visible(function ($record) {
-                        if ($record->scheduled_date === null)
+                        if ($record->scheduled_date === null) {
                             return false;
-                        else
-                        return $record->scheduled_date->isFuture();
+                        } else {
+                            return $record->scheduled_date->isFuture();
+                        }
                     }),
                 Tables\Actions\DeleteAction::make()
                     ->visible(function ($record) {
-                        if ($record->scheduled_date === null)
+                        if ($record->scheduled_date === null) {
                             return false;
-                        else
+                        } else {
                             return $record->scheduled_date->isFuture();
+                        }
                     }),
             ])
             ->headerActions([
@@ -156,15 +161,15 @@ class StockResource extends Resource
                         ExportFormat::Csv,
                     ])
                     ->modifyQueryUsing(fn (Builder $query) => $query->where('shop_id', Filament::getTenant()->id))
-                    ->hidden( !Auth::user()->hasPermissionTo('Exporter des données') && !Auth::user()->isAdministrateurOrGerant())
-                    ->exporter(StockExporter::class)
+                    ->hidden(! Auth::user()->hasPermissionTo('Exporter des données') && ! Auth::user()->isAdministrateurOrGerant())
+                    ->exporter(StockExporter::class),
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->orderBy('created_at', 'desc'))
             ->bulkActions([
-    //                Tables\Actions\BulkActionGroup::make([
-    //                    Tables\Actions\DeleteBulkAction::make(),
-    //                ]),
-                ]);
+                //                Tables\Actions\BulkActionGroup::make([
+                //                    Tables\Actions\DeleteBulkAction::make(),
+                //                ]),
+            ]);
     }
 
     public static function getRelations(): array

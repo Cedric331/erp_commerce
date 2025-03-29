@@ -6,7 +6,6 @@ use App\Filament\Resources\StockStatusResource\Pages;
 use App\Models\StockStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -15,12 +14,19 @@ use Filament\Tables\Table;
 class StockStatusResource extends Resource
 {
     protected static ?string $model = StockStatus::class;
+
     protected static bool $isScopedToTenant = true;
+
     protected static ?string $navigationIcon = 'heroicon-o-cog';
+
     protected static ?string $label = 'Statut des stocks';
+
     protected static ?string $pluralModelLabel = 'Statut des stocks';
+
     protected static ?string $slug = 'stock-status';
+
     protected static ?string $navigationGroup = 'Gestion des stocks';
+
     protected static ?int $navigationSort = 2;
 
     public static function isTenantSubscriptionRequired(Panel $panel): bool
@@ -66,6 +72,7 @@ class StockStatusResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('stocks_count')
                     ->label('Nombre de fois utilisé')
+                    ->counts('stocks')
                     ->default(0)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -85,23 +92,25 @@ class StockStatusResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->visible(function ($record) {
-                        if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE)
+                        if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE) {
                             return false;
-                        else
+                        } else {
                             return true;
+                        }
                     }),
                 Tables\Actions\DeleteAction::make()
                     ->visible(function ($record) {
-                        if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE || $record->stocks_count > 0)
+                        if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE || $record->stocks_count > 0) {
                             return false;
-                        else
+                        } else {
                             return true;
-                    })
+                        }
+                    }),
             ])
             ->bulkActions([
-//                Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
-//                ]),
+                //                Tables\Actions\BulkActionGroup::make([
+                //                    Tables\Actions\DeleteBulkAction::make(),
+                //                ]),
             ]);
     }
 

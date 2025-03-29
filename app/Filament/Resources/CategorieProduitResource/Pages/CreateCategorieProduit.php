@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\CategorieProduitResource\Pages;
 
 use App\Filament\Resources\CategorieProduitResource;
-use Filament\Actions;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 

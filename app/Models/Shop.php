@@ -14,7 +14,7 @@ use Spatie\Permission\Models\Role;
 
 class Shop extends Model implements HasCurrentTenantLabel
 {
-    use HasFactory, HasName, Billable, Notifiable;
+    use Billable, HasFactory, HasName, Notifiable;
 
     protected $fillable = [
         'enseigne',
@@ -29,7 +29,6 @@ class Shop extends Model implements HasCurrentTenantLabel
         'pays',
         'user_id',
     ];
-
 
     public function getCurrentTenantLabel(): string
     {
@@ -46,54 +45,53 @@ class Shop extends Model implements HasCurrentTenantLabel
         return strtolower($this->enseigne);
     }
 
-    public function users()
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, 'shop_users', 'shop_id', 'user_id');
     }
 
-    public function products()
+    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Product::class);
     }
 
-    public function categories()
+    public function categories(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Category::class);
     }
 
-    public function stocks()
+    public function stocks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Stock::class);
     }
 
-    public function brand()
+    public function brands(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Brand::class);
     }
 
-    public function stockStatuses()
+    public function stockStatuses(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(StockStatus::class);
     }
 
-    public function media()
+    public function media(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Media::class, 'model');
     }
 
-    public function roles()
+    public function roles(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Role::class);
     }
 
-    public function permissions()
+    public function permissions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Permission::class);
     }
 
-    public function storages()
+    public function storages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Storage::class);
     }
-
 }

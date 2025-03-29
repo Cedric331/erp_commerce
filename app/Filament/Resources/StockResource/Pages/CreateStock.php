@@ -5,9 +5,7 @@ namespace App\Filament\Resources\StockResource\Pages;
 use App\Filament\Resources\StockResource;
 use App\Models\Product;
 use App\Models\StockStatus;
-use Filament\Actions;
 use Filament\Facades\Filament;
-use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,20 +21,20 @@ class CreateStock extends CreateRecord
     public function mutateFormDataBeforeCreate(array $data): array
     {
         $this->data['shop_id'] = Filament::getTenant()->id;
-        if ($this->data['scheduled_date'] === "") {
+        if ($this->data['scheduled_date'] === '') {
             $this->data['scheduled_date'] = null;
         }
 
-        $product =  Product::find($this->data['product_id']);
-        $this->data['prix_product_ht'] = $product->prix_ht;
-        $this->data['prix_product_buy'] = $product->prix_buy;
+        $product = Product::find($this->data['product_id']);
+        $this->data['prix_product_ht'] = $product->price_ht;
+        $this->data['prix_product_buy'] = $product->price_buy;
 
         return $data;
     }
 
     public function afterCreate()
     {
-        if (!$this->data['scheduled_date']) {
+        if (! $this->data['scheduled_date']) {
             $type = StockStatus::find($this->data['stock_status_id'])->type;
             $product = Product::find($this->data['product_id']);
             if ($type === StockStatus::TYPE_ENTREE) {
@@ -49,10 +47,10 @@ class CreateStock extends CreateRecord
                 ]);
             }
             activity('Produit')
-                ->event('Stock modifié - ' . StockStatus::find($this->data['stock_status_id'])->name)
+                ->event('Stock modifié - '.StockStatus::find($this->data['stock_status_id'])->name)
                 ->causedBy(Auth::user())
                 ->performedOn($product)
-                ->log('Le stock a été modifié avec succès. Le stock du produit est maintenant de ' . $product->stock . '.');
+                ->log('Le stock a été modifié avec succès. Le stock du produit est maintenant de '.$product->stock.'.');
         }
     }
 }

@@ -18,6 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/app';
+
     public const CREATED_APP = '/app/create-commerce';
 
     /**
@@ -27,6 +28,21 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('contact', function (Request $request) {
+            return Limit::perMinutes(5, 3)
+                ->by($request->user()?->id ?: $request->ip());
+        });
+
+        RateLimiter::for('support', function (Request $request) {
+            return Limit::perMinutes(5, 3)
+                ->by($request->user()->id);
+        });
+
+        RateLimiter::for('filament::login', function (Request $request) {
+            return Limit::perMinutes(5, 5)
+                ->by($request->input('email').$request->ip());
         });
 
         $this->routes(function () {

@@ -6,8 +6,6 @@ use App\Http\Controllers\StripeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Cashier\Http\Controllers\PaymentController;
-use Laravel\Cashier\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,19 +20,19 @@ use Laravel\Cashier\Http\Controllers\WebhookController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'isAuth' => \Illuminate\Support\Facades\Auth::check()
+        'isAuth' => \Illuminate\Support\Facades\Auth::check(),
     ]);
 })->name('app');
 
 Route::get('/cgv', function () {
     return Inertia::render('Cgv', [
-        'isAuth' => \Illuminate\Support\Facades\Auth::check()
+        'isAuth' => \Illuminate\Support\Facades\Auth::check(),
     ]);
 })->name('cgv');
 
 Route::get('/mentions-legales', function () {
     return Inertia::render('LegalInformation', [
-        'isAuth' => \Illuminate\Support\Facades\Auth::check()
+        'isAuth' => \Illuminate\Support\Facades\Auth::check(),
     ]);
 })->name('legal.information');
 
@@ -48,4 +46,3 @@ Route::post('/contact', [ContactController::class, 'sendMessage'])->name('contac
 
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 Route::get('/complete-payment/{paymentIntent}', [StripeController::class, 'completePayment'])->name('complete.payment');
-

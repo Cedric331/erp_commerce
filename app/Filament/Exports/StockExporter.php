@@ -33,15 +33,16 @@ class StockExporter extends Exporter
         return [
             ExportColumn::make('scheduled_date')
                 ->state(function (Stock $record) {
-                    if (!empty($recordscheduled_date)) {
+                    if (! empty($recordscheduled_date)) {
                         $date = Carbon::parse($record->scheduled_date);
+
                         return $date->format('d/m/Y');
                     } else {
                         return $record->created_at->format('d/m/Y');
                     }
                 })
                 ->label('Date de traitement'),
-            ExportColumn::make('produit.nom')->label('Nom du produit'),
+            ExportColumn::make('produit.name')->label('Nom du produit'),
             ExportColumn::make('stockStatus.name')->label('Statut du stock'),
             ExportColumn::make('stockStatus.type')->label('Type du stock'),
             ExportColumn::make('quantity')->label('Quantité'),
@@ -51,10 +52,10 @@ class StockExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'L\'historique de stock : ' . number_format($export->successful_rows) . ' ' . str('ligne')->plural($export->successful_rows) . ' exporté.';
+        $body = 'L\'historique de stock : '.number_format($export->successful_rows).' '.str('ligne')->plural($export->successful_rows).' exporté.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . number_format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' échec de l\'import.';
+            $body .= ' '.number_format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' échec de l\'import.';
         }
 
         return $body;

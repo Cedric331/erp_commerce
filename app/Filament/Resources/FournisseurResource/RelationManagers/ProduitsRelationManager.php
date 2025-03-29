@@ -10,8 +10,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Validation\Rule;
 
 class ProduitsRelationManager extends RelationManager
@@ -20,14 +18,13 @@ class ProduitsRelationManager extends RelationManager
 
     protected static ?string $title = 'Produit du fournisseur';
 
-
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make('Informations de base')
                     ->schema([
-                        Forms\Components\TextInput::make('nom')
+                        Forms\Components\TextInput::make('name')
                             ->label('Nom du produit')
                             ->unique(ignoreRecord: true)
                             ->required()
@@ -72,6 +69,7 @@ class ProduitsRelationManager extends RelationManager
                             ->createOptionAction(function (Action $action) {
                                 $action->mutateFormDataUsing(function (array $data) {
                                     $data['shop_id'] = Filament::getTenant()->id;
+
                                     return $data;
                                 });
                             }),
@@ -93,6 +91,7 @@ class ProduitsRelationManager extends RelationManager
                             ->createOptionAction(function (Action $action) {
                                 $action->mutateFormDataUsing(function (array $data) {
                                     $data['shop_id'] = Filament::getTenant()->id;
+
                                     return $data;
                                 });
                             }),
@@ -123,7 +122,7 @@ class ProduitsRelationManager extends RelationManager
                 // Section: Détails financiers
                 Forms\Components\Section::make('Détails financiers')
                     ->schema([
-                        Forms\Components\TextInput::make('prix_ht')
+                        Forms\Components\TextInput::make('price_ht')
                             ->label('Prix HT')
                             ->suffixIcon('heroicon-o-currency-euro')
                             ->required()
@@ -132,11 +131,11 @@ class ProduitsRelationManager extends RelationManager
                                 $prixHT = (float) $state;
                                 $tva = (float) $get('tva') / 100;
                                 $prixTTC = $prixHT * (1 + $tva);
-                                $set('prix_ttc', number_format($prixTTC, 2, '.', ''));
+                                $set('price_ttc', number_format($prixTTC, 2, '.', ''));
                             })
                             ->numeric('decimal', 2),
 
-                        Forms\Components\TextInput::make('prix_ttc')
+                        Forms\Components\TextInput::make('price_ttc')
                             ->label('Prix TTC')
                             ->suffixIcon('heroicon-o-currency-euro')
                             ->required()
@@ -146,7 +145,7 @@ class ProduitsRelationManager extends RelationManager
                                 $prixTTC = (float) $state;
                                 $tva = (float) $get('tva') / 100;
                                 $prixHT = $prixTTC / (1 + $tva);
-                                $set('prix_ht', number_format($prixHT, 2, '.', ''));
+                                $set('price_ht', number_format($prixHT, 2, '.', ''));
                             })
                             ->numeric('decimal', 2),
 
@@ -158,9 +157,9 @@ class ProduitsRelationManager extends RelationManager
                             ->live('input', debounce: 200)
                             ->afterStateUpdated(function (callable $set, callable $get, $state) {
                                 $tva = (float) $state / 100;
-                                $prixHT = (float) $get('prix_ht');
+                                $prixHT = (float) $get('price_ht');
                                 $prixTTC = $prixHT * (1 + $tva);
-                                $set('prix_ttc', number_format($prixTTC, 2, '.', ''));
+                                $set('price_ttc', number_format($prixTTC, 2, '.', ''));
                             })
                             ->numeric('decimal', 2),
                     ]),
@@ -170,9 +169,9 @@ class ProduitsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('nom')
+            ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('nom')
+                Tables\Columns\TextColumn::make('name')
                     ->label('Nom du produit')
                     ->sortable()
                     ->searchable(),
@@ -184,14 +183,14 @@ class ProduitsRelationManager extends RelationManager
                     ->label('Stock')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('prix_ht')
+                Tables\Columns\TextColumn::make('price_ht')
                     ->label('Prix HT')
                     ->icon('heroicon-o-currency-euro')
                     ->iconPosition(IconPosition::After)
                     ->iconColor('primary')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('prix_ttc')
+                Tables\Columns\TextColumn::make('price_ttc')
                     ->label('Prix TTC')
                     ->icon('heroicon-o-currency-euro')
                     ->iconPosition(IconPosition::After)
@@ -208,7 +207,7 @@ class ProduitsRelationManager extends RelationManager
                     ->iconPosition(IconPosition::After)
                     ->iconColor('primary')
                     ->default(function ($record) {
-                        return number_format($record->stock * $record->prix_ht, 2, '.', '');
+                        return number_format($record->stock * $record->price_ht, 2, '.', '');
                     })
                     ->numeric()
                     ->sortable(),
@@ -217,16 +216,16 @@ class ProduitsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-             //   Tables\Actions\CreateAction::make(),
+                //   Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                  Tables\Actions\EditAction::make(),
-//                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make(),
+                //                Tables\Actions\DeleteAction::make(),
             ]);
-//            ->bulkActions([
-//                Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
-//                ]),
-//            ]);
+        //            ->bulkActions([
+        //                Tables\Actions\BulkActionGroup::make([
+        //                    Tables\Actions\DeleteBulkAction::make(),
+        //                ]),
+        //            ]);
     }
 }

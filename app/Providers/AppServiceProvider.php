@@ -15,8 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-//        Cashier::keepPastDueSubscriptionsActive();
-//        Cashier::keepIncompleteSubscriptionsActive();
+        //        Cashier::keepPastDueSubscriptionsActive();
+        //        Cashier::keepIncompleteSubscriptionsActive();
     }
 
     /**
@@ -26,9 +26,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Cashier::useCustomerModel(Shop::class);
 
-//        FilamentAsset::register([
-//            Js::make('stripe-script', __DIR__ . '/../../resources/js/stripe.js'),
-//        ]);
+        //        FilamentAsset::register([
+        //            Js::make('stripe-script', __DIR__ . '/../../resources/js/stripe.js'),
+        //        ]);
         // Faire la commande php artisan filament:assets pour générer le fichier
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -12,6 +11,7 @@ class PaymentSuccessNotification extends Notification
     use Queueable;
 
     protected $shop;
+
     protected $subscription;
 
     /**
@@ -40,7 +40,7 @@ class PaymentSuccessNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Paiement réussi : Votre abonnement est confirmé')
-            ->greeting('Bonjour ' . $this->shop->name . ',')
+            ->greeting('Bonjour '.$this->shop->name.',')
             ->line('Nous vous confirmons que votre paiement pour l\'abonnement a été effectué avec succès.')
             ->line('Votre abonnement est maintenant actif.')
             ->action('Voir votre compte', url('/app'))

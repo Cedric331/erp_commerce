@@ -11,21 +11,25 @@ use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class FournisseurResource extends Resource
 {
     protected static ?string $model = Brand::class;
 
     protected static bool $isScopedToTenant = true;
+
     protected static ?string $navigationIcon = 'heroicon-o-truck';
 
     protected static ?string $label = 'Fournisseur';
+
     protected static ?string $pluralModelLabel = 'Fournisseurs';
+
     protected static ?string $slug = 'fournisseurs';
+
     protected static ?string $navigationGroup = 'Gestion des produits';
+
     protected static ?int $navigationSort = 2;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function isTenantSubscriptionRequired(Panel $panel): bool

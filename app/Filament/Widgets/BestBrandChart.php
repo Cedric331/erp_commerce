@@ -12,16 +12,13 @@ class BestBrandChart extends ApexChartWidget
     protected static ?string $chartId = 'bestSupplierChart';
 
     protected static ?string $heading = 'Meilleurs fournisseurs';
+
     protected static bool $deferLoading = true;
 
     protected static ?string $loadingIndicator = 'Chargement des données...';
 
-
-
     /**
      * Prépare les données pour le graphique ApexCharts.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
@@ -35,21 +32,21 @@ class BestBrandChart extends ApexChartWidget
             }])
             ->get()
             ->map(function ($brand) {
-                $totalVentes = $brand->products->flatMap(function ($product) {
+                $totalSales = $brand->products->flatMap(function ($product) {
                     return $product->stocks->pluck('quantity');
                 })->sum();
 
                 return [
                     'name' => $brand->name,
-                    'totalVentes' => $totalVentes,
+                    'totalSales' => $totalSales,
                 ];
             })
-            ->sortByDesc('totalVentes')
+            ->sortByDesc('totalSales')
             ->take(5)
             ->values();
 
         $labels = $brands->pluck('name')->toArray();
-        $ventesTotales = $brands->pluck('totalVentes')->toArray();
+        $salesTotals = $brands->pluck('totalSales')->toArray();
 
         return [
             'chart' => [
@@ -59,7 +56,7 @@ class BestBrandChart extends ApexChartWidget
             'series' => [
                 [
                     'name' => 'Ventes Totales',
-                    'data' => $ventesTotales,
+                    'data' => $salesTotals,
                 ],
             ],
             'xaxis' => [

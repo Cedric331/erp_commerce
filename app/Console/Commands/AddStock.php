@@ -39,7 +39,7 @@ class AddStock extends Command
 
             if ($type === StockStatus::TYPE_ENTREE) {
                 $stock->product->increment('stock', $stock->quantity);
-            } else if ($type === StockStatus::TYPE_SORTIE) {
+            } elseif ($type === StockStatus::TYPE_SORTIE) {
                 $stock->product->decrement('stock', $stock->quantity);
             }
 
@@ -47,7 +47,7 @@ class AddStock extends Command
                 ->event('Stock modifié')
                 ->causedBy($stock->user)
                 ->performedOn($stock)
-                ->log('Le stock a été modifié avec succès le '. date('d/m/Y', strtotime(now())) .'. Le stock du produit est maintenant de ' . $stock->product->stock . '.');
+                ->log('Le stock a été modifié avec succès le '.date('d/m/Y', strtotime(now())).'. Le stock du produit est maintenant de '.$stock->product->stock.'.');
 
             $stock->update([
                 'scheduled_date' => null,
@@ -62,8 +62,8 @@ class AddStock extends Command
             });
 
             Notification::make()
-                ->title('Stock mis à jour pour le produit ' . $stock->product->nom . ' - ' . $stock->shop->enseigne)
-                ->body('Le stock du produit ' . $stock->product->nom . ' sur le commerce ' . $stock->shop->enseigne . ' a été mis à jour. Il est maintenant de ' . $stock->product->stock . ' unités.')
+                ->title('Stock mis à jour pour le produit '.$stock->product->name.' - '.$stock->shop->enseigne)
+                ->body('Le stock du produit '.$stock->product->name.' sur le commerce '.$stock->shop->enseigne.' a été mis à jour. Il est maintenant de '.$stock->product->stock.' unités.')
                 ->sendToDatabase($recipient);
         }
     }

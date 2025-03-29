@@ -11,6 +11,7 @@ class SubscriptionRenewedNotification extends Notification
     use Queueable;
 
     protected $shop;
+
     protected $subscription;
 
     public function __construct($shop, $subscription)
@@ -29,9 +30,9 @@ class SubscriptionRenewedNotification extends Notification
         return (new MailMessage)
             ->success()
             ->subject('Renouvellement de votre abonnement')
-            ->greeting('Bonjour ' . $this->shop->name . ',')
+            ->greeting('Bonjour '.$this->shop->name.',')
             ->line('Votre abonnement a été renouvelé avec succès.')
-            ->line('Le prochain renouvellement aura lieu le ' . $this->subscription->ends_at->format('d/m/Y') . '.')
+            ->line('Le prochain renouvellement aura lieu le '.$this->subscription->ends_at->format('d/m/Y').'.')
             ->action('Voir les détails', url('/app/billing'))
             ->line('Merci de votre confiance !');
     }

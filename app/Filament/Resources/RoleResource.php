@@ -19,18 +19,18 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Validation\Rules\Unique;
-use Spatie\Permission\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rules\Unique;
+use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
-
     public static function isTenantSubscriptionRequired(Panel $panel): bool
     {
         return true;
     }
+
     public static function isScopedToTenant(): bool
     {
         return config('filament-spatie-roles-permissions.scope_to_tenant', true);
@@ -38,7 +38,7 @@ class RoleResource extends Resource
 
     public static function getNavigationIcon(): ?string
     {
-        return  config('filament-spatie-roles-permissions.icons.role_navigation');
+        return config('filament-spatie-roles-permissions.icons.role_navigation');
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -63,7 +63,7 @@ class RoleResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        return  config('filament-spatie-roles-permissions.sort.role_navigation');
+        return config('filament-spatie-roles-permissions.sort.role_navigation');
     }
 
     public static function getPluralLabel(): string
@@ -85,10 +85,11 @@ class RoleResource extends Resource
                                     ->columnSpanFull()
                                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
                                         // If using teams and Tenancy, ensure uniqueness against current tenant
-                                        if(config('permission.teams', false) && Filament::hasTenancy()) {
+                                        if (config('permission.teams', false) && Filament::hasTenancy()) {
                                             // Check uniqueness against current user/team
                                             $rule->where(config('permission.column_names.team_foreign_key', 'team_id'), Filament::getTenant()->id);
                                         }
+
                                         return $rule;
                                     }),
 

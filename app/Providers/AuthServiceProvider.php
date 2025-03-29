@@ -3,28 +3,26 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
-use App\Models\Category;
-use App\Models\Shop;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Permission;
 use App\Models\Product;
 use App\Models\Role;
+use App\Models\Shop;
 use App\Models\Stock;
 use App\Models\StockStatus;
 use App\Models\Storage;
 use App\Models\User;
-use App\Policies\CategoryPolicy;
-use App\Policies\ShopPolicy;
-use App\Policies\ExportPolicy;
 use App\Policies\BrandPolicy;
+use App\Policies\CategoryPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
+use App\Policies\ShopPolicy;
 use App\Policies\StockPolicy;
 use App\Policies\StockStatusPolicy;
 use App\Policies\StoragePolicy;
 use App\Policies\UserPolicy;
-use Filament\Actions\Exports\Models\Export;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

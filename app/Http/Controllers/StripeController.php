@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use App\Notifications\PaymentSuccessNotification;
 use App\Notifications\SubscriptionCancellationRequestedNotification;
-use App\Notifications\SubscriptionRenewedNotification;
 use App\Notifications\SubscriptionCancelledNotification;
+use App\Notifications\SubscriptionRenewedNotification;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
 class StripeController extends CashierController
@@ -19,7 +19,9 @@ class StripeController extends CashierController
         $customerStripeId = $subscription['customer'];
         $shop = Shop::where('stripe_id', $customerStripeId)->first();
 
-        if (!$shop) return $response;
+        if (! $shop) {
+            return $response;
+        }
 
         $shopSubscription = $shop->subscriptions()->where('stripe_id', $subscription['id'])->first();
 
@@ -39,11 +41,15 @@ class StripeController extends CashierController
         $customerStripeId = $subscription['customer'];
         $shop = Shop::where('stripe_id', $customerStripeId)->first();
 
-        if (!$shop) return $response;
+        if (! $shop) {
+            return $response;
+        }
 
         $shopSubscription = $shop->subscriptions()->where('stripe_id', $subscription['id'])->first();
 
-        if (!$shopSubscription) return $response;
+        if (! $shopSubscription) {
+            return $response;
+        }
 
         // Cas de demande d'annulation
         if (
@@ -65,6 +71,7 @@ class StripeController extends CashierController
         if ($subscription['status'] === 'canceled') {
             $shopSubscription->markAsCanceled();
             $shop->notify(new SubscriptionCancelledNotification($shop, $shopSubscription));
+
             return $response;
         }
 
@@ -72,7 +79,7 @@ class StripeController extends CashierController
         if (
             $subscription['status'] === 'active' &&
             isset($subscription['current_period_end']) &&
-            (!isset($previousAttributes['current_period_end']) ||
+            (! isset($previousAttributes['current_period_end']) ||
                 $previousAttributes['current_period_end'] !== $subscription['current_period_end'])
         ) {
             $shop->notify(new SubscriptionRenewedNotification($shop, $shopSubscription));
@@ -89,7 +96,9 @@ class StripeController extends CashierController
         $customerStripeId = $subscription['customer'];
         $shop = Shop::where('stripe_id', $customerStripeId)->first();
 
-        if (!$shop) return $response;
+        if (! $shop) {
+            return $response;
+        }
 
         $shopSubscription = $shop->subscriptions()->where('stripe_id', $subscription['id'])->first();
 

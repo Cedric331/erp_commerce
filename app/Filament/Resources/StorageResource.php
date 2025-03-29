@@ -3,28 +3,31 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\StorageResource\Pages;
-use App\Filament\Resources\StorageResource\RelationManagers;
 use App\Models\Storage;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StorageResource extends Resource
 {
     protected static ?string $model = Storage::class;
 
     protected static bool $isScopedToTenant = true;
+
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     protected static ?string $label = 'Zone de stockage';
+
     protected static ?string $pluralModelLabel = 'Zones de stockage';
+
     protected static ?string $slug = 'stockage';
+
     protected static ?string $navigationGroup = 'Gestion des produits';
+
     protected static ?int $navigationSort = 3;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form

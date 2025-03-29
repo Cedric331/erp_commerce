@@ -8,10 +8,9 @@ use App\Filament\Resources\Tenancy\ShopEdit;
 use App\Filament\Resources\Tenancy\ShopRegister;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CheckTenantOwnership;
-use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
+use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\Shop;
-use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -53,16 +52,16 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('5rem')
             ->viteTheme('resources/css/filament/app/theme.css')
             ->unsavedChangesAlerts()
-            ->tenantBillingProvider(new BillingProvider())
+            ->tenantBillingProvider(new BillingProvider)
 //            ->requiresTenantSubscription()
             ->tenantMenuItems([
                 'billing' => MenuItem::make()
-                    ->visible(fn (): bool => auth()->user()->isAdministrateurOrGerant())
+                    ->visible(fn (): bool => auth()->user()->isAdministrateurOrGerant()),
             ])
             ->userMenuItems([
                 MenuItem::make()
                     ->visible(function (): bool {
-                        if (Route::currentRouteName() === 'filament.app.tenant.registration' || !auth()->user()->hasTenant()) {
+                        if (Route::currentRouteName() === 'filament.app.tenant.registration' || ! auth()->user()->hasTenant()) {
                             return false;
                         }
 
@@ -108,8 +107,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-//                Widgets\AccountWidget::class,
-//                Widgets\FilamentInfoWidget::class,
+                //
             ])
             ->databaseTransactions()
             ->middleware([
@@ -130,7 +128,7 @@ class AdminPanelProvider extends PanelProvider
                 'Gestion des produits',
                 'Gestion des stocks',
                 'Gestion des utilisateurs',
-                'Rôles et Permissions'
+                'Rôles et Permissions',
             ])
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
@@ -139,6 +137,7 @@ class AdminPanelProvider extends PanelProvider
                 if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shop()->count() > 1) {
                     return true;
                 }
+
                 return false;
             })
             ->tenantRegistration(ShopRegister::class)

@@ -22,10 +22,11 @@ class EditStockStatus extends EditRecord
         return [
             Actions\DeleteAction::make()
                 ->visible(function ($record) {
-                    if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE)
+                    if ($record->name === StockStatus::STATUS_VENTE || $record->name === StockStatus::STATUS_LIVRAISON || $record->name === StockStatus::STATUS_PERTE) {
                         return false;
-                    else
+                    } else {
                         return true;
+                    }
                 }),
         ];
     }

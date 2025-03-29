@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\Role;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms;
@@ -15,23 +13,26 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Unique;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+
     protected static bool $isScopedToTenant = true;
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $label = 'Utilisateur';
+
     protected static ?string $pluralModelLabel = 'Utilisateurs';
 
     protected static ?string $slug = 'users';
+
     protected static ?string $navigationGroup = 'Gestion des utilisateurs';
+
     protected static ?int $navigationSort = 9;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function isTenantSubscriptionRequired(Panel $panel): bool
@@ -42,7 +43,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        if (!Filament::auth()->user()->isAdministrateur()) {
+        if (! Filament::auth()->user()->isAdministrateur()) {
             $query->whereHas('roles', function ($query) {
                 $query->where('name', '!=', ['Administrateur', 'Gérant']);
             });
@@ -68,7 +69,7 @@ class UserResource extends Resource
                     ->label('Commerce autorisé')
                     ->relationship(name: 'shop', titleAttribute: 'enseigne')
                     ->columnSpanFull()
-                    ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
+                    ->hidden(fn () => ! Auth::user()->isAdministrateurOrGerant())
                     ->multiple()
                     ->required()
                     ->preload()
@@ -79,7 +80,7 @@ class UserResource extends Resource
                         if (Auth::user()->isAdministrateur()) {
                             $query->where('roles.shop_id', '=', Filament::getTenant()->id)
                                 ->orWhere('roles.shop_id', '=', null);
-                        } else if (Auth::user()->isGerant()) {
+                        } elseif (Auth::user()->isGerant()) {
                             $query->where('roles.shop_id', '=', Filament::getTenant()->id)
                                 ->orWhere('roles.name', '=', 'Gérant');
                         } else {
@@ -109,7 +110,7 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('shop.enseigne')
                     ->badge()
-                    ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
+                    ->hidden(fn () => ! Auth::user()->isAdministrateurOrGerant())
                     ->label('Commerce autorisé')
                     ->limit(50)
                     ->searchable(),
@@ -123,7 +124,7 @@ class UserResource extends Resource
                     ->label('Commerce autorisé')
                     ->relationship('shop', 'enseigne')
                     ->searchable()
-                    ->hidden(fn () => !Auth::user()->isAdministrateurOrGerant())
+                    ->hidden(fn () => ! Auth::user()->isAdministrateurOrGerant())
                     ->preload()
                     ->multiple(),
                 Tables\Filters\SelectFilter::make('roles')

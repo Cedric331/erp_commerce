@@ -3,25 +3,23 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
-use Filament\Panel\Concerns\HasTenancy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Collection;
 use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasTenants
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -54,11 +52,10 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         'password' => 'hashed',
     ];
 
-
     public function canAccessPanel(Panel $panel): bool
     {
-       // check panel id
-            return true;
+        // check panel id
+        return true;
     }
 
     public function getTenants(Panel $panel): Collection
@@ -135,13 +132,12 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         }
     }
 
-
     public function canAccessTenant(Model $tenant): bool
     {
         if ($this->isAdministrateurOrGerant()) {
             return true;
         }
+
         return $this->shop->contains('id', $tenant->id);
     }
-
 }

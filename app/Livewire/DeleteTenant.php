@@ -8,6 +8,7 @@ use Filament\Facades\Filament;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
@@ -15,62 +16,107 @@ class DeleteTenant extends Component implements HasForms
 {
     use InteractsWithForms;
 
-    public function deleteCommerce()
+    /**
+     * @return \Illuminate\Foundation\Application|object|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|null
+     */
+    public function deleteCommerce(): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|null
     {
         $tenant = Filament::getTenant();
 
-        if (!$tenant) {
+        if (! $tenant) {
             return redirect('/app');
         }
 
-        if ($tenant->subscribed('default')) {
-            $tenant->subscription('default')->cancelNow();
-        }
+        try {
+            DB::beginTransaction();
 
-        $productIds = $tenant->products->pluck('id');
-        Activity::whereIn('subject_id', $productIds)
-            ->where('subject_type', Product::class)
-            ->delete();
-        $tenant->products()->delete();
-
-        $tenant->stocks()->delete();
-        $tenant->categories()->delete();
-        $tenant->stockStatuses()->delete();
-        $tenant->storages()->delete();
-        $tenant->brand()->delete();
-
-        $tenant->users->each(function ($user) {
-            if ($user->shop->count() === 1 && $user->isNot(auth()->user())) {
-                $user->delete();
+            // Annulation de tous les abonnements actifs
+            foreach ($tenant->subscriptions as $subscription) {
+                if ($subscription->active() || $subscription->onTrial()) {
+                    $subscription->cancelNow();
+                }
             }
-        });
 
-        $tenant->roles()->delete();
+            // Si l'abonnement par défaut existe, on s'assure qu'il est bien annulé
+            if ($tenant->subscribed('default')) {
+                $tenant->subscription('default')->cancelNow();
+            }
 
-        $tenant->delete();
+            // Suppression des données Stripe associées
+            if ($tenant->hasStripeId()) {
+                $stripeCustomer = $tenant->createOrGetStripeCustomer();
+                $stripeCustomer->delete();
+                $tenant->stripe_id = null;
+                $tenant->pm_type = null;
+                $tenant->pm_last_four = null;
+                $tenant->save();
+            }
 
-        $tenantFirst = auth()->user()->shop->first();
-        Notification::make()
-            ->title('Commerce supprimé')
-            ->body('Le commerce a été supprimé avec succès.')
-            ->success()
-            ->duration(10000)
-            ->send();
+            $productIds = $tenant->products->pluck('id');
+            Activity::whereIn('subject_id', $productIds)
+                ->where('subject_type', Product::class)
+                ->delete();
+            $tenant->products()->delete();
 
-        if ($tenantFirst) {
-            $this->redirect('/app/shop/' . $tenantFirst->slug);
-        } else {
-            $this->redirect(RouteServiceProvider::CREATED_APP);
+            $tenant->stocks()->delete();
+            $tenant->categories()->delete();
+            $tenant->stockStatuses()->delete();
+            $tenant->storages()->delete();
+            $tenant->brands()->delete();
+
+            $tenant->users->each(function ($user) {
+                if ($user->shop->count() === 1 && $user->isNot(auth()->user())) {
+                    $user->delete();
+                }
+            });
+
+            $tenant->roles()->delete();
+
+            $tenant->delete();
+
+            DB::commit();
+
+            $tenants = auth()->user()->shop()->get();
+            Notification::make()
+                ->title('Commerce supprimé')
+                ->body('Le commerce a été supprimé avec succès.')
+                ->success()
+                ->duration(10000)
+                ->send();
+
+            $tenantFirst = null;
+            if ($tenants->isNotEmpty()) {
+                $tenantFirst = $tenants->firstWhere('id', '!=', $tenant->id);
+            }
+
+            if ($tenantFirst) {
+                return $this->redirect('/app/shop/'.$tenantFirst->slug);
+            }
+
+            return $this->redirect(RouteServiceProvider::HOME);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Notification::make()
+                ->title('Erreur')
+                ->body('Une erreur est survenue lors de la suppression du commerce : '.$e->getMessage())
+                ->danger()
+                ->duration(10000)
+                ->send();
+
+            report($e);
+
+            return redirect()->back();
         }
     }
 
-
-    public function close()
+    public function close(): void
     {
         $this->dispatch('close-modal', id: 'delete-commerce');
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
     {
         return view('livewire.delete-tenant');
     }

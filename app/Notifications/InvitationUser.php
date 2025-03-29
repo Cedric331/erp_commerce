@@ -2,11 +2,10 @@
 
 namespace App\Notifications;
 
-use Illuminate\Support\Facades\URL;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\URL;
 
 class InvitationUser extends Notification
 {
@@ -39,5 +38,4 @@ class InvitationUser extends Notification
             ->action('Récupérer mon mot de passe', $url)
             ->line('Merci');
     }
-
 }

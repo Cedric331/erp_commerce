@@ -3,14 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\StockStatus;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StockStatusSeeder extends Seeder
 {
-
     const STATUS_VENTE = 'Vente';
+
     const STATUS_LIVRAISON = 'Livraison';
+
     const STATUS_PERTE = 'Perte';
 
     /**
@@ -20,7 +20,7 @@ class StockStatusSeeder extends Seeder
     {
         StockStatus::create([
             'name' => self::STATUS_VENTE,
-            'color' =>  '#008000',
+            'color' => '#008000',
             'type' => StockStatus::TYPE_SORTIE,
             'shop_id' => 1,
         ]);

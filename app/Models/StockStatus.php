@@ -17,22 +17,27 @@ class StockStatus extends Model
     ];
 
     const TYPE_ENTREE = 'entrée';
+
     const TYPE_SORTIE = 'sortie';
 
     const STATUS_VENTE = 'Vente';
+
     const STATUS_LIVRAISON = 'Livraison';
+
     const STATUS_PERTE = 'Perte';
 
     const COLOR_VERTE = '#008000';
+
     const COLOR_ORANGE = '#FFA500';
+
     const COLOR_ROUGE = '#FF0000';
 
-    public function shop()
+    public function shop(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Shop::class);
     }
 
-    public function stocks()
+    public function stocks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Stock::class);
     }

@@ -4,18 +4,15 @@ namespace App\Policies;
 
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Auth;
 
 class ProductPolicy
 {
-
     /**
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
     {
-       return $user->hasPermissionTo('Créer produit') || $user->isAdministrateurOrGerant();
+        return $user->hasPermissionTo('Créer produit') || $user->isAdministrateurOrGerant();
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\StockResource\Pages;
 
 use App\Filament\Resources\StockResource;
-use App\Models\Stock;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -16,13 +15,13 @@ class EditStock extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-//            Actions\DeleteAction::make(),
+            //            Actions\DeleteAction::make(),
         ];
     }
 
     public function mutateFormDataBeforeSave(array $data): array
     {
-        if ($this->data['scheduled_date'] === "") {
+        if ($this->data['scheduled_date'] === '') {
             $this->data['scheduled_date'] = null;
         }
 
@@ -43,5 +42,4 @@ class EditStock extends EditRecord
 
         $this->halt();
     }
-
 }

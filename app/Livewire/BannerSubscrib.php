@@ -3,11 +3,7 @@
 namespace App\Livewire;
 
 use Filament\Facades\Filament;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Dashboard;
-use Illuminate\Config\Repository;
-use Laravel\Cashier\SubscriptionBuilder;
 use Livewire\Component;
 
 class BannerSubscrib extends Component
@@ -15,7 +11,6 @@ class BannerSubscrib extends Component
     public $tenant;
 
     public $subscribed = false;
-
 
     public function mount(): void
     {
@@ -37,7 +32,7 @@ class BannerSubscrib extends Component
             $priceId = config("cashier.plans.{$plan}.price_id");
 
             if (empty($priceId)) {
-                throw new \Exception('Price ID not configured for plan: ' . $plan);
+                throw new \Exception('Price ID not configured for plan: '.$plan);
             }
 
             $trialDays = config("cashier.plans.{$plan}.trial_days", false);

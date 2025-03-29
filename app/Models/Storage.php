@@ -17,6 +17,7 @@ class Storage extends Model
     ];
 
     const STATUS_ACTIVE = 'active';
+
     const STATUS_INACTIVE = 'inactive';
 
     public function products()

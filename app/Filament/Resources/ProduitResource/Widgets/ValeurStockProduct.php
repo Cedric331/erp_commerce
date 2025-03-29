@@ -17,13 +17,14 @@ class ValeurStockProduct extends BaseWidget
 
         $valeurStockHt = number_format($valeurStockHtBrut, 2, '.', '');
         $valeurStockTtc = number_format($valeurStockTtcBrut, 2, '.', '');
+
         return [
             Stat::make('Nombre de produit', $products->count())
                 ->icon('heroicon-o-circle-stack'),
-            Stat::make('Valeur stock HT', $valeurStockHt . ' €')
-               ->icon('heroicon-o-currency-euro'),
-            Stat::make('Valeur stock TTC', $valeurStockTtc . ' €')
-               ->icon('heroicon-o-currency-euro')
+            Stat::make('Valeur stock HT', $valeurStockHt.' €')
+                ->icon('heroicon-o-currency-euro'),
+            Stat::make('Valeur stock TTC', $valeurStockTtc.' €')
+                ->icon('heroicon-o-currency-euro'),
         ];
     }
 
@@ -33,9 +34,9 @@ class ValeurStockProduct extends BaseWidget
         foreach ($products as $product) {
             if ($product->stock > 0) {
                 if ($type === 'ht') {
-                    $value += $product->stock * $product->prix_ht;
+                    $value += $product->stock * $product->price_ht;
                 } else {
-                    $value += $product->stock * $product->prix_ttc;
+                    $value += $product->stock * $product->price_ttc;
                 }
             }
         }

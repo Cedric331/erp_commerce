@@ -2,28 +2,20 @@
 
 namespace App\Filament\Resources\ProduitResource\Widgets;
 
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Support\HtmlString;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class ProfitabilityProduct extends ApexChartWidget
 {
     /**
      * Chart Id
-     *
-     * @var string
      */
     protected static ?string $chartId = 'profitabilityProduct';
 
     /**
      * Widget Title
-     *
-     * @var string|null
      */
     protected static ?string $heading = 'Rentabilité du produit (Bénéfices par mois)';
-
 
     protected $data = [];
 
@@ -31,13 +23,12 @@ class ProfitabilityProduct extends ApexChartWidget
 
     protected function getFooter(): string
     {
-        if ($this->product->ventes->count() > 0) {
+        if ($this->product->sales->count() > 0) {
             return '<p class="dark:text-info-300 text-info-800 text-sm">Ce graphique nécessite d\'avoir renseigné des ventes.</p>';
         } else {
             return '';
         }
     }
-
 
     // Filter
     protected function getFormSchema(): array
@@ -52,7 +43,7 @@ class ProfitabilityProduct extends ApexChartWidget
                 ->default(now()->year)
                 ->rule('digits:4')
                 ->rule('min:2024')
-                ->rule('max:' . (now()->year))
+                ->rule('max:'.(now()->year))
                 ->afterStateUpdated(function () {
                     $this->getData();
                 }),
@@ -62,8 +53,6 @@ class ProfitabilityProduct extends ApexChartWidget
     /**
      * Chart options (series, labels, types, size, animations...)
      * https://apexcharts.com/docs/options
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
@@ -122,20 +111,20 @@ class ProfitabilityProduct extends ApexChartWidget
             $dateFin = now()->month($mois)->year($year)->endOfMonth();
 
             // Récupération des ventes pour le mois courant
-            $ventes = $product->ventes()
+            $sales = $product->sales()
                 ->whereBetween('date_process', [$dateDebut, $dateFin])
                 ->get();
 
             // Calculer le bénéfice pour chaque vente et les additionner pour obtenir le bénéfice total du mois
-            $beneficeTotalMois = $ventes->reduce(function ($carry, $vente) {
-                $beneficeVente = ($vente->prix_product_ht - $vente->prix_product_buy) * $vente->quantity;
+            $beneficeTotalMois = $sales->reduce(function ($carry, $sale) {
+                $beneficeVente = ($sale->prix_product_ht - $sale->prix_product_buy) * $sale->quantity;
+
                 return $carry + $beneficeVente;
             }, 0);
 
             // Stocker le bénéfice total du mois dans le tableau
             $beneficesParMois[$mois] = $beneficeTotalMois;
         }
-
 
         $this->data = array_values($beneficesParMois);
     }

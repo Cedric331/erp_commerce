@@ -8,7 +8,6 @@ use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\Pages\ViewPermission;
 use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource\RelationManager\RoleRelationManager;
 use App\Models\Role;
-use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -30,7 +29,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 
-
 class PermissionResource extends Resource
 {
     protected static bool $isScopedToTenant = false;
@@ -42,7 +40,7 @@ class PermissionResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return Auth::user()->hasPermissionTo('Gérer les permissions') ||  Auth::user()->isAdministrateur();
+        return Auth::user()->hasPermissionTo('Gérer les permissions') || Auth::user()->isAdministrateur();
     }
 
     public static function canCreate(): bool
@@ -67,7 +65,7 @@ class PermissionResource extends Resource
 
     public static function getNavigationIcon(): ?string
     {
-        return  config('filament-spatie-roles-permissions.icons.permission_navigation');
+        return config('filament-spatie-roles-permissions.icons.permission_navigation');
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -92,7 +90,7 @@ class PermissionResource extends Resource
 
     public static function getNavigationSort(): ?int
     {
-        return  config('filament-spatie-roles-permissions.sort.permission_navigation');
+        return config('filament-spatie-roles-permissions.sort.permission_navigation');
     }
 
     public static function getPluralLabel(): string
@@ -123,13 +121,14 @@ class PermissionResource extends Resource
                                 ->relationship(
                                     name: 'roles',
                                     titleAttribute: 'name',
-                                    modifyQueryUsing: function(Builder $query, Get $get) {
-                                        if (!empty($get('guard_name'))) {
+                                    modifyQueryUsing: function (Builder $query, Get $get) {
+                                        if (! empty($get('guard_name'))) {
                                             $query->where('guard_name', $get('guard_name'));
                                         }
-                                        if(Filament::hasTenancy()) {
+                                        if (Filament::hasTenancy()) {
                                             return $query->where(config('permission.column_names.team_foreign_key'), Filament::getTenant()->id);
                                         }
+
                                         return $query;
                                     }
                                 )
@@ -156,7 +155,7 @@ class PermissionResource extends Resource
                     ->label('Models')
                     ->multiple()
                     ->options(function () {
-                        $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission();
+                        $commands = new \Althinect\FilamentSpatieRolesPermissions\Commands\Permission;
 
                         /** @var \ReflectionClass[] */
                         $models = $commands->getAllModels();
@@ -183,7 +182,7 @@ class PermissionResource extends Resource
                         return $query;
                     }),
             ])->actions([
-//                Tables\Actions\EditAction::make(),
+                //                Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
@@ -194,8 +193,8 @@ class PermissionResource extends Resource
                     ->action(function (Collection $records, array $data): void {
                         Role::whereIn('id', $data['roles'])
                             ->each(function (Role $role) use ($records): void {
-                            $records->each(fn (Permission $permission) => $role->givePermissionTo($permission));
-                        });
+                                $records->each(fn (Permission $permission) => $role->givePermissionTo($permission));
+                            });
                     })
                     ->form([
                         Select::make('roles')

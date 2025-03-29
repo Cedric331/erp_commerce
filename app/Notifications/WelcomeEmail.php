@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class WelcomeEmail extends Notification
 {
@@ -38,7 +38,7 @@ class WelcomeEmail extends Notification
     {
         return (new MailMessage)
             ->subject('Bienvenue sur '.env('APP_NAME').' !')
-            ->greeting('Bonjour ' . $notifiable->name . ',')
+            ->greeting('Bonjour '.$notifiable->name.',')
             ->line('Nous sommes ravis de vous compter parmi nos membres.')
             ->action('Visitez notre site', url('/'))
             ->line('Merci de faire partie de notre communauté!');
@@ -57,4 +57,3 @@ class WelcomeEmail extends Notification
         ];
     }
 }
-

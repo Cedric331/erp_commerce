@@ -11,14 +11,13 @@ class BestStorageChart extends ApexChartWidget
     protected static ?string $chartId = 'bestStorageChart';
 
     protected static ?string $heading = 'Zone de stockage';
+
     protected static bool $deferLoading = true;
 
     protected static ?string $loadingIndicator = 'Chargement des données...';
 
     /**
      * Prépare les données pour le graphique ApexCharts.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {

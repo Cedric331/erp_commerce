@@ -2,11 +2,11 @@
     <form>
         {{ $this->form }}
     </form>
-    <div class="flex justify-end" style="margin-top: 20px">
+    <div class="flex justify-end">
         <x-filament::button
             wire:click="sendMessage"
             color="primary"
-            size="sm"
+            size="lg"
             icon="heroicon-o-envelope"
             iconSize="sm">
             Envoyer

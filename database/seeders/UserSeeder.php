@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Shop;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -19,19 +18,18 @@ class UserSeeder extends Seeder
         $userA = User::create([
             'name' => 'Cedric',
             'email' => 'test@test.fr',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
 
         $userB = User::create([
             'name' => 'DEMO',
             'email' => 'demo@demo.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
         ]);
-
 
         $role = Role::create([
             'name' => 'Administrateur',
-            'guard_name' => 'web'
+            'guard_name' => 'web',
         ]);
 
         setPermissionsTeamId(Shop::first()->id);

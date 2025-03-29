@@ -3,9 +3,8 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class ContactNotification extends Notification
 {
@@ -46,10 +45,10 @@ class ContactNotification extends Notification
             ->subject('Nouveau message de contact')
             ->greeting('Bonjour,')
             ->line('Vous avez reçu un nouveau message de contact.')
-            ->line('Nom: ' . $this->data['name'])
-            ->line('Email: ' . $this->data['email'])
-            ->line('Téléphone: ' . $this->data['phone'])
-            ->line('Message: ' . $this->data['message']);
+            ->line('Nom: '.$this->data['name'])
+            ->line('Email: '.$this->data['email'])
+            ->line('Téléphone: '.$this->data['phone'])
+            ->line('Message: '.$this->data['message']);
     }
 
     /**

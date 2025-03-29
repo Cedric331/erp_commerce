@@ -22,7 +22,8 @@ class RequestPostContact extends FormRequest
      * phone: '',
      * message: '',
      * });
- * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -36,6 +37,7 @@ class RequestPostContact extends FormRequest
 
     /**
      * Get the error messages for the defined validation rules.
+     *
      * @return array<string, string>
      */
     public function messages(): array

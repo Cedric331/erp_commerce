@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('prix_product_ht', 10, 2)->nullable();
             $table->decimal('prix_product_buy', 10, 2)->nullable();
             $table->longText('note')->nullable();
+            $table->date('date_process')->nullable();
             $table->foreignId('shop_id')->constrained('shops')->onDelete('cascade');
             $table->foreignId('stock_status_id')->constrained()->onDelete(null);
             $table->foreignId('product_id')->constrained()->onDelete('cascade');

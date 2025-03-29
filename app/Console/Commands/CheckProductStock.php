@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Shop;
-use App\Models\Product;
 use App\Models\User;
 use App\Notifications\AlerteStock;
 use Filament\Notifications\Notification;
@@ -25,7 +24,6 @@ class CheckProductStock extends Command
      */
     protected $description = 'Vérifie le stock des produits';
 
-
     /**
      * Execute the console command.
      */
@@ -33,7 +31,7 @@ class CheckProductStock extends Command
     {
         $shops = Shop::whereHas('products', function ($query) {
             $query->where('stock', '>', 0)
-                    ->with('category');
+                ->with('category');
         })->get();
 
         foreach ($shops as $shop) {
@@ -46,15 +44,15 @@ class CheckProductStock extends Command
             });
 
             foreach ($shop->products as $product) {
-                $threshold = $product->stock_alert && $product->stock_alert > 0 || !$product->category ? $product->stock_alert : $product->categorie->alert_stock;
+                $threshold = $product->stock_alert && $product->stock_alert > 0 || ! $product->category ? $product->stock_alert : $product->categorie->alert_stock;
 
                 if ($threshold > 0 && $product->stock <= $threshold) {
                     Notification::make()
-                        ->title('Alerte stock sur le produit ' . $product->nom . ' - ' . $product->shop->enseigne)
-                        ->body('Le stock du produit ' . $product->nom . ' sur le commerce ' . $product->shop->enseigne . ' est en dessous du seuil d\'alerte. Il reste ' . $product->stock . ' unités.')
+                        ->title('Alerte stock sur le produit '.$product->name.' - '.$product->shop->enseigne)
+                        ->body('Le stock du produit '.$product->name.' sur le commerce '.$product->shop->enseigne.' est en dessous du seuil d\'alerte. Il reste '.$product->stock.' unités.')
                         ->sendToDatabase($recipient);
                     $data[] = [
-                        'product' => $product->nom,
+                        'product' => $product->name,
                         'stock' => $product->stock,
                         'seuil_alerte' => $threshold,
                     ];
@@ -63,7 +61,7 @@ class CheckProductStock extends Command
                         ->event('Alerte stock')
                         ->causedBy($shop->user)
                         ->performedOn($product)
-                        ->log('Le stock du produit ' . $product->nom . ' est en dessous du seuil d\'alerte. Il reste ' . $product->stock . ' unités.');
+                        ->log('Le stock du produit '.$product->name.' est en dessous du seuil d\'alerte. Il reste '.$product->stock.' unités.');
                 }
             }
             if (count($data) > 0) {
@@ -73,8 +71,6 @@ class CheckProductStock extends Command
             }
         }
 
-
         $this->info('Vérification du stock terminée.');
     }
-
 }

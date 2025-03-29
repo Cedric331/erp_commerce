@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources\Tenancy;
 
-use App\Models\Shop;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\Shop;
 use App\Models\StockStatus;
 use App\Models\Storage;
-use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\RegisterTenant;
@@ -20,12 +19,14 @@ class ShopRegister extends RegisterTenant
     protected static ?string $model = Shop::class;
 
     protected static ?string $label = 'Ajouter un commerce';
+
     protected static ?string $pluralModelLabel = 'Commerces';
+
     protected static ?string $slug = 'create-commerce';
 
     public static function canView(): bool
     {
-        return Auth::user()->isAdministrateurOrGerant() || !Auth::user()->hasTenant();
+        return Auth::user()->isAdministrateurOrGerant() || ! Auth::user()->hasTenant();
     }
 
     public function form(Form $form): Form
@@ -62,12 +63,11 @@ class ShopRegister extends RegisterTenant
                         'France' => 'France',
                         'Belgique' => 'Belgique',
                         'Suisse' => 'Suisse',
-                        'Luxembourg' => 'Luxembourg'
+                        'Luxembourg' => 'Luxembourg',
                     ])
                     ->required(),
             ]);
     }
-
 
     public static function getLabel(): string
     {
@@ -79,7 +79,7 @@ class ShopRegister extends RegisterTenant
         $data['enseigne'] = ucwords(strtolower($data['enseigne']));
 
         $slug = Str::slug($data['enseigne'], '-');
-        $slug = $slug . '-' .Shop::where('slug', 'like', $slug . '-%')->count();
+        $slug = $slug.'-'.Shop::where('slug', 'like', $slug.'-%')->count();
         $data['slug'] = $slug;
 
         return $data;
@@ -95,19 +95,19 @@ class ShopRegister extends RegisterTenant
             $this->createDefaultStockStatuses();
         });
 
-//        $rolesWithPermissions = [
-//            Role::ROLE_GERANT => config('setting-permission.gerant'),
-//        ];
+        //        $rolesWithPermissions = [
+        //            Role::ROLE_GERANT => config('setting-permission.gerant'),
+        //        ];
 
-//        foreach ($rolesWithPermissions as $roleName => $permissions) {
-//            $role = Role::firstOrCreate([
-//                'name' => $roleName
-//            ]);
-//
-//            if ($permissions) {
-//                $role->syncPermissions($permissions);
-//            }
-//        }
+        //        foreach ($rolesWithPermissions as $roleName => $permissions) {
+        //            $role = Role::firstOrCreate([
+        //                'name' => $roleName
+        //            ]);
+        //
+        //            if ($permissions) {
+        //                $role->syncPermissions($permissions);
+        //            }
+        //        }
         $role = Role::where('name', Role::ROLE_GERANT)->first();
         setPermissionsTeamId($tenantId);
         Auth::user()->assignRole($role);
@@ -146,5 +146,4 @@ class ShopRegister extends RegisterTenant
             StockStatus::create(array_merge($status, ['shop_id' => $this->tenant->id]));
         }
     }
-
 }

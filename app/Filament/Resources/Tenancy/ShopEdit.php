@@ -14,13 +14,14 @@ class ShopEdit extends EditTenantProfile
     protected static ?string $model = Shop::class;
 
     protected static ?string $label = 'Modifier le commerce';
+
     protected static ?string $pluralModelLabel = 'Commerces';
 
     protected static ?string $slug = 'edit-commerce';
 
     public static function canView(\Illuminate\Database\Eloquent\Model $tenant): bool
     {
-       return Auth::user()->hasPermissionTo('Gestion commerce') || Auth::user()->isAdministrateurOrGerant();
+        return Auth::user()->hasPermissionTo('Gestion commerce') || Auth::user()->isAdministrateurOrGerant();
     }
 
     public function form(Form $form): Form
@@ -57,7 +58,7 @@ class ShopEdit extends EditTenantProfile
                         'France' => 'France',
                         'Belgique' => 'Belgique',
                         'Suisse' => 'Suisse',
-                        'Luxembourg' => 'Luxembourg'
+                        'Luxembourg' => 'Luxembourg',
                     ])
                     ->required(),
             ]);
@@ -67,7 +68,6 @@ class ShopEdit extends EditTenantProfile
     {
         return '/app';
     }
-
 
     public static function getLabel(): string
     {
@@ -79,40 +79,39 @@ class ShopEdit extends EditTenantProfile
         $data['enseigne'] = ucwords(strtolower($data['enseigne']));
 
         $slug = Str::slug($data['enseigne'], '-');
-        $slug = $slug . '-' .Shop::where('slug', 'like', $slug . '-%')->count();
+        $slug = $slug.'-'.Shop::where('slug', 'like', $slug.'-%')->count();
         $data['slug'] = $slug;
-
 
         return $data;
     }
 
-//    protected function afterSave(): void
-//    {
-//        $this->tenant->users()->attach(Auth::user()->id);
-//        $tenantId = Filament::getTenant()->id;
-//
-//        $permissions = Permission::ALL_PERMISSION;
-//
-//        foreach ($permissions as $permission) {
-//            Permission::create([
-//                'name' => $permission,
-//                'guard_name' => 'web',
-//                'shop_id' => $tenantId
-//            ]);
-//        }
-//
-//        Role::create([
-//            'name' => Role::ROLE_ADMIN,
-//            'shop_id' => $tenantId
-//        ]);
-//
-//
-//        $role->syncPermissions(Permission::PERMISSION_MANAGER);
-//
-//        $role = Role::create([
-//            'name' => Role::ROLE_GERANT,
-//            'shop_id' => $tenantId
-//        ]);
-//
-//    }
+    //    protected function afterSave(): void
+    //    {
+    //        $this->tenant->users()->attach(Auth::user()->id);
+    //        $tenantId = Filament::getTenant()->id;
+    //
+    //        $permissions = Permission::ALL_PERMISSION;
+    //
+    //        foreach ($permissions as $permission) {
+    //            Permission::create([
+    //                'name' => $permission,
+    //                'guard_name' => 'web',
+    //                'shop_id' => $tenantId
+    //            ]);
+    //        }
+    //
+    //        Role::create([
+    //            'name' => Role::ROLE_ADMIN,
+    //            'shop_id' => $tenantId
+    //        ]);
+    //
+    //
+    //        $role->syncPermissions(Permission::PERMISSION_MANAGER);
+    //
+    //        $role = Role::create([
+    //            'name' => Role::ROLE_GERANT,
+    //            'shop_id' => $tenantId
+    //        ]);
+    //
+    //    }
 }

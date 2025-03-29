@@ -18,6 +18,7 @@ class Administrateur
         if (auth()->user()->isAdministrateur()) {
             return $next($request);
         }
+
         return redirect('/app');
     }
 }

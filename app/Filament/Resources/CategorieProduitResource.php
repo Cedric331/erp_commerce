@@ -6,15 +6,11 @@ use App\Filament\Resources\CategorieProduitResource\Pages;
 use App\Filament\Resources\CategorieProduitResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategorieProduitResource extends Resource
 {
@@ -25,10 +21,15 @@ class CategorieProduitResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static ?string $label = 'Catégorie';
+
     protected static ?string $pluralModelLabel = 'Catégories';
+
     protected static ?string $slug = 'catégorie';
+
     protected static ?string $navigationGroup = 'Gestion des produits';
+
     protected static ?int $navigationSort = 1;
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function isTenantSubscriptionRequired(Panel $panel): bool
@@ -88,7 +89,6 @@ class CategorieProduitResource extends Resource
             RelationManagers\ProduitsRelationManager::class,
         ];
     }
-
 
     public static function getPages(): array
     {

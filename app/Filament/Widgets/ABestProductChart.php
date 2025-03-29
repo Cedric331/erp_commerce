@@ -6,9 +6,6 @@ use App\Models\Product;
 use App\Models\StockStatus;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
-use Filament\Widgets\Widget;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class ABestProductChart extends ApexChartWidget
@@ -16,18 +13,20 @@ class ABestProductChart extends ApexChartWidget
     protected static ?string $chartId = 'bestProductChart';
 
     protected static ?string $heading = 'Meilleurs produits';
+
     protected static bool $deferLoading = true;
 
     protected static ?string $loadingIndicator = 'Chargement des données...';
 
     public ?string $filter = StockStatus::STATUS_VENTE;
+
     public ?int $filterStatusId = null;
 
     protected function getFormSchema(): array
     {
         $status = StockStatus::query()
             ->where('shop_id', Filament::getTenant()?->id)
-            ->pluck('name' , 'id')
+            ->pluck('name', 'id')
             ->toArray();
 
         return [
@@ -45,8 +44,6 @@ class ABestProductChart extends ApexChartWidget
 
     /**
      * Prépare les données pour le graphique ApexCharts.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
@@ -54,27 +51,27 @@ class ABestProductChart extends ApexChartWidget
 
         $products = Product::query()
             ->where('shop_id', Filament::getTenant()?->id)
-            ->withSum(['stocks as ventes_total' => function ($query) use ($activeFilter) {
+            ->withSum(['stocks as sales_total' => function ($query) use ($activeFilter) {
                 $query->whereHas('stockStatus', function ($query) use ($activeFilter) {
                     $query->where('name', $activeFilter);
                 });
             }], 'quantity')
-            ->orderByDesc('ventes_total')
+            ->orderByDesc('sales_total')
             ->limit(5)
             ->get();
 
-        $labels = $products->pluck('nom')->toArray();
-        $ventesTotales = $products->pluck('ventes_total')->toArray();
+        $labels = $products->pluck('name')->toArray();
+        $salesTotals = $products->pluck('sales_total')->toArray();
 
         return [
             'chart' => [
                 'type' => 'bar',
-                'height' => 300
+                'height' => 300,
             ],
             'series' => [
                 [
                     'name' => 'Totales',
-                    'data' => $ventesTotales,
+                    'data' => $salesTotals,
                 ],
             ],
             'xaxis' => [
@@ -103,4 +100,3 @@ class ABestProductChart extends ApexChartWidget
         ];
     }
 }
-

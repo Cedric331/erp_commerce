@@ -8,6 +8,4 @@ $_SERVER['argv'] = [
 
 ];
 
-
-
 require __DIR__.'/artisan';

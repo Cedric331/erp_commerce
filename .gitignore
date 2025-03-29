@@ -1,45 +1,41 @@
-<<<<<<< HEAD
-/vendor/
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
-
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
-storage/*.key
-.env
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
-=======
-/.phpunit.cache
+# Dependencies
 /node_modules
+/vendor
+
+# Laravel specific
 /public/build
 /public/hot
 /public/storage
+/public/livewire
 /storage/*.key
-/vendor
+/bootstrap/compiled.php
+
+# Environment files
 .env
 .env.backup
 .env.production
+
+# Testing
+/.phpunit.cache
 .phpunit.result.cache
-Homestead.json
+
+# Homestead
 Homestead.yaml
-auth.json
-npm-debug.log
-yarn-error.log
+Homestead.json
+/.vagrant
+
+# IDE & Editors
 /.fleet
 /.idea
 /.vscode
->>>>>>> 9ecf071d273fcf178d8d1d47397fd02e4b80c52d
+
+# Logs & Debug
+npm-debug.log
+yarn-error.log
+
+# Authentication
+auth.json
+
+# Public HTML (if using alternative public path)
+/public_html/storage
+/public_html/hot

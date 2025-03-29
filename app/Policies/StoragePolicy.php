@@ -6,7 +6,6 @@ use App\Models\User;
 
 class StoragePolicy
 {
-
     public function create(User $user): bool
     {
         return $user->hasPermissionTo('Créer zone de stockage') || $user->isAdministrateurOrGerant();

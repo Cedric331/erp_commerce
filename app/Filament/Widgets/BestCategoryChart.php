@@ -3,8 +3,6 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Category;
-use App\Models\Product;
-use App\Models\StockStatus;
 use Filament\Facades\Filament;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
@@ -13,14 +11,13 @@ class BestCategoryChart extends ApexChartWidget
     protected static ?string $chartId = 'bestCategoryChart';
 
     protected static ?string $heading = 'Meilleures catégories';
+
     protected static bool $deferLoading = true;
 
     protected static ?string $loadingIndicator = 'Chargement des données...';
 
     /**
      * Prépare les données pour le graphique ApexCharts.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
@@ -34,21 +31,21 @@ class BestCategoryChart extends ApexChartWidget
             }])
             ->get()
             ->map(function ($category) {
-                $totalVentes = $category->products->flatMap(function ($product) {
+                $salesTotals = $category->products->flatMap(function ($product) {
                     return $product->stocks->pluck('quantity');
                 })->sum();
 
                 return [
                     'nom' => $category->name,
-                    'totalVentes' => $totalVentes,
+                    'salesTotals' => $salesTotals,
                 ];
             })
-            ->sortByDesc('totalVentes')
+            ->sortByDesc('salesTotals')
             ->take(5)
             ->values();
 
         $labels = $categories->pluck('nom')->toArray();
-        $ventesTotales = $categories->pluck('totalVentes')->toArray();
+        $salesTotals = $categories->pluck('salesTotals')->toArray();
 
         return [
             'chart' => [
@@ -58,7 +55,7 @@ class BestCategoryChart extends ApexChartWidget
             'series' => [
                 [
                     'name' => 'Ventes Totales',
-                    'data' => $ventesTotales,
+                    'data' => $salesTotals,
                 ],
             ],
             'xaxis' => [
