@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->id('app')
+            ->default()
             ->path('app')
             ->profile()
             ->login()
@@ -53,7 +54,7 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/app/theme.css')
             ->unsavedChangesAlerts()
             ->tenantBillingProvider(new BillingProvider)
-//            ->requiresTenantSubscription()
+            ->requiresTenantSubscription()
             ->tenantMenuItems([
                 'billing' => MenuItem::make()
                     ->visible(fn (): bool => auth()->user()->isAdministrateurOrGerant()),

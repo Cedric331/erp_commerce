@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProduitResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Panel;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,6 +18,11 @@ class PriceHistoryRelationManager extends RelationManager
     protected static ?string $modelLabel = 'historique de prix';
 
     protected static ?string $pluralModelLabel = 'historiques de prix';
+
+    public static function isTenantSubscriptionRequired(Panel $panel): bool
+    {
+        return true;
+    }
 
     public function form(Form $form): Form
     {

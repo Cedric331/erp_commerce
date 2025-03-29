@@ -320,7 +320,7 @@ const navbarOpen = ref(false);
                         </p>
                         <div class="mb-7">
                             <p class="mb-1 text-base leading-loose text-body-color">
-                                <b>7 jours d'essai gratuit</b>
+                                <b>30 jours d'essai gratuit</b>
                             </p>
                             <p class="mb-1 text-base leading-loose text-body-color">
                                 Utilisateurs illimités

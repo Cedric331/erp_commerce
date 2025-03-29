@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CreateProduit extends CreateRecord
 {
-    protected static string $resource = ProduitResource::class;
+    public static string $resource = ProduitResource::class;
 
     protected function getRedirectUrl(): string
     {

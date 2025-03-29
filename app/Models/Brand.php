@@ -18,8 +18,15 @@ class Brand extends Model
         'postal_code',
         'country',
         'note',
+        'website',
+        'contact_person',
+        'status',
         'shop_id',
     ];
+
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'inactive';
+    const STATUS_PENDING = 'pending';
 
     public function shop()
     {

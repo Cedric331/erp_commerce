@@ -85,6 +85,20 @@ class FournisseurResource extends Resource
                     ])
                     ->label('Note')
                     ->columnSpanFull(),
+                Forms\Components\Select::make('status')
+                    ->label('Statut')
+                    ->options([
+                        Brand::STATUS_ACTIVE => 'Actif',
+                        Brand::STATUS_INACTIVE => 'Inactif',
+                        Brand::STATUS_PENDING => 'En attente',
+                    ])
+                    ->required(),
+                Forms\Components\TextInput::make('website')
+                    ->label('Site web')
+                    ->url(),
+                Forms\Components\TextInput::make('contact_person')
+                    ->label('Personne de contact')
+                    ->maxLength(255),
             ]);
     }
 

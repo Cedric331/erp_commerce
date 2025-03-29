@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('country')->nullable();
             $table->string('postal_code')->nullable();
+            $table->string('website')->nullable();
+            $table->string('contact_person')->nullable();
+            $table->string('status')->nullable();
             $table->string('note')->nullable();
             $table->foreignId('shop_id')->constrained()->onDelete('cascade');
             $table->unique(['name', 'shop_id']);
