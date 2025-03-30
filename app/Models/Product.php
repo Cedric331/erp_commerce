@@ -52,6 +52,11 @@ class Product extends Model implements HasMedia
         return $this->hasMany(ProductPriceHistory::class);
     }
 
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
     public function sales(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Stock::class)->whereHas('stockStatus', function ($query) {

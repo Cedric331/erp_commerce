@@ -6,6 +6,11 @@ use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugi
 use App\Filament\Pages\Support;
 use App\Filament\Resources\Tenancy\ShopEdit;
 use App\Filament\Resources\Tenancy\ShopRegister;
+use App\Filament\Widgets\ABestProductChart;
+use App\Filament\Widgets\BestBrandChart;
+use App\Filament\Widgets\BestCategoryChart;
+use App\Filament\Widgets\BestStorageChart;
+use App\Filament\Widgets\CalendarWidget;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CheckTenantOwnership;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
@@ -31,6 +36,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use Maartenpaauw\Filament\Cashier\Stripe\BillingProvider;
+use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 use Swis\Filament\Backgrounds\ImageProviders\MyImages;
 
@@ -40,6 +46,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->id('app')
+            ->spa()
             ->default()
             ->path('app')
             ->profile()
@@ -106,9 +113,13 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+//            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                //
+                CalendarWidget::class,
+                ABestProductChart::class,
+                BestCategoryChart::class,
+                BestBrandChart::class,
+                BestStorageChart::class,
             ])
             ->databaseTransactions()
             ->middleware([
@@ -134,6 +145,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
             ->tenant(Shop::class, 'slug')
+            ->tenantDomain('{tenant:slug}.' . parse_url(config('app.url'), PHP_URL_HOST))
             ->tenantMenu(function () {
                 if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shop()->count() > 1) {
                     return true;
@@ -158,6 +170,15 @@ class AdminPanelProvider extends PanelProvider
                         MyImages::make()
                             ->directory('images/backgrounds')
                     ),
+                FilamentFullCalendarPlugin::make()
+                    ->timezone('Europe/Paris')
+                    ->locale('fr')
+                    ->plugins([
+                        'dayGrid',
+                        'timeGrid',
+                        'list',
+                        'interaction',
+                    ])
             ]);
     }
 }

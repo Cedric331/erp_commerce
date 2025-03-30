@@ -169,11 +169,11 @@ class ProduitResource extends Resource
                                     '2.10' => '2.1%',
                                 ])
                                 ->suffix('%')
-                                ->default(20.00)
+                                ->default('20.00')
                                 ->required()
                                 ->live()
                                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                                    $state = (float) $state; // Assurons-nous que c'est bien un float
+                                    $state = (float) $state;
                                     if ($get('price_ht')) {
                                         $set('price_ttc', round($get('price_ht') * (1 + $state / 100), 2));
                                     }
@@ -298,6 +298,7 @@ class ProduitResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('status')
                             ->label('Statut')
+                            ->searchable()
                             ->options([
                                 'active' => 'Actif',
                                 'inactive' => 'Inactif',
@@ -345,9 +346,24 @@ class ProduitResource extends Resource
                     ->label('Fournisseur')
                     ->searchable()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Statut')
+                    ->badge()
+                    ->searchable()
+                    ->sortable()
+                    ->colors([
+                        'success' => 'active',
+                        'danger' => 'inactive',
+                    ])
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'active' => 'Actif',
+                        'inactive' => 'Inactif',
+                        default => $state,
+                    }),
             ])
             ->filters([
-                // Ajoutez vos filtres ici
+                //
             ])
             ->actions([
                 ActionGroup::make([
