@@ -11,11 +11,12 @@ trait HandlesCalendarActions
     {
         $stock = Stock::find($eventId);
 
-        if (!$stock || !$stock->scheduled_date?->isFuture()) {
+        if (! $stock || ! $stock->scheduled_date?->isFuture()) {
             Notification::make()
                 ->title('Action non autorisée')
                 ->danger()
                 ->send();
+
             return;
         }
 
@@ -33,11 +34,12 @@ trait HandlesCalendarActions
     {
         $stock = Stock::find($eventId);
 
-        if (!$stock || !$stock->scheduled_date?->isFuture()) {
+        if (! $stock || ! $stock->scheduled_date?->isFuture()) {
             Notification::make()
                 ->title('Action non autorisée')
                 ->danger()
                 ->send();
+
             return;
         }
 

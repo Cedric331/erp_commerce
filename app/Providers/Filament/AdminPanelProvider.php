@@ -145,7 +145,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
             ->tenant(Shop::class, 'slug')
-            ->tenantDomain('{tenant:slug}.' . parse_url(config('app.url'), PHP_URL_HOST))
+            ->tenantDomain('{tenant:slug}.'.parse_url(config('app.url'), PHP_URL_HOST))
             ->tenantMenu(function () {
                 if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shop()->count() > 1) {
                     return true;
@@ -178,7 +178,7 @@ class AdminPanelProvider extends PanelProvider
                         'timeGrid',
                         'list',
                         'interaction',
-                    ])
+                    ]),
             ]);
     }
 }

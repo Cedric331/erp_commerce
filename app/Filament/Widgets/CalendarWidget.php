@@ -4,11 +4,9 @@ namespace App\Filament\Widgets;
 
 use App\Models\Stock;
 use App\Models\StockStatus;
-use Carbon\Carbon;
 use Filament\Facades\Filament;
-use Saade\FilamentFullCalendar\Data\Event;
-use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 use Saade\FilamentFullCalendar\Data\EventData;
+use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
@@ -16,10 +14,7 @@ class CalendarWidget extends FullCalendarWidget
 
     public string|int|null|\Illuminate\Database\Eloquent\Model $record = null;
 
-    public function onEventClick(array $event): void
-    {
-        return;
-    }
+    public function onEventClick(array $event): void {}
 
     protected function headerActions(): array
     {
@@ -28,12 +23,12 @@ class CalendarWidget extends FullCalendarWidget
 
     public function eventDidMount(): string
     {
-        return <<<JS
+        return <<<'JS'
         function({ event, el }) {
             const tooltip = `
-                Produit : \${event.extendedProps.product_name}<br>
-                Statut : \${event.extendedProps.status}<br>
-                Quantité : \${event.extendedProps.quantity}
+                Produit : ${event.extendedProps.product_name}<br>
+                Statut : ${event.extendedProps.status}<br>
+                Quantité : ${event.extendedProps.quantity}
             `;
 
             el.setAttribute("data-tooltip", tooltip);
@@ -42,7 +37,6 @@ class CalendarWidget extends FullCalendarWidget
         }
     JS;
     }
-
 
     public function config(): array
     {

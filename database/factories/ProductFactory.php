@@ -2,11 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Product;
 use App\Models\Shop;
-use App\Models\Storage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,7 +14,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $name = $this->faker->words(3, true);
-        
+
         return [
             'shop_id' => Shop::factory(),
             'category_id' => null,

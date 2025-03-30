@@ -25,7 +25,7 @@ class ShopFactory extends Factory
             'ville' => $this->faker->city(),
             'code_postal' => $this->faker->postcode(),
             'trial_ends_at' => now()->addDays(7),
-            'stripe_id' => 'cus_' . Str::random(14),
+            'stripe_id' => 'cus_'.Str::random(14),
             'pays' => 'France',
         ];
     }
