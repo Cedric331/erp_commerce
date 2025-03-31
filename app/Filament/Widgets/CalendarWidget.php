@@ -26,8 +26,8 @@ class CalendarWidget extends FullCalendarWidget
         return <<<'JS'
         function({ event, el }) {
             const tooltip = `
-                Produit : ${event.extendedProps.product_name}<br>
-                Statut : ${event.extendedProps.status}<br>
+                Produit : ${event.extendedProps.product_name}
+                Statut : ${event.extendedProps.status}
                 Quantité : ${event.extendedProps.quantity}
             `;
 
@@ -86,11 +86,11 @@ class CalendarWidget extends FullCalendarWidget
             ->get()
             ->map(function (Stock $stock) {
                 $date = $this->resolveDate($stock);
-                $color = $stock->stockStatus->type === StockStatus::TYPE_ENTREE ? '#10B981' : '#EF4444';
+                $color = $this->getColor($stock->stockStatus->name);
 
                 return EventData::make()
                     ->id($stock->id)
-                    ->title("{$stock->product->name} - {$stock->quantity} unités")
+                    ->title("{$stock->product->name} - {$stock->quantity} unités - {$stock->stockStatus->name}")
                     ->start($date)
                     ->end($date)
                     ->allDay(true)
@@ -105,6 +105,16 @@ class CalendarWidget extends FullCalendarWidget
                     ]);
             })
             ->toArray();
+    }
+
+    protected function getColor(string $type): string
+    {
+        return match ($type) {
+            StockStatus::STATUS_VENTE => '#008000',
+            StockStatus::STATUS_PERTE => '#FF0000',
+            StockStatus::STATUS_LIVRAISON => '#FFA500',
+            default => '#000000',
+        };
     }
 
     protected function resolveDate(Stock $stock): \Illuminate\Support\Carbon
