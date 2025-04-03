@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         'stripe/webhook',
         'stripe/*',
         'checkout/*',
+        'https://billing.stripe.com/p/session/*',
         'https://billing.stripe.com/*',
         'https://checkout.stripe.com/*',
     ];

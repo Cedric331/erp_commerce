@@ -16,11 +16,13 @@ use App\Http\Middleware\CheckTenantOwnership;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\Shop;
+use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Pages;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\View\PanelsRenderHook;
@@ -40,13 +42,12 @@ use Saade\FilamentFullCalendar\FilamentFullCalendarPlugin;
 use Swis\Filament\Backgrounds\FilamentBackgroundsPlugin;
 use Swis\Filament\Backgrounds\ImageProviders\MyImages;
 
-class AdminPanelProvider extends PanelProvider
+class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->id('app')
-            ->spa()
             ->default()
             ->path('app')
             ->profile()
@@ -145,9 +146,8 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseNotificationsPolling('300s')
             ->tenant(Shop::class, 'slug')
-            ->tenantDomain('{tenant:slug}.'.parse_url(config('app.url'), PHP_URL_HOST))
             ->tenantMenu(function () {
-                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shop()->count() > 1) {
+                if (Auth::user()->isAdministrateurOrGerant() || Auth::user()->shops()->count() > 1) {
                     return true;
                 }
 

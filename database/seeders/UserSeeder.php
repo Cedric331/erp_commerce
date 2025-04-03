@@ -35,9 +35,9 @@ class UserSeeder extends Seeder
         setPermissionsTeamId(Shop::first()->id);
 
         $userA->assignRole($role);
-        $userA->shop()->attach(Shop::first());
+        $userA->shops()->attach(Shop::first());
 
         $userB->assignRole($role);
-        $userB->shop()->attach(Shop::first());
+        $userB->shops()->attach(Shop::first());
     }
 }

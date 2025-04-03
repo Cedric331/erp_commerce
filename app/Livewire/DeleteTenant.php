@@ -65,7 +65,7 @@ class DeleteTenant extends Component implements HasForms
             $tenant->brands()->delete();
 
             $tenant->users->each(function ($user) {
-                if ($user->shop->count() === 1 && $user->isNot(auth()->user())) {
+                if ($user->shops->count() === 1 && $user->isNot(auth()->user())) {
                     $user->delete();
                 }
             });
@@ -76,7 +76,7 @@ class DeleteTenant extends Component implements HasForms
 
             DB::commit();
 
-            $tenants = auth()->user()->shop()->get();
+            $tenants = auth()->user()->shops()->get();
             Notification::make()
                 ->title('Commerce supprimé')
                 ->body('Le commerce a été supprimé avec succès.')

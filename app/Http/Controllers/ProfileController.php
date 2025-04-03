@@ -64,7 +64,7 @@ class ProfileController extends Controller
     public function deleteTenant(Request $request, $slug)
     {
         $user = $request->user();
-        $tenant = $user->shop()->where('slug', $slug)->first();
+        $tenant = $user->shops()->where('slug', $slug)->first();
 
         if ($tenant) {
             if ($tenant->subscribed('default')) {
