@@ -17,7 +17,7 @@ class DeleteTenant extends Component implements HasForms
     use InteractsWithForms;
 
     /**
-     * @return \Illuminate\Foundation\Application|object|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|null
+     * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|null
      */
     public function deleteCommerce(): \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|null
     {

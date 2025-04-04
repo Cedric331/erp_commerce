@@ -54,7 +54,7 @@ class AddStock extends Command
                 'date_process' => now(),
             ]);
 
-            $recipient = User::with('rolesAllTenant')->whereHas('shops', function ($query) use ($stock) {
+            $recipient = User::with('rolesAllTenant')->whereHas('shop', function ($query) use ($stock) {
                 $query->where('shop_id', $stock->shop_id);
             })->get();
             $recipient = $recipient->filter(function ($user) {

@@ -93,23 +93,16 @@ class ShopRegister extends RegisterTenant
         DB::transaction(function () {
             $this->createDefaultStorage();
             $this->createDefaultStockStatuses();
+            $this->createDefaultRolesAndPermissions();
         });
 
-        //        $rolesWithPermissions = [
-        //            Role::ROLE_GERANT => config('setting-permission.gerant'),
-        //        ];
-
-        //        foreach ($rolesWithPermissions as $roleName => $permissions) {
-        //            $role = Role::firstOrCreate([
-        //                'name' => $roleName
-        //            ]);
-        //
-        //            if ($permissions) {
-        //                $role->syncPermissions($permissions);
-        //            }
-        //        }
-        $role = Role::where('name', Role::ROLE_GERANT)->first();
         setPermissionsTeamId($tenantId);
+
+        // Assign the Gerant role to the current user
+        $role = Role::where('name', Role::ROLE_GERANT)
+            ->where('shop_id', $tenantId)
+            ->first();
+
         Auth::user()->assignRole($role);
     }
 
@@ -144,6 +137,25 @@ class ShopRegister extends RegisterTenant
 
         foreach ($statuses as $status) {
             StockStatus::create(array_merge($status, ['shop_id' => $this->tenant->id]));
+        }
+    }
+
+    private function createDefaultRolesAndPermissions(): void
+    {
+        // Définir les rôles par défaut avec leurs permissions
+        $roles = [
+            Role::ROLE_GERANT => config('setting-permission.gerant'),
+        ];
+
+        // Créer les rôles avec leurs permissions
+        foreach ($roles as $roleName => $permissions) {
+            $role = Role::firstOrCreate([
+                'name' => $roleName,
+                'guard_name' => 'web',
+                'shop_id' => $this->tenant->id,
+            ]);
+
+            $role->syncPermissions($permissions);
         }
     }
 }

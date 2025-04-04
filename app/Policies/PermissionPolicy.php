@@ -12,7 +12,7 @@ class PermissionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('Gérer les permissions') || $user->isAdministrateur();
+        return false;
     }
 
     /**
@@ -20,7 +20,7 @@ class PermissionPolicy
      */
     public function view(User $user, Permission $permission): bool
     {
-        return $user->hasPermissionTo('Gérer les permissions') || $user->isAdministrateur();
+        return false;
     }
 
     /**

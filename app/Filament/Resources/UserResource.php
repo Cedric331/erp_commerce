@@ -21,6 +21,8 @@ class UserResource extends Resource
 
     protected static bool $isScopedToTenant = true;
 
+    protected static ?string $tenantOwnershipRelationshipName = 'shops';
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $label = 'Utilisateur';
@@ -65,9 +67,18 @@ class UserResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('shop')
+                Forms\Components\Select::make('shops')
                     ->label('Commerce autorisé')
-                    ->relationship(name: 'shop', titleAttribute: 'enseigne')
+                    ->relationship(
+                        name: 'shops',
+                        titleAttribute: 'enseigne',
+                        modifyQueryUsing: function ($query) {
+                            if (!Auth::user()->isAdministrateur()) {
+                                $query->whereIn('shops.id', Auth::user()->shops->pluck('id'));
+                            }
+                            return $query;
+                        }
+                    )
                     ->columnSpanFull()
                     ->hidden(fn () => ! Auth::user()->isAdministrateurOrGerant())
                     ->multiple()
@@ -77,16 +88,7 @@ class UserResource extends Resource
                 Forms\Components\Select::make('roles')
                     ->label('Rôles')
                     ->relationship(name: 'roles', titleAttribute: 'name', modifyQueryUsing: function ($query) {
-                        if (Auth::user()->isAdministrateur()) {
-                            $query->where('roles.shop_id', '=', Filament::getTenant()->id)
-                                ->orWhere('roles.shop_id', '=', null);
-                        } elseif (Auth::user()->isGerant()) {
-                            $query->where('roles.shop_id', '=', Filament::getTenant()->id)
-                                ->orWhere('roles.name', '=', 'Gérant');
-                        } else {
-                            $query->where('roles.shop_id', '=', Filament::getTenant()->id);
-                        }
-
+                        $query->where('roles.shop_id', '=', Filament::getTenant()->id);
                     })
                     ->saveRelationshipsUsing(function (Model $record, $state) {
                         $record->roles()->syncWithPivotValues($state, [config('permission.column_names.team_foreign_key') => getPermissionsTeamId()]);
@@ -108,7 +110,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('shop.enseigne')
+                Tables\Columns\TextColumn::make('shops.enseigne')
                     ->badge()
                     ->hidden(fn () => ! Auth::user()->isAdministrateurOrGerant())
                     ->label('Commerce autorisé')
@@ -120,9 +122,9 @@ class UserResource extends Resource
                     ->searchable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('shop')
+                Tables\Filters\SelectFilter::make('shops')
                     ->label('Commerce autorisé')
-                    ->relationship('shop', 'enseigne')
+                    ->relationship('shops', 'enseigne')
                     ->searchable()
                     ->hidden(fn () => ! Auth::user()->isAdministrateurOrGerant())
                     ->preload()

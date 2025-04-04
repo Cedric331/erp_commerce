@@ -36,7 +36,7 @@ class CheckProductStock extends Command
 
         foreach ($shops as $shop) {
             $data = [];
-            $recipient = User::with('rolesAllTenant')->whereHas('shops', function ($query) use ($shop) {
+            $recipient = User::with('rolesAllTenant')->whereHas('shop', function ($query) use ($shop) {
                 $query->where('shop_id', $shop->id);
             })->get();
             $recipient = $recipient->filter(function ($user) {
