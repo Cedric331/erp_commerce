@@ -15,29 +15,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $userA = User::create([
+        User::create([
             'name' => 'Cedric',
             'email' => 'test@test.fr',
             'password' => Hash::make('password'),
         ]);
-
-        $userB = User::create([
-            'name' => 'DEMO',
-            'email' => 'demo@demo.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        $role = Role::create([
-            'name' => 'Administrateur',
-            'guard_name' => 'web',
-        ]);
-
-        setPermissionsTeamId(Shop::first()->id);
-
-        $userA->assignRole($role);
-        $userA->shops()->attach(Shop::first());
-
-        $userB->assignRole($role);
-        $userB->shops()->attach(Shop::first());
     }
 }

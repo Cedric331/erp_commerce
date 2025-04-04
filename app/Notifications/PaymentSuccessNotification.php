@@ -38,10 +38,24 @@ class PaymentSuccessNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        $message = (new MailMessage)
             ->subject('Paiement réussi : Votre abonnement est confirmé')
             ->greeting('Bonjour '.$this->shop->name.',')
-            ->line('Nous vous confirmons que votre paiement pour l\'abonnement a été effectué avec succès.')
+            ->line('Nous vous confirmons que votre paiement pour l\'abonnement a été effectué avec succès.');
+
+        // Vérifier si abonnement avec période d'essai
+        if ($this->subscription->onTrial()) {
+            $message->line('Période d\'essai jusqu\'au '.$this->subscription->trial_ends_at->format('d/m/Y'));
+        }
+
+        // Vérifier si la date de fin existe
+        if (isset($this->subscription->ends_at) && $this->subscription->ends_at) {
+            $message->line('Prochain renouvellement : '.$this->subscription->ends_at->format('d/m/Y'));
+        } elseif (isset($this->subscription->current_period_end) && $this->subscription->current_period_end) {
+            $message->line('Prochain renouvellement : '.date('d/m/Y', $this->subscription->current_period_end));
+        }
+
+        return $message
             ->line('Votre abonnement est maintenant actif.')
             ->action('Voir votre compte', url('/app'))
             ->line('Merci d\'utiliser notre application !');

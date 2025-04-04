@@ -4,15 +4,23 @@ namespace App\Policies;
 
 use App\Models\Role;
 use App\Models\User;
+use Filament\Facades\Filament;
 
 class RolePolicy
 {
+    public $tenant = null;
+
+    public function __construct()
+    {
+        $this->tenant = Filament::getTenant();
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant();
+        return ($user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant()) && $this->tenant->subscribed('default');
     }
 
     /**
@@ -20,7 +28,7 @@ class RolePolicy
      */
     public function view(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant();
+        return ($user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant()) && $this->tenant->subscribed('default');
     }
 
     /**
@@ -28,7 +36,7 @@ class RolePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant();
+        return ($user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateurOrGerant()) && $this->tenant->subscribed('default');
     }
 
     /**
@@ -36,7 +44,7 @@ class RolePolicy
      */
     public function update(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateur();
+        return ($user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateur()) && $this->tenant->subscribed('default');
     }
 
     /**
@@ -44,6 +52,6 @@ class RolePolicy
      */
     public function delete(User $user, Role $role): bool
     {
-        return $user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateur();
+        return ($user->hasPermissionTo('Gérer les rôles') || $user->isAdministrateur()) && $this->tenant->subscribed('default');
     }
 }

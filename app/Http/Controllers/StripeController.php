@@ -7,6 +7,7 @@ use App\Notifications\PaymentSuccessNotification;
 use App\Notifications\SubscriptionCancellationRequestedNotification;
 use App\Notifications\SubscriptionCancelledNotification;
 use App\Notifications\SubscriptionRenewedNotification;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
 class StripeController extends CashierController
@@ -26,7 +27,15 @@ class StripeController extends CashierController
         $shopSubscription = $shop->subscriptions()->where('stripe_id', $subscription['id'])->first();
 
         if ($shopSubscription) {
-            $shop->notify(new PaymentSuccessNotification($shop, $shopSubscription));
+            try {
+                $shop->notify(new PaymentSuccessNotification($shop, $shopSubscription));
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'envoi de la notification de paiement réussi : ' . $e->getMessage(), [
+                    'subscription_id' => $shopSubscription->id,
+                    'stripe_id' => $subscription['id'],
+                    'exception' => $e
+                ]);
+            }
         }
 
         return $response;
@@ -62,7 +71,15 @@ class StripeController extends CashierController
             $shopSubscription->save();
 
             // Notification de la demande d'annulation
-            $shop->notify(new SubscriptionCancellationRequestedNotification($shop, $shopSubscription));
+            try {
+                $shop->notify(new SubscriptionCancellationRequestedNotification($shop, $shopSubscription));
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'envoi de la notification de demande d\'annulation : ' . $e->getMessage(), [
+                    'subscription_id' => $shopSubscription->id,
+                    'stripe_id' => $subscription['id'],
+                    'exception' => $e
+                ]);
+            }
 
             return $response;
         }
@@ -70,7 +87,15 @@ class StripeController extends CashierController
         // Cas d'annulation effective immédiate
         if ($subscription['status'] === 'canceled') {
             $shopSubscription->markAsCanceled();
-            $shop->notify(new SubscriptionCancelledNotification($shop, $shopSubscription));
+            try {
+                $shop->notify(new SubscriptionCancelledNotification($shop, $shopSubscription));
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'envoi de la notification d\'annulation : ' . $e->getMessage(), [
+                    'subscription_id' => $shopSubscription->id,
+                    'stripe_id' => $subscription['id'],
+                    'exception' => $e
+                ]);
+            }
 
             return $response;
         }
@@ -82,7 +107,15 @@ class StripeController extends CashierController
             (! isset($previousAttributes['current_period_end']) ||
                 $previousAttributes['current_period_end'] !== $subscription['current_period_end'])
         ) {
-            $shop->notify(new SubscriptionRenewedNotification($shop, $shopSubscription));
+            try {
+                $shop->notify(new SubscriptionRenewedNotification($shop, $shopSubscription));
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'envoi de la notification de renouvellement : ' . $e->getMessage(), [
+                    'subscription_id' => $shopSubscription->id,
+                    'stripe_id' => $subscription['id'],
+                    'exception' => $e
+                ]);
+            }
         }
 
         return $response;
@@ -104,7 +137,17 @@ class StripeController extends CashierController
 
         if ($shopSubscription) {
             $shopSubscription->markAsCanceled();
-            $shop->notify(new SubscriptionCancelledNotification($shop, $shopSubscription));
+
+                try {
+                    Log::info("Envoi de notification depuis webhook pour la souscription : {$subscription['id']}");
+                    $shop->notify(new SubscriptionCancelledNotification($shop, $shopSubscription));
+                } catch (\Exception $e) {
+                    Log::error('Erreur lors de l\'envoi de la notification de suppression : ' . $e->getMessage(), [
+                        'subscription_id' => $shopSubscription->id,
+                        'stripe_id' => $subscription['id'],
+                        'exception' => $e
+                    ]);
+                }
         }
 
         return $response;

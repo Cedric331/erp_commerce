@@ -27,12 +27,20 @@ class SubscriptionCancelledNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        $message = (new MailMessage)
             ->subject('Résiliation de votre abonnement')
             ->greeting('Bonjour '.$this->shop->name.',')
-            ->line('Votre abonnement a été résilié.')
-            ->line('Vous aurez accès à nos services jusqu\'au '.$this->subscription->ends_at->format('d/m/Y').'.')
+            ->line('Votre abonnement a été résilié.');
+
+        // Vérifier si la date de fin existe
+        if (isset($this->subscription->ends_at) && $this->subscription->ends_at) {
+            $message->line('Vous aurez accès à nos services jusqu\'au '.$this->subscription->ends_at->format('d/m/Y').'.');
+        } else {
+            $message->line('Votre accès aux services a été immédiatement interrompu.');
+        }
+
+        return $message
             ->line('Nous espérons vous revoir bientôt !')
-            ->action('Réactiver votre abonnement', url('/app/billing'));
+            ->action('Accéder à l\application', url('/app'));
     }
 }

@@ -27,12 +27,20 @@ class SubscriptionRenewedNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        $message = (new MailMessage)
             ->success()
             ->subject('Renouvellement de votre abonnement')
             ->greeting('Bonjour '.$this->shop->name.',')
-            ->line('Votre abonnement a été renouvelé avec succès.')
-            ->line('Le prochain renouvellement aura lieu le '.$this->subscription->ends_at->format('d/m/Y').'.')
+            ->line('Votre abonnement a été renouvelé avec succès.');
+
+        // Vérifier si la date de fin existe
+        if (isset($this->subscription->ends_at) && $this->subscription->ends_at) {
+            $message->line('Le prochain renouvellement aura lieu le '.$this->subscription->ends_at->format('d/m/Y').'.');
+        } elseif (isset($this->subscription->current_period_end) && $this->subscription->current_period_end) {
+            $message->line('Le prochain renouvellement aura lieu le '.date('d/m/Y', $this->subscription->current_period_end).'.');
+        }
+
+        return $message
             ->action('Voir les détails', url('/app/billing'))
             ->line('Merci de votre confiance !');
     }

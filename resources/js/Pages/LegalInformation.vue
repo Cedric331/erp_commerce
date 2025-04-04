@@ -100,8 +100,8 @@ const navbarOpen = ref(false);
                                 <p class="mb-8 max-w-[680px] text-base text-body-color">
                                     <strong>1. Informations légales</strong><br>
                                     <strong>Propriétaire du site :</strong><br>
-                                    Quantisys<br>
                                     MR Cédric Lima, <br>Résidant 5 route de pouzoum 33138 LANTON <br>Nationalité Française (France), né(e) le 08/02/1991 <br>
+                                    Web Discovery<br>
                                     Numéro SIRET : 84396946000016<br>
                                     Site web : <a href="https://www.quantisys.fr">www.Quantisys.fr</a><br><br>
 

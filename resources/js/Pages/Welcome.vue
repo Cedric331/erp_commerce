@@ -98,7 +98,7 @@ const navbarOpen = ref(false);
                             Quantisys : La Solution de Gestion de Stock pour Petits Commerces
                         </h1>
                         <p class="mb-8 max-w-[480px] text-base text-body-color">
-                            Simplifiez votre gestion d'inventaire avec Quantisys, la plateforme conçue spécifiquement pour les besoins des petits commerces. Notre outil intuitif vous aide à suivre vos stocks et prévenir les ruptures ou surstocks sans effort.<br> Rejoignez les centaines de commerçants qui propulsent leur efficacité et réduisent leurs coûts grâce à Quantisys.
+                            Simplifiez votre gestion d'inventaire avec Quantisys, la plateforme conçue spécifiquement pour les besoins des petits commerces. Notre outil intuitif vous aide à suivre vos stocks, recevoir des alertes automatiques et prévenir les ruptures ou surstocks sans effort.<br> Profitez de 30 jours d'essai gratuit et rejoignez les commerçants qui propulsent leur efficacité et réduisent leurs coûts grâce à Quantisys.
                         </p>
 
                         <ul class="flex flex-wrap items-center">
@@ -202,7 +202,7 @@ const navbarOpen = ref(false);
                             Gestion des produits
                         </h4>
                         <p class="text-body-color">
-                            Gérer vos produits n'a jamais été aussi simple. Quantisys vous permet de suivre vos stocks.
+                            Gérer vos produits n'a jamais été aussi simple. Quantisys vous permet de suivre vos stocks, gérer les références, codes-barres, prix d'achat et de vente, et bien plus encore.
                         </p>
 
                         <span class="absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 bg-primary opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
@@ -236,7 +236,7 @@ const navbarOpen = ref(false);
                             Gestion du stock
                         </h4>
                         <p class="text-body-color">
-                            Planifier des alertes de stock, suivre les mouvements de stock afin de prévenir les ruptures ou surstocks.
+                            Configurez des seuils d'alerte personnalisés, recevez des notifications automatiques et suivez tous les mouvements de stock pour prévenir efficacement les ruptures ou surstocks.
                         </p>
                         <span
                             class="absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 bg-primary opacity-0 blur-[12px] transition group-hover:opacity-[14%]"
@@ -271,7 +271,7 @@ const navbarOpen = ref(false);
                            Gestion des commerces
                         </h4>
                         <p class="text-body-color">
-                            Gérer vos commerces n'a jamais été aussi simple. Quantisys vous permet de suivre vos stocks sur vos différents commerces.
+                            Gérez plusieurs points de vente depuis une seule interface. Quantisys vous permet de suivre vos stocks sur vos différents commerces et d'optimiser votre gestion multi-sites.
                         </p>
 
                         <span class="absolute -bottom-2 left-0 right-0 z-[-1] mx-auto h-12 w-3/4 bg-primary opacity-0 blur-[12px] transition group-hover:opacity-[14%]"></span>
@@ -295,7 +295,7 @@ const navbarOpen = ref(false);
                             Un Plan Unique, Une Gestion Simplifiée
                         </h2>
                         <p class="text-base text-body-color">
-                            Quantisys vous propose un plan tarifaire unique, conçu pour répondre efficacement à tous vos besoins de gestion de stock, sans complexité ni coûts cachés. Profitez d'une solution complète de gestion d'inventaire avec un abonnement mensuel abordable, incluant la gestion des produits, les alertes de stock, et bien plus. Optimisez votre gestion de stock dès aujourd'hui avec Quantisys.
+                            Quantisys vous propose un plan tarifaire unique, conçu pour répondre efficacement à tous vos besoins de gestion de stock, sans complexité ni coûts cachés. Profitez d'une solution complète de gestion d'inventaire avec un abonnement mensuel abordable, incluant la gestion des produits, les alertes de stock, et bien plus. Commencez avec 30 jours d'essai gratuit et optimisez votre gestion de stock dès aujourd'hui avec Quantisys.
                         </p>
                     </div>
 
@@ -307,10 +307,10 @@ const navbarOpen = ref(false);
                 <div class="w-full px-4 md:w-1/2 lg:w-1/3">
                     <div class="relative z-10 mb-10 overflow-hidden rounded-xl border border-primary border-opacity-20 bg-white py-10 px-8 shadow-pricing sm:p-12 lg:py-10 lg:px-6 xl:p-12">
                           <span class="mb-4 block text-lg font-semibold text-primary">
-                            Abonnement
+                            Abonnement Starter
                           </span>
                         <h2 class="mb-5 text-[42px] font-bold text-dark">
-                            29.99 €
+                            9.99 €
                             <span class="text-base font-medium text-body-color">
                           / mois
                         </span>
@@ -320,16 +320,16 @@ const navbarOpen = ref(false);
                         </p>
                         <div class="mb-7">
                             <p class="mb-1 text-base leading-loose text-body-color">
-                                <b>30 jours d'essai gratuit</b>
+                                <b>30 jours d'essai gratuit sans engagement</b>
                             </p>
                             <p class="mb-1 text-base leading-loose text-body-color">
-                                Utilisateurs illimités
+                                Utilisateurs illimités pour votre commerce
                             </p>
                             <p class="mb-1 text-base leading-loose text-body-color">
-                                Accès complet à toutes les fonctionnalités
+                                Accès complet à toutes les fonctionnalités (gestion des produits, stocks, alertes)
                             </p>
                             <p class="mb-1 text-base leading-loose text-body-color">
-                                Mise à jour gratuite
+                                Mises à jour gratuites et support client
                             </p>
                             <p class="mb-1 text-base leading-loose text-body-color">
                                 Simple et facile à utiliser
@@ -664,7 +664,7 @@ const navbarOpen = ref(false);
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Dès votre première utilisation de Quantisys, vous commencez à bénéficier de nos analyses. Notre plateforme est conçue pour vous fournir des insights précieux sur votre inventaire immédiatement après la saisie de vos données de stock. Aucune attente n'est nécessaire : commencez à optimiser votre gestion d'inventaire dès le premier jour.
+                                Dès votre première utilisation de Quantisys, vous commencez à bénéficier de nos analyses. Notre plateforme est conçue pour vous fournir des insights précieux sur votre inventaire immédiatement après la saisie de vos données de stock. Configurez vos alertes de stock, suivez vos mouvements d'inventaire et optimisez votre gestion dès le premier jour, sans délai d'attente.
                             </p>
                         </div>
                     </div>
@@ -677,7 +677,7 @@ const navbarOpen = ref(false);
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                La sécurité de vos données est notre priorité absolue chez Quantisys. Nous utilisons des technologies de cryptage de pointe et des protocoles de sécurité stricts pour protéger toutes les informations de votre inventaire.
+                                La sécurité de vos données est notre priorité absolue chez Quantisys. Nous utilisons des technologies de cryptage de pointe et des protocoles de sécurité stricts pour protéger toutes les informations de votre inventaire. Vos données commerciales sensibles sont stockées de manière sécurisée et ne sont jamais partagées avec des tiers.
                             </p>
                         </div>
                     </div>
@@ -692,7 +692,7 @@ const navbarOpen = ref(false);
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Quantisys est actuellement toujours en développement, ce qui signifie que nous sommes en phase active de développement et d'amélioration. Nous travaillons sans relâche pour ajouter de nouvelles fonctionnalités qui rendront la gestion de votre inventaire encore plus facile et intuitive. Bien que cette phase puisse inclure des bugs, notre équipe s'engage à les identifier et les corriger rapidement. Nous encourageons les retours de nos utilisateurs pour aider à améliorer constamment Quantisys. Votre feedback est précieux et joue un rôle crucial dans le développement de futures versions plus robustes et riches en fonctionnalités.
+                                Quantisys est en constante évolution, avec des mises à jour régulières qui ajoutent de nouvelles fonctionnalités pour rendre la gestion de votre inventaire encore plus facile et intuitive. Notre équipe travaille sans relâche pour améliorer l'expérience utilisateur et intégrer de nouvelles capacités comme la gestion multi-commerces, les rapports avancés et les alertes personnalisables. Nous encourageons vivement les retours de nos utilisateurs pour nous aider à améliorer constamment Quantisys. Votre feedback est précieux et joue un rôle crucial dans le développement de futures versions plus robustes et riches en fonctionnalités.
                             </p>
                         </div>
                     </div>
@@ -704,7 +704,7 @@ const navbarOpen = ref(false);
                         </div>
                         <div class="faq-content ">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Chez Quantisys, nous comprenons l'importance d'une prise en main efficace pour maximiser les bénéfices de notre outil de gestion de stock dès le premier jour. Nous nous engageons à vous fournir l'assistance nécessaire pour assurer une expérience fluide et intuitive, vous permettant ainsi de tirer le meilleur parti de Quantisys sans délai.
+                                Chez Quantisys, nous comprenons l'importance d'une prise en main efficace pour maximiser les bénéfices de notre outil de gestion de stock dès le premier jour. Notre interface intuitive et nos guides d'utilisation vous permettent de configurer rapidement votre commerce, d'ajouter vos produits et de commencer à gérer votre stock en quelques minutes. Nous vous accompagnons à chaque étape pour vous assurer une expérience fluide et productive.
                             </p>
                         </div>
                     </div>
@@ -716,7 +716,7 @@ const navbarOpen = ref(false);
                         </div>
                         <div class="faq-content">
                             <p class="py-3 text-base leading-relaxed text-body-color">
-                                Si vous rencontrez un bug ou un problème dans l'utilisation de Quantisys, nous vous encourageons à le signaler immédiatement afin que nous puissions y remédier rapidement. Vous pouvez nous contacter directement par email. Nous prenons chaque signalement au sérieux et nous nous engageons à fournir une réponse et une solution dans les plus brefs délais. Votre aide est inestimable pour nous aider à améliorer Quantisys et à vous offrir une expérience utilisateur optimale.
+                                Si vous rencontrez un bug ou un problème dans l'utilisation de Quantisys, nous vous encourageons à le signaler immédiatement via notre formulaire de contact. Notre équipe de support technique est disponible pour vous aider et résoudre rapidement tout problème. Nous prenons chaque signalement au sérieux et nous nous engageons à fournir une réponse et une solution dans les plus brefs délais. Votre aide est inestimable pour nous aider à améliorer Quantisys et à vous offrir une expérience utilisateur optimale.
                             </p>
                         </div>
                     </div>
@@ -770,7 +770,7 @@ const navbarOpen = ref(false);
                             Une question ?
                         </h2>
                         <p class="mb-9 text-base leading-relaxed text-body-color">
-                            Notre équipe est là pour vous aider. Contactez-nous pour toute question, suggestion ou demande d'assistance. Nous sommes disponibles pour répondre à vos questions et vous accompagner dans l'utilisation de Quantisys.
+                            Notre équipe est là pour vous aider. Contactez-nous pour toute question sur nos fonctionnalités, notre abonnement ou pour une demande d'assistance technique. Nous sommes disponibles pour répondre à vos questions et vous accompagner dans l'utilisation de Quantisys pour optimiser la gestion de votre commerce.
                         </p>
                     </div>
                 </div>

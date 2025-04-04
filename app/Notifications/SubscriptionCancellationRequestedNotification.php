@@ -27,12 +27,20 @@ class SubscriptionCancellationRequestedNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        $message = (new MailMessage)
             ->subject('Demande de résiliation enregistrée')
             ->greeting('Bonjour '.$this->shop->name.',')
-            ->line('Nous avons bien pris en compte votre demande de résiliation.')
-            ->line('Votre abonnement restera actif jusqu\'au '.$this->subscription->ends_at->format('d/m/Y').'.')
-            ->line('Vous pouvez continuer à utiliser tous nos services jusqu\'à cette date.')
+            ->line('Nous avons bien pris en compte votre demande de résiliation.');
+
+        // Vérifier si la date de fin existe
+        if (isset($this->subscription->ends_at) && $this->subscription->ends_at) {
+            $message->line('Votre abonnement restera actif jusqu\'au '.$this->subscription->ends_at->format('d/m/Y').'.');
+            $message->line('Vous pouvez continuer à utiliser tous nos services jusqu\'à cette date.');
+        } else {
+            $message->line('Votre abonnement sera résilié à la fin de la période de facturation en cours.');
+        }
+
+        return $message
             ->action('Gérer votre abonnement', url('/app/billing'))
             ->line('Nous espérons vous revoir bientôt !');
     }
