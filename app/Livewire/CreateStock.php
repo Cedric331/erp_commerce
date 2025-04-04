@@ -63,12 +63,16 @@ class CreateStock extends Component implements HasForms
             $this->data['scheduled_date'] = null;
         }
 
+        $product = Product::find($this->data['product_id']);
+        $this->data['price_ht'] = $product->price_ht;
+        $this->data['price_ttc'] = $product->price_ttc;
+        $this->data['price_buy'] = $product->price_buy;
+
         $stock = Stock::create($this->data);
 
         if (! $this->data['scheduled_date']) {
             $type = StockStatus::find($this->data['stock_status_id'])->type;
 
-            $product = Product::find($this->data['product_id']);
             if ($type === StockStatus::TYPE_ENTREE) {
                 $product->update([
                     'stock' => $product->stock + $this->data['quantity'],
@@ -93,6 +97,8 @@ class CreateStock extends Component implements HasForms
             ->title('Ligne de stock créé avec succès')
             ->success()
             ->send();
+
+        $this->showForm = false;
     }
 
     public function form(Form $form): Form

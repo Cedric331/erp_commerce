@@ -8,8 +8,10 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class ABestProductChart extends ApexChartWidget
+class BestProductChart extends ApexChartWidget
 {
+    protected static ?int $sort = 3;
+
     protected static ?string $chartId = 'bestProductChart';
 
     protected static ?string $heading = 'Meilleurs produits';

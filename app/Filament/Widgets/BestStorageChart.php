@@ -8,6 +8,8 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class BestStorageChart extends ApexChartWidget
 {
+    protected static ?int $sort = 6;
+
     protected static ?string $chartId = 'bestStorageChart';
 
     protected static ?string $heading = 'Zone de stockage';

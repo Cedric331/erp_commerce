@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity')->default(0);
-            $table->decimal('prix_product_ht', 10, 2)->nullable();
-            $table->decimal('prix_product_buy', 10, 2)->nullable();
+            $table->decimal('price_buy', 10, 2)->nullable(); // Prix d'achat HT
+            $table->decimal('price_ht', 10, 2); // Prix de vente HT
+            $table->decimal('price_ttc', 10, 2); // Prix de vente TTC
             $table->longText('note')->nullable();
             $table->date('date_process')->nullable();
             $table->foreignId('shop_id')->constrained('shops')->onDelete('cascade');

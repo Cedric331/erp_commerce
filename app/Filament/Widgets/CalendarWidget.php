@@ -10,6 +10,8 @@ use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
+    protected static ?int $sort = 2;
+
     public string|null|\Illuminate\Database\Eloquent\Model $model = Stock::class;
 
     public string|int|null|\Illuminate\Database\Eloquent\Model $record = null;

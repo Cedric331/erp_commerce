@@ -13,8 +13,9 @@ class Stock extends Model
         'shop_id',
         'product_id',
         'stock_status_id',
-        'prix_product_ht',
-        'prix_product_buy',
+        'price_buy',
+        'price_ht',
+        'price_ttc',
         'quantity',
         'date_process',
         'note',
@@ -28,17 +29,17 @@ class Stock extends Model
         'date_process' => 'datetime',
     ];
 
-    public function product()
+    public function product(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function stockStatus()
+    public function stockStatus(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(StockStatus::class, 'stock_status_id');
     }
 
-    public function shop()
+    public function shop(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Shop::class, 'shop_id');
     }

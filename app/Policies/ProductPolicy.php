@@ -20,7 +20,7 @@ class ProductPolicy
      */
     public function update(User $user, Product $product): bool
     {
-        return $user->hasPermissionTo('Créer produit') || $user->isAdministrateurOrGerant();
+        return $user->hasPermissionTo('Modifier produit') || $user->isAdministrateurOrGerant();
     }
 
     /**

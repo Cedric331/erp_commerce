@@ -36,12 +36,7 @@ class CheckProductStock extends Command
 
         foreach ($shops as $shop) {
             $data = [];
-            $recipient = User::with('rolesAllTenant')->whereHas('shop', function ($query) use ($shop) {
-                $query->where('shop_id', $shop->id);
-            })->get();
-            $recipient = $recipient->filter(function ($user) {
-                return $user->rolesAllTenant()->whereIn('name', ['Gérant', 'Manager'])->exists();
-            });
+            $recipient = User::where('shop_id', $shop->id)->get();
 
             foreach ($shop->products as $product) {
                 $threshold = $product->stock_alert && $product->stock_alert > 0 || ! $product->category ? $product->stock_alert : $product->categorie->alert_stock;

@@ -40,7 +40,7 @@ class WelcomeEmail extends Notification
             ->subject('Bienvenue sur '.env('APP_NAME').' !')
             ->greeting('Bonjour '.$notifiable->name.',')
             ->line('Nous sommes ravis de vous compter parmi nos membres.')
-            ->action('Visitez notre site', url('/'))
+            ->action('Accéder à votre compte', url('/app'))
             ->line('Merci de faire partie de notre communauté!');
     }
 

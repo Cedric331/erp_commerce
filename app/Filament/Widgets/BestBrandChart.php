@@ -9,6 +9,8 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class BestBrandChart extends ApexChartWidget
 {
+    protected static ?int $sort = 5;
+
     protected static ?string $chartId = 'bestSupplierChart';
 
     protected static ?string $heading = 'Meilleurs fournisseurs';

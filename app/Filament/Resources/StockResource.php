@@ -84,6 +84,7 @@ class StockResource extends Resource
                 Tables\Columns\TextColumn::make('date_action')
                     ->label('Traité le')
                     ->searchable()
+                    ->badge()
                     ->getStateUsing(function ($record) {
                         if ($record->date_process) {
                             return $record->date_process->format('d/m/Y');
@@ -99,6 +100,22 @@ class StockResource extends Resource
                         } else {
                             return $record->created_at->format('d/m/Y');
                         }
+                    })
+                    ->color(function ($record) {
+                        if ($record->date_process) {
+                            return 'success';
+                        }
+
+                        if (! empty($record->scheduled_date)) {
+                            $date = Carbon::parse($record->scheduled_date);
+                            if ($date->isFuture()) {
+                                return 'warning';
+                            } else {
+                                return 'danger';
+                            }
+                        }
+
+                        return 'gray';
                     }),
                 Tables\Columns\TextColumn::make('product.name')
                     ->searchable()
@@ -119,7 +136,7 @@ class StockResource extends Resource
                 Tables\Columns\TextColumn::make('formatted_scheduled_date')
                     ->searchable()
                     ->sortable()
-                    ->label('Date prévue'),
+                    ->label('Date traitement prévue'),
             ])
             ->filters([
                 SelectFilter::make('quantity')
@@ -129,6 +146,26 @@ class StockResource extends Resource
                     ->options(
                         fn (Builder $query) => $query->pluck('name', 'id')->all()
                     ),
+                SelectFilter::make('stockStatus.name')
+                    ->label('Statut')
+                    ->relationship('stockStatus', 'name')
+                    ->preload()
+                    ->options(
+                        fn (Builder $query) => $query->pluck('name', 'id')->all()
+                    ),
+                SelectFilter::make('processing_status')
+                    ->label('État de traitement')
+                    ->options([
+                        'processed' => 'Traité',
+                        'unprocessed' => 'Non traité',
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        return $query->when($data['value'] === 'processed', function (Builder $query) {
+                            return $query->whereNotNull('date_process');
+                        })->when($data['value'] === 'unprocessed', function (Builder $query) {
+                            return $query->whereNull('date_process');
+                        });
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -149,9 +186,6 @@ class StockResource extends Resource
                     }),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->icon('heroicon-o-plus')
-                    ->label('Créer un produit'),
                 ExportAction::make()
                     ->label('Exporter')
                     ->icon('heroicon-o-arrow-down-tray')
@@ -164,12 +198,7 @@ class StockResource extends Resource
                     ->hidden(! Auth::user()->hasPermissionTo('Exporter des données') && ! Auth::user()->isAdministrateurOrGerant())
                     ->exporter(StockExporter::class),
             ])
-            ->modifyQueryUsing(fn (Builder $query) => $query->orderBy('created_at', 'desc'))
-            ->bulkActions([
-                //                Tables\Actions\BulkActionGroup::make([
-                //                    Tables\Actions\DeleteBulkAction::make(),
-                //                ]),
-            ]);
+            ->modifyQueryUsing(fn (Builder $query) => $query->orderBy('created_at', 'desc'));
     }
 
     public static function getRelations(): array

@@ -26,8 +26,9 @@ class CreateStock extends CreateRecord
         }
 
         $product = Product::find($this->data['product_id']);
-        $this->data['prix_product_ht'] = $product->price_ht;
-        $this->data['prix_product_buy'] = $product->price_buy;
+        $this->data['price_ht'] = $product->price_ht;
+        $this->data['price_ttc'] = $product->price_ttc;
+        $this->data['price_buy'] = $product->price_buy;
 
         return $data;
     }

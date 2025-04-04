@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProduitResource\Pages;
 
 use App\Filament\Resources\ProduitResource;
 use App\Filament\Resources\ProduitResource\Widgets\ValeurStockProduct;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListProduits extends ListRecords
@@ -20,7 +21,7 @@ class ListProduits extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            //
+            Actions\CreateAction::make(),
         ];
     }
 }

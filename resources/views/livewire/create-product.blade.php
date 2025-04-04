@@ -7,22 +7,12 @@
             size="sm"
             icon="heroicon-o-plus"
             iconSize="sm"
-            class="mx-4 w-full text-center hide-on-mobile"
+            class="mx-4 w-full text-center"
         >
             Créer un produit
         </x-filament::button>
     @endif
-    <style>
-        .hide-on-mobile {
-            display: none;
-        }
 
-        @media (min-width: 1024px) {
-            .hide-on-mobile {
-                display: inline-flex;
-            }
-        }
-    </style>
 </div>
 
 

@@ -6,11 +6,12 @@ use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugi
 use App\Filament\Pages\Support;
 use App\Filament\Resources\Tenancy\ShopEdit;
 use App\Filament\Resources\Tenancy\ShopRegister;
-use App\Filament\Widgets\ABestProductChart;
+use App\Filament\Widgets\BestProductChart;
 use App\Filament\Widgets\BestBrandChart;
 use App\Filament\Widgets\BestCategoryChart;
 use App\Filament\Widgets\BestStorageChart;
 use App\Filament\Widgets\CalendarWidget;
+use App\Filament\Widgets\StoreStatsWidget;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CheckTenantOwnership;
 use App\Http\Middleware\SyncSpatiePermissionsWithFilamentTenants;
@@ -111,14 +112,7 @@ class AppPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-//            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
-                CalendarWidget::class,
-                ABestProductChart::class,
-                BestCategoryChart::class,
-                BestBrandChart::class,
-                BestStorageChart::class,
-            ])
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->databaseTransactions()
             ->middleware([
                 EncryptCookies::class,

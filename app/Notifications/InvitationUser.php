@@ -33,9 +33,11 @@ class InvitationUser extends Notification
 
         return (new MailMessage)
             ->subject('Création de votre compte')
+            ->greeting('Bonjour,')
             ->line('Un compte a été créé pour vous avec l\'adresse email : '.$notifiable->email.'.')
             ->line('Afin de pouvoir vous connecter, veuillez cliquer sur le lien ci-dessous pour suivre la procédure de récupération du mot de passe.')
             ->action('Récupérer mon mot de passe', $url)
-            ->line('Merci');
+            ->line('Merci de votre confiance !')
+            ->salutation('L\'équipe '.config('app.name'));
     }
 }

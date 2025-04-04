@@ -46,3 +46,6 @@ Route::post('/contact', [ContactController::class, 'sendMessage'])->name('contac
 
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 Route::get('/complete-payment/{paymentIntent}', [StripeController::class, 'completePayment'])->name('complete.payment');
+
+
+require __DIR__ . '/notification.php';

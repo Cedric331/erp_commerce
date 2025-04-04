@@ -8,6 +8,8 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class BestCategoryChart extends ApexChartWidget
 {
+    protected static ?int $sort = 4;
+
     protected static ?string $chartId = 'bestCategoryChart';
 
     protected static ?string $heading = 'Meilleures catégories';

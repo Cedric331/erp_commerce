@@ -54,12 +54,7 @@ class AddStock extends Command
                 'date_process' => now(),
             ]);
 
-            $recipient = User::with('rolesAllTenant')->whereHas('shop', function ($query) use ($stock) {
-                $query->where('shop_id', $stock->shop_id);
-            })->get();
-            $recipient = $recipient->filter(function ($user) {
-                return $user->rolesAllTenant()->whereIn('name', ['Gérant', 'Manager'])->exists();
-            });
+            $recipient = User::where('shop_id', $stock->shop_id)->get();
 
             Notification::make()
                 ->title('Stock mis à jour pour le produit '.$stock->product->name.' - '.$stock->shop->enseigne)

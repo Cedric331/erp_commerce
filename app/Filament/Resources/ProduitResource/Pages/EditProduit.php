@@ -30,7 +30,7 @@ class EditProduit extends EditRecord
             Action::make('Détail du produit')
                 ->url(fn () => ViewProduitActivities::getUrl(['record' => $this->record]))
                 ->icon('heroicon-o-information-circle'),
-            Action::make('Créer une variante')
+            Action::make('Dupliquer le produit')
                 ->url(fn () => CreateProduit::getUrl(['duplicate_from' => $this->record->id]))
                 ->icon('heroicon-o-plus'),
             Actions\DeleteAction::make(),
