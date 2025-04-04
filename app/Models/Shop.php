@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
+use Laravel\Cashier\Subscription;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -28,11 +29,16 @@ class Shop extends Model implements HasCurrentTenantLabel
         'ville',
         'pays',
         'user_id',
+        'subscribed',
+    ];
+
+    protected $casts = [
+        'subscribed' => 'boolean',
     ];
 
     public function getCurrentTenantLabel(): string
     {
-        return $this->subscribed('default') ? 'Abonnement activé' : 'Abonnement inactif';
+        return $this->subscribed ? 'Abonnement activé' : 'Abonnement inactif';
     }
 
     public function getNameAttribute(): string
@@ -93,5 +99,15 @@ class Shop extends Model implements HasCurrentTenantLabel
     public function storages(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Storage::class);
+    }
+
+    /**
+     * Get the subscriptions for the shop.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 }

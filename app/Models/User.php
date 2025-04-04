@@ -29,6 +29,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     protected $fillable = [
         'name',
         'email',
+        'is_admin',
         'password',
     ];
 
@@ -50,11 +51,15 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'boolean',
     ];
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // check panel id
+        if ($panel->getId() === 'admin' && ! $this->isAdministrateur()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -68,37 +73,56 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $this->shops->count() > 0;
     }
 
+    public function rolesGlobal(): BelongsToMany
+    {
+        $relation = $this->morphToMany(
+            config('permission.models.role'),
+            'model',
+            config('permission.table_names.model_has_roles'),
+            config('permission.column_names.model_morph_key'),
+            app(PermissionRegistrar::class)->pivotRole
+        );
+
+        return $relation->where('roles.shop_id', null);
+    }
+
     public function isAdministrateur(): bool
     {
-        $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
-
-        if ($userRoles->contains(Role::ROLE_ADMIN)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (bool) $this->is_admin;
     }
 
     public function isAdministrateurOrGerant(): bool
     {
-        $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
-
-        if ($userRoles->contains(Role::ROLE_ADMIN) || $userRoles->contains(Role::ROLE_GERANT)) {
+        // Vérifier d'abord les rôles globaux (sans tenant)
+        $globalRoles = $this->rolesGlobal()->pluck('name');
+        if ($globalRoles->contains(Role::ROLE_ADMIN) || $globalRoles->contains(Role::ROLE_GERANT)) {
             return true;
-        } else {
-            return false;
         }
+
+        // Vérifier ensuite les rôles liés aux tenants
+        $tenantRoles = $this->rolesAllTenant()->pluck('name');
+        if ($tenantRoles->contains(Role::ROLE_ADMIN) || $tenantRoles->contains(Role::ROLE_GERANT)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isGerant(): bool
     {
-        $userRoles = Auth::user()->rolesAllTenant()->pluck('name');
-
-        if ($userRoles->contains(Role::ROLE_GERANT)) {
+        // Vérifier d'abord les rôles globaux (sans tenant)
+        $globalRoles = $this->rolesGlobal()->pluck('name');
+        if ($globalRoles->contains(Role::ROLE_GERANT)) {
             return true;
-        } else {
-            return false;
         }
+
+        // Vérifier ensuite les rôles liés aux tenants
+        $tenantRoles = $this->rolesAllTenant()->pluck('name');
+        if ($tenantRoles->contains(Role::ROLE_GERANT)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function rolesAllTenant(): BelongsToMany

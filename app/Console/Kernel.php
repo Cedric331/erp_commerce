@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('app:add-stock')->everyFiveMinutes();
         $schedule->command('check:product-stock')->hourly();
+        $schedule->command('shops:update-subscription-status')->hourly();
     }
 
     /**
